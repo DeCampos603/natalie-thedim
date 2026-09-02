@@ -1544,39 +1544,111 @@
         tabIndividual.addEventListener('click', () => updateServiceTab(false));
       }
 
-      // 4. Controle da Barra de Apresentação e Balões Estratégicos
-      const toggleBtn = document.getElementById('toggleAnnotations');
-      const toggleStatus = document.getElementById('toggleStatus');
-      const pins = document.querySelectorAll('.strategy-pin');
+      // 4. Controle do Painel Lateral de Parecer Estratégico (Zero Sobreposição)
+      const openDrawerBtn = document.getElementById('openDrawerBtn');
+      const togglePinsBtn = document.getElementById('togglePinsBtn');
+      const togglePinsStatus = document.getElementById('togglePinsStatus');
+      const strategyDrawer = document.getElementById('strategyDrawer');
+      const strategyBackdrop = document.getElementById('strategyBackdrop');
+      const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+      const drawerPrevBtn = document.getElementById('drawerPrevBtn');
+      const drawerNextBtn = document.getElementById('drawerNextBtn');
+      const drawerStepIndicator = document.getElementById('drawerStepIndicator');
+      const notes = document.querySelectorAll('.drawer-note');
+      const quickTabs = document.querySelectorAll('.quick-tab-btn');
+      const pinTriggers = document.querySelectorAll('.strategy-pin-trigger');
+      let currentNoteIndex = 1;
+      const totalNotes = notes.length;
 
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
+      function showNote(noteId) {
+        currentNoteIndex = parseInt(noteId, 10);
+        notes.forEach(note => {
+          const id = parseInt(note.getAttribute('data-note-id'), 10);
+          note.classList.toggle('active', id === currentNoteIndex);
+        });
+        quickTabs.forEach(tab => {
+          const jump = parseInt(tab.getAttribute('data-jump'), 10);
+          tab.classList.toggle('active', jump === currentNoteIndex);
+        });
+        if (drawerStepIndicator) {
+          drawerStepIndicator.textContent = `Nota ${currentNoteIndex} de ${totalNotes}`;
+        }
+      }
+
+      function openDrawer(noteId = 1) {
+        showNote(noteId);
+        if (strategyDrawer) {
+          strategyDrawer.classList.add('is-open');
+          strategyDrawer.setAttribute('aria-hidden', 'false');
+        }
+        if (strategyBackdrop) {
+          strategyBackdrop.classList.add('is-open');
+        }
+      }
+
+      function closeDrawer() {
+        if (strategyDrawer) {
+          strategyDrawer.classList.remove('is-open');
+          strategyDrawer.setAttribute('aria-hidden', 'true');
+        }
+        if (strategyBackdrop) {
+          strategyBackdrop.classList.remove('is-open');
+        }
+      }
+
+      if (openDrawerBtn) {
+        openDrawerBtn.addEventListener('click', () => openDrawer(1));
+      }
+
+      if (drawerCloseBtn) {
+        drawerCloseBtn.addEventListener('click', closeDrawer);
+      }
+
+      if (strategyBackdrop) {
+        strategyBackdrop.addEventListener('click', closeDrawer);
+      }
+
+      if (drawerPrevBtn) {
+        drawerPrevBtn.addEventListener('click', () => {
+          const prev = currentNoteIndex > 1 ? currentNoteIndex - 1 : totalNotes;
+          showNote(prev);
+        });
+      }
+
+      if (drawerNextBtn) {
+        drawerNextBtn.addEventListener('click', () => {
+          const next = currentNoteIndex < totalNotes ? currentNoteIndex + 1 : 1;
+          showNote(next);
+        });
+      }
+
+      quickTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const jump = tab.getAttribute('data-jump');
+          showNote(jump);
+        });
+      });
+
+      pinTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const noteId = trigger.getAttribute('data-open-note') || 1;
+          openDrawer(noteId);
+        });
+      });
+
+      if (togglePinsBtn) {
+        togglePinsBtn.addEventListener('click', () => {
           const isHidden = document.body.classList.toggle('annotations-hidden');
-          toggleBtn.setAttribute('aria-pressed', !isHidden);
-          if (toggleStatus) {
-            toggleStatus.textContent = isHidden ? 'DESATIVADO' : 'ATIVO';
-            toggleStatus.style.background = isHidden ? '#782635' : '#25D366';
-            toggleStatus.style.color = isHidden ? '#FFFFFF' : '#0A2412';
+          if (togglePinsStatus) {
+            togglePinsStatus.textContent = isHidden ? '👁️ Alfinetes: OCULTOS' : '👁️ Alfinetes: ATIVOS';
           }
         });
       }
 
-      pins.forEach(pin => {
-        const btn = pin.querySelector('.strategy-pin-btn');
-        if (btn) {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isOpen = pin.classList.contains('is-open');
-            pins.forEach(p => p.classList.remove('is-open'));
-            if (!isOpen) pin.classList.add('is-open');
-          });
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.strategy-pin')) {
-          pins.forEach(p => p.classList.remove('is-open'));
-        }
+      // Atalho teclado Esc fecha painel
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDrawer();
       });
     });
   </script>
