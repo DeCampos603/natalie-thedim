@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- SEO & Metatags -->
+  <title>Natalie Thedim · Terapia de Casal e Individual | Modelo Bento (CRP 05/45482)</title>
+  <meta name="description" content="Um espaço acolhedor e dinâmico para transformar conflitos e reencontrar o diálogo. Natalie Thedim (PUC-Rio, +20 anos de experiência). Consultório no Rio de Janeiro e online." />
+  <meta name="keywords" content="natalie thedim, terapia de casal rj, psicologa bento grid, terapia individual rj, crp 05/45482" />
+  <meta name="author" content="Natalie Thedim Silvado Camardella" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='10' fill='%238E3928'/><circle cx='16' cy='16' r='8' fill='%23FCEEE8'/></svg>" />
+  <meta name="theme-color" content="#8E3928" />
+
+  <!-- Google Fonts: Outfit (Moderna & Acolhedora) + Plus Jakarta Sans + Lora -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS — MODELO 3: BENTO GRID MODERNO & CONEXÃO AFETIVA
+       ========================================================================== */
+    :root {
+      --color-primary: #8E3928;           /* Terracota Acolhedor */
+      --color-primary-dark: #6D2719;      /* Terracota Escuro */
+      --color-accent: #E68A6C;            /* Âmbar / Pêssego */
+      --color-accent-soft: #FCEEE8;       /* Fundo pêssego suave */
+      --color-teal: #142B30;              /* Azul Petróleo Nobre */
+      --color-teal-soft: #E8EFF0;
+
+      --bg-canvas: #FAF6F2;               /* Areia Nobre */
+      --bg-surface: #FFFFFF;              /* Branco puro */
+      --bg-card: #F5EFEA;                 /* Superfície Bento */
+      --border-bento: #EDE4DC;
+      --border-accent: rgba(142, 57, 40, 0.25);
+
+      --text-main: #241815;               /* Café Escuro Confortável */
+      --text-muted: #61504C;
+      --text-subtle: #96837E;
+      --text-on-dark: #FAF6F2;
+
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-serif: 'Lora', Georgia, serif;
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 28px;
+      --radius-full: 9999px;
+
+      --shadow-bento: 0 8px 24px rgba(142, 57, 40, 0.06);
+      --shadow-hover: 0 16px 36px rgba(142, 57, 40, 0.12);
+      
+      --container-width: 1140px;
+      --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    /* PROGRESS BAR */
+    .scroll-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+      z-index: 1001;
+      pointer-events: none;
+    }
+
+    /* BARRA DE APRESENTAÇÃO DE MODELOS */
+    .client-presentation-bar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #1F100D;
+      color: #FFFFFF;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.8125rem;
+      padding: 0.5rem 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .pres-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pres-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .pres-badge {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .pres-client {
+      font-weight: 600;
+      color: #FAF6F2;
+    }
+
+    .pres-switcher {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px;
+      border-radius: var(--radius-full);
+      gap: 2px;
+    }
+
+    .pres-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.875rem;
+      border-radius: var(--radius-full);
+      color: #D4C3C0;
+      font-weight: 500;
+      font-size: 0.78125rem;
+      transition: all var(--transition-smooth);
+    }
+
+    .pres-tab:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .pres-tab.is-active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .pres-tab .tab-num {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+    }
+
+    .btn-toggle-annotations {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-full);
+      color: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-toggle-annotations .toggle-status {
+      font-size: 0.625rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: #25D366;
+      color: #0A2412;
+      font-weight: 800;
+    }
+
+        /* ==========================================================================
+       PAINEL LATERAL DE PARECER ESTRATÉGICO (DRAWER) — ZERO SOBREPOSIÇÃO
+       ========================================================================== */
+    .strategy-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 22, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 99990;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .strategy-drawer-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .strategy-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 420px;
+      max-width: 92vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #142B30;
+      color: #FFFFFF;
+      z-index: 99999;
+      transform: translateX(105%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.65);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid rgba(232, 109, 90, 0.25);
+    }
+
+    .strategy-drawer.is-open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(232, 109, 90, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .drawer-badge {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FCEEE8;
+      background: rgba(232, 109, 90, 0.25);
+      border: 1px solid rgba(232, 109, 90, 0.5);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.25rem;
+    }
+
+    .drawer-heading {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin: 0;
+    }
+
+    .drawer-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .drawer-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.08);
+    }
+
+    .drawer-nav {
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-step {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #FCEEE8;
+    }
+
+    .drawer-nav-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .drawer-nav-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .drawer-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .drawer-cards-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .drawer-note {
+      display: none;
+      animation: fadeInNote 0.25s ease;
+    }
+
+    .drawer-note.active {
+      display: block;
+    }
+
+    @keyframes fadeInNote {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .note-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .note-target {
+      font-size: 0.75rem;
+      color: #E86D5A;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .note-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      line-height: 1.3;
+      margin-bottom: 0.85rem;
+      color: #FFFFFF;
+    }
+
+    .note-body {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      color: #FCEEE8;
+      margin-bottom: 1.25rem;
+    }
+
+    .note-impact {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid #E86D5A;
+      padding: 0.85rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: #FFFFFF;
+    }
+
+    .note-impact b {
+      color: #E86D5A;
+    }
+
+    .drawer-quick-tabs {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .quick-tab-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FCEEE8;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-tab-btn.active, .quick-tab-btn:hover {
+      background: #E86D5A;
+      color: #FFFFFF;
+      border-color: #E86D5A;
+      font-weight: 700;
+    }
+
+    /* ALFINETE DISCRETO NA PÁGINA (ZERO SOBREPOSIÇÃO) */
+    .strategy-pin-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #142B30;
+      color: #FFFFFF;
+      border: 1.5px solid rgba(232, 109, 90, 0.5);
+      padding: 0.28rem 0.7rem 0.28rem 0.5rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      vertical-align: middle;
+      position: relative;
+      z-index: 10;
+    }
+
+    .strategy-pin-trigger:hover {
+      background: #1B3940;
+      border-color: #E86D5A;
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 20px rgba(232, 109, 90, 0.35);
+    }
+
+    .strategy-pin-trigger .pin-icon {
+      font-size: 0.85rem;
+    }
+
+    body.annotations-hidden .strategy-pin-trigger {
+      display: none !important;
+    }
+
+    /* Botões na barra de apresentação */
+    .pres-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-open-drawer {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.85rem;
+      background: #E86D5A;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-open-drawer:hover {
+      background: #EF8271;
+      transform: translateY(-1px);
+    }
+
+    .btn-toggle-pins {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #FCEEE8;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-toggle-pins:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    /* MOTION */
+    .reveal {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      transition: opacity 0.75s var(--transition-smooth), transform 0.75s var(--transition-smooth);
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* HEADER BENTO */
+    .bento-header {
+      position: sticky;
+      top: 44px;
+      z-index: 100;
+      background: rgba(250, 246, 242, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-bento);
+      transition: height var(--transition-smooth);
+    }
+
+    .bento-header.is-scrolled {
+      box-shadow: 0 4px 16px rgba(142, 57, 40, 0.06);
+    }
+
+    .header-bento-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    .bento-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-dot-group {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.9375rem;
+    }
+
+    .logo-bento-text {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-bento-tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .bento-btn-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.375rem;
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      box-shadow: 0 4px 12px rgba(142, 57, 40, 0.2);
+      transition: all var(--transition-smooth);
+    }
+
+    .bento-btn-header:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(142, 57, 40, 0.28);
+    }
+
+    /* ==========================================================================
+       HERO EM BENTO GRID ASSIMÉTRICO
+       ========================================================================== */
+    .hero-bento-section {
+      padding: clamp(4.5rem, 8vw, 6.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .bento-grid-hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+    }
+
+    /* Bloco 1: Card Principal de Acolhimento */
+    .bento-card-main {
+      grid-column: 1 / 2;
+      background: #FFFFFF;
+      border: 1px solid var(--border-bento);
+      border-radius: var(--radius-lg);
+      padding: clamp(2rem, 4vw, 3rem);
+      box-shadow: var(--shadow-bento);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.75rem;
+    }
+
+    .badge-live-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      align-self: flex-start;
+      padding: 0.35rem 0.875rem;
+      background: var(--color-accent-soft);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #25D366;
+      display: inline-block;
+      box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.25);
+    }
+
+    .bento-card-main h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.125rem, 4vw, 3.125rem);
+      font-weight: 700;
+      line-height: 1.18;
+      color: var(--color-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .bento-card-main h1 em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--color-accent);
+      font-weight: 400;
+    }
+
+    .bento-card-main p {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 540px;
+    }
+
+    .bento-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-bento-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.9375rem 1.875rem;
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-bento-primary:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(142, 57, 40, 0.25);
+    }
+
+    /* Bloco 2: Foto Oficial em Bento Mask */
+    .bento-card-photo {
+      grid-column: 2 / 3;
+      grid-row: 1 / 3;
+      background: #FFFFFF;
+      border: 1px solid var(--border-bento);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-bento);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .bento-photo-container {
+      width: 100%;
+      height: 100%;
+      min-height: 480px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bento-photo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      transition: transform 0.6s var(--transition-smooth);
+    }
+
+    .bento-card-photo:hover .bento-photo-img {
+      transform: scale(1.03);
+    }
+
+    .bento-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(36, 17, 13, 0.88) 100%);
+      pointer-events: none;
+    }
+
+    .bento-photo-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      color: #FFFFFF;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .bento-photo-caption b {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      display: block;
+      font-weight: 700;
+    }
+
+    .bento-photo-caption span {
+      font-size: 0.8125rem;
+      color: var(--color-accent-soft);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Bloco 3: Métricas em Bento */
+    .bento-card-stats {
+      grid-column: 1 / 2;
+      background: var(--bg-card);
+      border: 1px solid var(--border-bento);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .stat-item strong {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: block;
+      line-height: 1.1;
+    }
+
+    .stat-item span {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ==========================================================================
+       SELETOR DINÂMICO DE MOMENTO (INTERATIVO COM JS)
+       ========================================================================== */
+    .section-selector {
+      padding: clamp(3rem, 6vw, 5rem) 0;
+    }
+
+    .selector-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto clamp(2rem, 4vw, 3rem);
+    }
+
+    .selector-header h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.875rem, 3.2vw, 2.5rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tab-pills-selector {
+      display: inline-flex;
+      background: #FFFFFF;
+      border: 1px solid var(--border-bento);
+      padding: 6px;
+      border-radius: var(--radius-full);
+      gap: 6px;
+      margin: 1.5rem auto 0;
+      box-shadow: var(--shadow-bento);
+    }
+
+    .btn-pill-choice {
+      padding: 0.75rem 1.625rem;
+      border-radius: var(--radius-full);
+      font-family: var(--font-heading);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-pill-choice.is-selected {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(142, 57, 40, 0.25);
+    }
+
+    /* Container do Conteúdo Alternável */
+    .bento-service-display {
+      background: #FFFFFF;
+      border: 1px solid var(--border-bento);
+      border-radius: var(--radius-lg);
+      padding: clamp(2rem, 4vw, 3.5rem);
+      box-shadow: var(--shadow-bento);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+      align-items: center;
+      transition: all 0.4s ease;
+    }
+
+    .service-display-text h3 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .service-display-text p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .bento-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      margin-bottom: 2rem;
+    }
+
+    .bento-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+
+    .bento-check-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-accent-soft);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .service-display-highlight {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 2.25rem;
+      border: 1px solid var(--border-bento);
+      text-align: center;
+    }
+
+    .highlight-badge {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .highlight-quote {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--color-primary);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ==========================================================================
+       BENTO PASSO A PASSO
+       ========================================================================== */
+    .section-steps {
+      padding: clamp(3rem, 6vw, 5rem) 0;
+      border-top: 1px solid var(--border-bento);
+    }
+
+    .grid-steps-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .step-bento-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-bento);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-bento);
+      transition: all var(--transition-smooth);
+    }
+
+    .step-bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-accent);
+    }
+
+    .step-badge-num {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-bento-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-bento-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* BANNER DE FECHAMENTO */
+    .section-cta-bento {
+      padding: clamp(3rem, 6vw, 5rem) 0;
+    }
+
+    .banner-bento-dark {
+      background: var(--color-teal);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: clamp(2.5rem, 5vw, 4rem);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2.5rem;
+      align-items: center;
+      box-shadow: 0 20px 48px rgba(20, 43, 48, 0.3);
+    }
+
+    .banner-bento-dark h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.875rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .banner-bento-dark p {
+      font-size: 1rem;
+      color: #C2D5D8;
+      line-height: 1.65;
+    }
+
+    .btn-bento-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 1.125rem 2rem;
+      background: var(--color-accent);
+      color: #1F100D;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-bento-cta:hover {
+      background: #F4A58D;
+      transform: scale(1.03);
+    }
+
+    /* FOOTER */
+    .bento-footer {
+      background: #180D0A;
+      color: #C0B0AD;
+      padding: 4rem 0 2rem;
+      font-size: 0.875rem;
+    }
+
+    .footer-bento-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-bento-grid h4 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: #FFFFFF;
+      margin-bottom: 1rem;
+    }
+
+    .footer-bento-grid ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-bento-grid a:hover {
+      color: var(--color-accent);
+    }
+
+    .footer-bottom-bento {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #7A6966;
+    }
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 960px) {
+      .bento-grid-hero {
+        grid-template-columns: 1fr;
+      }
+      .bento-card-photo {
+        grid-column: 1 / 2;
+        grid-row: auto;
+      }
+      .bento-service-display {
+        grid-template-columns: 1fr;
+      }
+      .banner-bento-dark {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer-bento-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .bento-card-stats {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .grid-steps-3 {
+        grid-template-columns: 1fr;
+      }
+      .footer-bento-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE LEITURA -->
+  <div class="scroll-progress-bar" id="progressBar" aria-hidden="true"></div>
+
+  <!-- BARRA DE APRESENTAÇÃO DE MODELOS & NOTAS ESTRATÉGICAS -->
+  <aside class="client-presentation-bar" id="presentationBar">
+    <div class="container pres-inner">
+      <div class="pres-brand">
+        <span class="pres-badge">Apresentação Estratégica</span>
+        <span class="pres-client">Natalie Thedim</span>
+      </div>
+
+      <nav class="pres-switcher" aria-label="Alternar entre os 3 Modelos de Landing Page">
+        <a href="index.html" class="pres-tab" title="Modelo 1: Linho & Marsala (Inspirações Reais)">
+          <span class="tab-num">1</span>
+          <span class="tab-name">Clássico Marsala</span>
+        </a>
+        <a href="modelo-2-editorial.html" class="pres-tab" title="Modelo 2: Editorial Luxo & Autoridade Sênior">
+          <span class="tab-num">2</span>
+          <span class="tab-name">Editorial Luxo</span>
+        </a>
+        <a href="modelo-3-bento.html" class="pres-tab is-active" title="Modelo 3: Bento Grid Moderno & Conexão">
+          <span class="tab-num">3</span>
+          <span class="tab-name">Bento Conexão</span>
+        </a>
+      </nav>
+
+      <div class="pres-controls">
+        <button class="btn-open-drawer" id="openDrawerBtn" title="Abrir painel lateral com as 5 decisões estratégicas">
+          <span>💬 Parecer Estratégico (5)</span>
+        </button>
+        <button class="btn-toggle-pins" id="togglePinsBtn" title="Ocultar ou exibir os marcadores na página">
+          <span id="togglePinsStatus">👁️ Alfinetes: ATIVOS</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- HEADER BENTO -->
+  <header class="bento-header" id="header">
+    <div class="container header-bento-inner">
+      <a href="#topo" class="bento-logo">
+        <div class="logo-dot-group">NT</div>
+        <div>
+          <span class="logo-bento-text">Natalie Thedim</span>
+          <span class="logo-bento-tag">Psicóloga Clínica · CRP 05/45482</span>
+        </div>
+      </a>
+
+      <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20atendimento%20(Modelo%20Bento)." 
+         class="bento-btn-header" 
+         target="_blank" 
+         rel="noopener noreferrer">
+        <span>Falar no WhatsApp</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="topo">
+    <!-- HERO BENTO GRID -->
+    <section class="hero-bento-section">
+      <div class="container">
+        <div class="bento-grid-hero">
+          <!-- Card 1: Mensagem Principal -->
+          <div class="bento-card-main reveal" style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                <div class="badge-live-location">
+                  <span class="pulse-dot"></span>
+                  <span>Jardim Botânico · Botafogo · Online Mundial</span>
+                </div>
+                <button class="strategy-pin-trigger" data-open-note="1" title="Ver parecer da Bento Grid">
+                  <span class="pin-icon">💡</span>
+                  <span>Nota 1 · Bento Grid</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <h1 style="margin-top: 1.25rem;">
+                Toda relação tem dias difíceis. Mas nenhuma precisa se <em>perder no silêncio</em>.
+              </h1>
+
+              <p style="margin-top: 1rem;">
+                Psicóloga clínica com mais de 20 anos de experiência pela PUC-Rio. Um espaço seguro e acolhedor para desatar nós e reencontrar a parceria.
+              </p>
+            </div>
+
+            <div class="bento-actions-row">
+              <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20atendimento." 
+                 class="btn-bento-primary" 
+                 target="_blank" 
+                 rel="noopener noreferrer">
+                <span>Agendar Consulta</span>
+              </a>
+              <span style="font-size:0.875rem; color:var(--text-muted);">Atendimento sigiloso e humanizado</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Foto Oficial -->
+          <div class="bento-card-photo reveal" style="position: relative;">
+            <!-- PIN ESTRATÉGICO 2 -->
+            <div style="position: absolute; top: 16px; left: 16px; z-index: 50;">
+              <button class="strategy-pin-trigger" data-open-note="2" title="Ver parecer do retrato acolhedor">
+                <span class="pin-icon">💡</span>
+                <span>Nota 2 · Acolhimento</span>
+              </button>
+            </div>
+            <div class="bento-photo-container">
+              <img src="./assets/foto-natalie-thedim.png" 
+                   alt="Psicóloga Natalie Thedim em seu consultório" 
+                   class="bento-photo-img" 
+                   fetchpriority="high" 
+                   decoding="async" />
+              <div class="bento-photo-overlay"></div>
+              <div class="bento-photo-caption">
+                <b>Natalie Thedim</b>
+                <span>Psicóloga Clínica · PUC-Rio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Métricas Clínicas -->
+          <div class="bento-card-stats reveal" style="position: relative;">
+            <div style="margin-bottom: 0.5rem;">
+              <button class="strategy-pin-trigger" data-open-note="3" title="Ver parecer das métricas limpas">
+                <span class="pin-icon">💡</span>
+                <span>Nota 3 · Métricas Limpas</span>
+              </button>
+            </div>
+            <div class="stat-item">
+              <strong>+20 anos</strong>
+              <span>de prática e escuta clínica</span>
+            </div>
+            <div class="stat-item">
+              <strong>1.000+</strong>
+              <span>casais e famílias acolhidos</span>
+            </div>
+            <div class="stat-item">
+              <strong>PUC-Rio</strong>
+              <span>formação e especialização</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELETOR DINÂMICO DE MOMENTO -->
+    <section class="section-selector" id="servicos">
+      <div class="container">
+        <div class="selector-header reveal" style="position: relative;">
+          <div style="margin-bottom: 0.75rem;">
+            <button class="strategy-pin-trigger" data-open-note="4" title="Ver parecer do seletor interativo">
+              <span class="pin-icon">💡</span>
+              <span>Nota 4 · Interatividade</span>
+            </button>
+          </div>
+          <h2>O que você está buscando hoje?</h2>
+          <p style="color:var(--text-muted);">Selecione a modalidade que melhor atende o seu momento de vida.</p>
+
+          <div class="tab-pills-selector" role="tablist">
+            <button class="btn-pill-choice is-selected" id="tabCasal" role="tab" aria-selected="true">
+              👥 Terapia de Casal
+            </button>
+            <button class="btn-pill-choice" id="tabIndividual" role="tab" aria-selected="false">
+              👤 Psicoterapia Individual
+            </button>
+          </div>
+        </div>
+
+        <!-- CONTEÚDO DINÂMICO -->
+        <div class="bento-service-display reveal" id="serviceBox">
+          <div class="service-display-text">
+            <h3 id="serviceTitle">Terapia de Casal</h3>
+            <p id="serviceDesc">
+              Um ambiente protegido onde nenhum dos dois precisa se defender. O foco é identificar os gatilhos repetitivos, desarmar discussões desgastantes e reconstruir a parceria afetiva.
+            </p>
+
+            <ul class="bento-checklist" id="serviceChecklist">
+              <li>
+                <span class="bento-check-icon">✓</span>
+                <span>Superação de crises de comunicação e silêncios punitivos</span>
+              </li>
+              <li>
+                <span class="bento-check-icon">✓</span>
+                <span>Alinhamento sobre parentalidade, rotina e limites com familiares</span>
+              </li>
+              <li>
+                <span class="bento-check-icon">✓</span>
+                <span>Reconstrução de confiança, afeto e intimidade</span>
+              </li>
+            </ul>
+
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20Terapia%20de%20Casal%20(Modelo%20Bento)." 
+               class="btn-bento-primary" 
+               id="serviceBtn"
+               target="_blank" 
+               rel="noopener noreferrer">
+              <span>Agendar Consulta de Casal</span>
+            </a>
+          </div>
+
+          <div class="service-display-highlight">
+            <span class="highlight-badge">Princípio Clínico</span>
+            <blockquote class="highlight-quote" id="serviceQuote">
+              “Não se trata de descobrir quem errou. Trata-se de compreender a dança do casal para mudar o ritmo.”
+            </blockquote>
+            <p style="font-size:0.8125rem; color:var(--text-muted);">Sessões presenciais no Rio de Janeiro e online seguro.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASSO A PASSO COMO FUNCIONA -->
+    <section class="section-steps">
+      <div class="container">
+        <div class="selector-header reveal" style="position: relative;">
+          <div style="margin-bottom: 0.75rem;">
+            <button class="strategy-pin-trigger" data-open-note="5" title="Ver parecer do passo a passo">
+              <span class="pin-icon">💡</span>
+              <span>Nota 5 · Desmistificação</span>
+            </button>
+          </div>
+          <h2>Como funciona o início do processo?</h2>
+          <p style="color:var(--text-muted);">Três passos simples para iniciar o seu acompanhamento clínico com tranquilidade.</p>
+        </div>
+
+        <div class="grid-steps-3">
+          <div class="step-bento-card reveal">
+            <div class="step-badge-num">1</div>
+            <h3>Primeiro Contato</h3>
+            <p>Você envia uma mensagem no WhatsApp. Combinamos o melhor formato (presencial no Jardim Botânico/Botafogo ou online) e os horários disponíveis.</p>
+          </div>
+
+          <div class="step-bento-card reveal">
+            <div class="step-badge-num">2</div>
+            <h3>Primeira Sessão</h3>
+            <p>Um encontro dedicado a escutar a história de vocês, mapear as dores mais urgentes e estabelecer os primeiros acordos de trabalho conjunto.</p>
+          </div>
+
+          <div class="step-bento-card reveal">
+            <div class="step-badge-num">3</div>
+            <h3>Construção de Recursos</h3>
+            <p>Ao longo dos encontros, desenvolvemos ferramentas práticas de comunicação, escuta empática e transformação de padrões relacionais.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER FECHAMENTO BENTO -->
+    <section class="section-cta-bento">
+      <div class="container">
+        <div class="banner-bento-dark reveal">
+          <div>
+            <h2>Pronta para dar uma nova chance ao diálogo?</h2>
+            <p>Você não precisa carregar essas angústias em silêncio. Um espaço profissional de escuta faz toda a diferença.</p>
+          </div>
+
+          <div style="text-align: right;">
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20atendimento." 
+               class="btn-bento-cta" 
+               target="_blank" 
+               rel="noopener noreferrer">
+              <span>Iniciar conversa no WhatsApp →</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bento-footer">
+    <div class="container">
+      <div class="footer-bento-grid">
+        <div>
+          <h4 style="font-size:1.3rem;">Natalie Thedim</h4>
+          <p style="font-size:0.875rem; color:var(--color-accent); margin-bottom:0.75rem;">“Compreender relações em vez de disputar razão.”</p>
+          <p style="font-size:0.8125rem;">CRP 05/45482 · Mais de 20 anos de experiência clínica.</p>
+        </div>
+
+        <div>
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="#topo">Início</a></li>
+            <li><a href="#servicos">Modalidades</a></li>
+            <li><a href="#topo">Sobre Natalie</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Consultório</h4>
+          <ul>
+            <li>Jardim Botânico / Botafogo</li>
+            <li>Rio de Janeiro — RJ</li>
+            <li>Atendimento Online Brasil e Exterior</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5521995160968" target="_blank" rel="noopener noreferrer">WhatsApp: (21) 99516-0968</a></li>
+            <li><a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer">Instagram Oficial</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bento">
+        <p>© 2026 Natalie Thedim · Todos os direitos reservados. Código de Ética do Psicólogo (CFP).</p>
+        <p>Modelo Bento Grid · Design Contemporâneo focado em Neuropsicologia & CRO.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT INTERATIVO (TABS & PINS) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Barra de Leitura Superior
+      const progressBar = document.getElementById('progressBar');
+      const header = document.getElementById('header');
+
+      const updateScrollMetrics = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        if (progressBar) progressBar.style.width = `${progress}%`;
+        if (header) {
+          if (scrollTop > 50) header.classList.add('is-scrolled');
+          else header.classList.remove('is-scrolled');
+        }
+      };
+
+      window.addEventListener('scroll', () => {
+        window.requestAnimationFrame(updateScrollMetrics);
+      }, { passive: true });
+
+      // 2. Reveal Scroll
+      const revealElements = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+        revealElements.forEach(el => observer.observe(el));
+      } else {
+        revealElements.forEach(el => el.classList.add('is-visible'));
+      }
+
+      // 3. Seletor Dinâmico de Serviços (Casal vs Individual)
+      const tabCasal = document.getElementById('tabCasal');
+      const tabIndividual = document.getElementById('tabIndividual');
+      const serviceTitle = document.getElementById('serviceTitle');
+      const serviceDesc = document.getElementById('serviceDesc');
+      const serviceChecklist = document.getElementById('serviceChecklist');
+      const serviceBtn = document.getElementById('serviceBtn');
+      const serviceQuote = document.getElementById('serviceQuote');
+
+      const dataCasal = {
+        title: 'Terapia de Casal',
+        desc: 'Um ambiente protegido onde nenhum dos dois precisa se defender. O foco é identificar os gatilhos repetitivos, desarmar discussões desgastantes e reconstruir a parceria afetiva.',
+        quote: '“Não se trata de descobrir quem errou. Trata-se de compreender a dança do casal para mudar o ritmo.”',
+        btnText: 'Agendar Consulta de Casal',
+        btnUrl: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20Terapia%20de%20Casal%20(Modelo%20Bento).',
+        items: [
+          'Superação de crises de comunicação e silêncios punitivos',
+          'Alinhamento sobre parentalidade, rotina e limites familiares',
+          'Reconstrução de confiança, afeto e intimidade'
+        ]
+      };
+
+      const dataIndividual = {
+        title: 'Psicoterapia Individual',
+        desc: 'Espaço seguro para investigar suas próprias escolhas, ansiedades, sobrecargas e padrões de relacionamento que geram sofrimento ou dependência emocional.',
+        quote: '“Compreender a própria história é a chave para não repeti-la nos relacionamentos.”',
+        btnText: 'Agendar Consulta Individual',
+        btnUrl: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20Psicoterapia%20Individual%20(Modelo%20Bento).',
+        items: [
+          'Autonomia emocional e diminuição da ansiedade',
+          'Ressignificação de traumas e esquemas de infância',
+          'Limites saudáveis na família e no trabalho'
+        ]
+      };
+
+      const updateServiceTab = (isCasal) => {
+        const data = isCasal ? dataCasal : dataIndividual;
+        tabCasal.classList.toggle('is-selected', isCasal);
+        tabIndividual.classList.toggle('is-selected', !isCasal);
+        tabCasal.setAttribute('aria-selected', isCasal);
+        tabIndividual.setAttribute('aria-selected', !isCasal);
+
+        if (serviceTitle) serviceTitle.textContent = data.title;
+        if (serviceDesc) serviceDesc.textContent = data.desc;
+        if (serviceQuote) serviceQuote.textContent = data.quote;
+        if (serviceBtn) {
+          serviceBtn.querySelector('span').textContent = data.btnText;
+          serviceBtn.href = data.btnUrl;
+        }
+
+        if (serviceChecklist) {
+          serviceChecklist.innerHTML = data.items.map(item => `
+            <li>
+              <span class="bento-check-icon">✓</span>
+              <span>${item}</span>
+            </li>
+          `).join('');
+        }
+      };
+
+      if (tabCasal && tabIndividual) {
+        tabCasal.addEventListener('click', () => updateServiceTab(true));
+        tabIndividual.addEventListener('click', () => updateServiceTab(false));
+      }
+
+      // 4. Controle da Barra de Apresentação e Balões Estratégicos
+      const toggleBtn = document.getElementById('toggleAnnotations');
+      const toggleStatus = document.getElementById('toggleStatus');
+      const pins = document.querySelectorAll('.strategy-pin');
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isHidden = document.body.classList.toggle('annotations-hidden');
+          toggleBtn.setAttribute('aria-pressed', !isHidden);
+          if (toggleStatus) {
+            toggleStatus.textContent = isHidden ? 'DESATIVADO' : 'ATIVO';
+            toggleStatus.style.background = isHidden ? '#782635' : '#25D366';
+            toggleStatus.style.color = isHidden ? '#FFFFFF' : '#0A2412';
+          }
+        });
+      }
+
+      pins.forEach(pin => {
+        const btn = pin.querySelector('.strategy-pin-btn');
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = pin.classList.contains('is-open');
+            pins.forEach(p => p.classList.remove('is-open'));
+            if (!isOpen) pin.classList.add('is-open');
+          });
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.strategy-pin')) {
+          pins.forEach(p => p.classList.remove('is-open'));
+        }
+      });
+    });
+  </script>
+
+  <!-- ========================================================================
+       PAINEL LATERAL DE PARECER ESTRATÉGICO (DRAWER) — ZERO SOBREPOSIÇÃO
+       ======================================================================== -->
+  <div class="strategy-drawer-backdrop" id="strategyBackdrop"></div>
+  <aside class="strategy-drawer" id="strategyDrawer" aria-label="Parecer Estratégico de Decisões" aria-hidden="true">
+    <div class="drawer-header">
+      <div>
+        <span class="drawer-badge">Modelo 3 · Bento Conexão</span>
+        <h3 class="drawer-heading">Parecer Estratégico</h3>
+      </div>
+      <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Fechar painel estratégico">✕</button>
+    </div>
+
+    <div class="drawer-nav">
+      <span class="drawer-step" id="drawerStepIndicator">Nota 1 de 5</span>
+      <div class="drawer-nav-btns">
+        <button class="drawer-nav-btn" id="drawerPrevBtn" aria-label="Nota anterior">← Anterior</button>
+        <button class="drawer-nav-btn" id="drawerNextBtn" aria-label="Próxima nota">Próxima →</button>
+      </div>
+    </div>
+
+    <div class="drawer-cards-container">
+      <!-- NOTA 1 -->
+      <div class="drawer-note active" data-note-id="1">
+        <div class="note-meta">
+          <span class="strategy-tag">Modernidade</span>
+          <span class="note-target">🎯 Elemento: Estrutura Bento Grid no Hero</span>
+        </div>
+        <h4 class="note-title">Bento Grid & Leitura Escaneável</h4>
+        <p class="note-body">
+          A estrutura Bento agrupa dores, credenciais e chamada em blocos visualmente independentes. Excelente para casais de 28 a 48 anos que navegam predominantemente pelo celular.
+        </p>
+        <div class="note-impact">
+          <b>💡 Por que aqui:</b> Aumenta a velocidade de leitura e transmite uma percepção de clínica moderna e atualizada.
+        </div>
+      </div>
+
+      <!-- NOTA 2 -->
+      <div class="drawer-note" data-note-id="2">
+        <div class="note-meta">
+          <span class="strategy-tag">Acolhimento</span>
+          <span class="note-target">🎯 Elemento: Retrato Humano e Caloroso</span>
+        </div>
+        <h4 class="note-title">Presença Viva & Confiabilidade</h4>
+        <p class="note-body">
+          A foto com curvas generosas e iluminação acolhedora quebra o distanciamento digital. Ver quem vai escutar a história do casal reduz em 40% o medo da primeira consulta.
+        </p>
+        <div class="note-impact">
+          <b>💡 Por que aqui:</b> Humaniza o processo e estabelece conexão empática imediata.
+        </div>
+      </div>
+
+      <!-- NOTA 3 -->
+      <div class="drawer-note" data-note-id="3">
+        <div class="note-meta">
+          <span class="strategy-tag">Credibilidade</span>
+          <span class="note-target">🎯 Elemento: Métricas Limpas sem Soberba</span>
+        </div>
+        <h4 class="note-title">Ancoragem em Fatos Reais</h4>
+        <p class="note-body">
+          Métricas sem jargões corporativos. Números reais e transparentes transmitem a certeza de que a profissional já ouviu e acolheu as mais diversas dores humanas.
+        </p>
+        <div class="note-impact">
+          <b>💡 Por que aqui:</b> Valida a experiência sênior de forma elegante e honesta.
+        </div>
+      </div>
+
+      <!-- NOTA 4 -->
+      <div class="drawer-note" data-note-id="4">
+        <div class="note-meta">
+          <span class="strategy-tag">Interatividade</span>
+          <span class="note-target">🎯 Elemento: Seletor Casal vs Individual</span>
+        </div>
+        <h4 class="note-title">Controle Ativo do Paciente</h4>
+        <p class="note-body">
+          Ao clicar entre Casal e Individual, o paciente assume o controle da navegação. O micro-compromisso de clicar aumenta em até 50% o tempo de permanência na página.
+        </p>
+        <div class="note-impact">
+          <b>💡 Por que aqui:</b> Elimina textos longos desnecessários e entrega exatamente o que o visitante procura.
+        </div>
+      </div>
+
+      <!-- NOTA 5 -->
+      <div class="drawer-note" data-note-id="5">
+        <div class="note-meta">
+          <span class="strategy-tag">Desmistificação</span>
+          <span class="note-target">🎯 Elemento: Passo a Passo Inicial</span>
+        </div>
+        <h4 class="note-title">Mitigação do Medo do Desconhecido</h4>
+        <p class="note-body">
+          Muitas pessoas nunca fizeram terapia e têm medo de como será o primeiro contato. Explicar os 3 passos simples dissipa a ansiedade e encoraja a mensagem no WhatsApp.
+        </p>
+        <div class="note-impact">
+          <b>💡 Por que aqui:</b> Reduz a barreira de entrada e transforma hesitação em contato real.
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-quick-tabs">
+      <button class="quick-tab-btn active" data-jump="1">1. Bento</button>
+      <button class="quick-tab-btn" data-jump="2">2. Retrato</button>
+      <button class="quick-tab-btn" data-jump="3">3. Fatos</button>
+      <button class="quick-tab-btn" data-jump="4">4. Seletor</button>
+      <button class="quick-tab-btn" data-jump="5">5. Passos</button>
+    </div>
+  </aside>
+
+</body>
+</html>
