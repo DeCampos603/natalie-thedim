@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Pergunte para Natalie</title>
+  <meta name="description" content="Envie sua dúvida sobre relacionamentos e receba uma resposta de Natalie Thedim." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
+  <meta name="theme-color" content="#5B1826" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+
+  <header class="revista-header">
+    <div class="container header-row">
+      <a href="index.html" class="revista-logo">Natalie Thedim <span>Revista de Relacionamentos</span></a>
+      <a class="header-cta" href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20atendimento." target="_blank" rel="noopener noreferrer">Agendar atendimento</a>
+    </div>
+    <nav class="revista-nav" aria-label="Navegação do site">
+      <div class="container">
+        <a href="index.html">Início</a>
+        <a href="historias.html">Histórias Reais</a>
+        <a href="cartas.html">Cartas</a>
+        <a href="pergunte.html" class="is-active">Pergunte p/ Natalie</a>
+        <a href="diario.html">Diário Anônimo</a>
+        <a href="biblioteca.html">Biblioteca</a>
+        <a href="exercicios.html">Exercícios</a>
+        <a href="e-se.html">Série "E se..."</a>
+        <a href="casos.html">Casos p/ Refletir</a>
+        <a href="emocoes.html">Mapa das Emoções</a>
+        <a href="filme.html">Clube do Filme</a>
+        <a href="livro.html">Clube do Livro</a>
+        <a href="podcast.html">Podcast</a>
+        <a href="youtube.html">YouTube</a>
+        <a href="instagram.html">Instagram</a>
+        <a href="terapeutas.html">Área p/ Terapeutas</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="breadcrumb"><a href="index.html">Início</a> / Pergunte para Natalie</span>
+        <span class="proto-eyebrow">Caixa permanente</span>
+        <h1>Pergunte para Natalie</h1>
+        <p>Uma pergunta enviada, uma resposta em vídeo, áudio ou texto — alimentando o site, o Instagram e o YouTube ao mesmo tempo.</p>
+      </div>
+    </section>
+
+    <section class="proto-section">
+      <div class="container">
+        <div id="avisoOffline" class="aviso-offline" hidden>
+          Este site ainda não está conectado ao banco de dados. Sua pergunta não será salva até o Supabase ser configurado.
+        </div>
+
+        <div class="envio-box">
+          <h3>Qual é a sua dúvida sobre relacionamentos?</h3>
+          <form id="formPergunta">
+            <div class="campo">
+              <textarea id="textoPergunta" name="texto" rows="3" maxlength="1000" required
+                placeholder="Ex.: Como saber se devo continuar em um relacionamento à distância?"></textarea>
+              <span class="contador"><span id="contadorPergunta">0</span>/1000</span>
+            </div>
+            <button type="submit" class="btn-enviar" id="btnEnviarPergunta">Enviar pergunta</button>
+            <div id="statusPergunta" class="status-msg" hidden></div>
+          </form>
+        </div>
+
+        <div class="proto-header" style="margin: 2.5rem auto 1.5rem;">
+          <span class="proto-eyebrow">Já respondidas</span>
+          <h2 style="text-align:left;">Perguntas já respondidas</h2>
+        </div>
+        <div id="listaPerguntas" class="mock-grid" aria-live="polite">
+          <p class="lista-vazia">Carregando perguntas respondidas…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <p class="footer-note">
+    Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/supabase-config.js"></script>
+  <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const avisoOffline = document.getElementById('avisoOffline');
+      const lista = document.getElementById('listaPerguntas');
+      const form = document.getElementById('formPergunta');
+      const textoInput = document.getElementById('textoPergunta');
+      const contador = document.getElementById('contadorPergunta');
+      const status = document.getElementById('statusPergunta');
+      const btnEnviar = document.getElementById('btnEnviarPergunta');
+
+      if (!DB.disponivel()) avisoOffline.hidden = false;
+
+      textoInput.addEventListener('input', () => { contador.textContent = textoInput.value.length; });
+
+      function escapeHtml(s) {
+        const div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+      }
+
+      async function carregar() {
+        const { ok, dados } = await DB.listarAprovados('perguntas', { limite: 12 });
+        if (!ok || dados.length === 0) {
+          lista.innerHTML = '<p class="lista-vazia">Ainda não há perguntas respondidas publicadas.</p>';
+          return;
+        }
+        lista.innerHTML = dados.map((p) => `
+          <div class="mock-card">
+            <h3>"${escapeHtml(p.texto)}"</h3>
+            ${p.resposta_texto ? `<div class="mock-meta">${p.resposta_tipo === 'video' ? '▶️' : p.resposta_tipo === 'audio' ? '🎧' : '📝'} ${escapeHtml(p.resposta_texto)}</div>` : ''}
+          </div>
+        `).join('');
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.hidden = true;
+        if (!DB.disponivel()) {
+          status.className = 'status-msg aviso';
+          status.textContent = 'Banco de dados ainda não configurado — sua pergunta não pôde ser salva agora.';
+          status.hidden = false;
+          return;
+        }
+        const texto = textoInput.value.trim();
+        if (texto.length < 5) return;
+
+        btnEnviar.disabled = true;
+        const { ok, erro } = await DB.enviar('perguntas', { texto });
+        btnEnviar.disabled = false;
+
+        if (ok) {
+          form.reset();
+          contador.textContent = '0';
+          status.className = 'status-msg sucesso';
+          status.textContent = 'Pergunta enviada! Quando a Natalie responder, ela pode aparecer aqui.';
+        } else {
+          status.className = 'status-msg erro';
+          status.textContent = 'Não foi possível enviar agora (' + erro + ').';
+        }
+        status.hidden = false;
+      });
+
+      carregar();
+    });
+  </script>
+
+</body>
+</html>

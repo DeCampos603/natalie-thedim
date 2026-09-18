@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Moderação · Natalie Thedim</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
+  <meta name="theme-color" content="#5B1826" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+
+  <header class="revista-header">
+    <div class="container header-row">
+      <a href="index.html" class="revista-logo">Natalie Thedim <span>Painel de Moderação</span></a>
+      <button class="header-cta" id="btnSair" hidden>Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="avisoOffline" class="aviso-offline" style="margin-top:2rem;" hidden>
+      Este painel ainda não está conectado ao banco de dados. Preencha <code>assets/supabase-config.js</code> e crie o login da Natalie no Supabase (Authentication → Users) para poder moderar de verdade.
+    </div>
+
+    <section id="telaLogin" class="login-box" hidden>
+      <h1>Entrar</h1>
+      <form id="formLogin">
+        <div class="campo">
+          <label for="emailLogin">E-mail</label>
+          <input type="text" id="emailLogin" required autocomplete="username" />
+        </div>
+        <div class="campo">
+          <label for="senhaLogin">Senha</label>
+          <input type="text" id="senhaLogin" required autocomplete="current-password" style="-webkit-text-security: disc;" />
+        </div>
+        <button type="submit" class="btn-enviar">Entrar</button>
+        <div id="statusLogin" class="status-msg" hidden></div>
+      </form>
+    </section>
+
+    <section id="telaModeracao" class="container" style="padding: 2rem 1.25rem;" hidden>
+      <div class="fila-tabs">
+        <button class="fila-tab is-active" data-tabela="historias">Histórias <span class="contagem" id="contHistorias"></span></button>
+        <button class="fila-tab" data-tabela="cartas">Cartas <span class="contagem" id="contCartas"></span></button>
+        <button class="fila-tab" data-tabela="perguntas">Perguntas <span class="contagem" id="contPerguntas"></span></button>
+        <button class="fila-tab" data-tabela="diario_posts">Diário <span class="contagem" id="contDiario"></span></button>
+      </div>
+
+      <div id="filtroStatus" class="chip-row" style="margin-bottom:1.5rem;">
+        <span class="chip-static" data-status="pendente" style="cursor:pointer; font-weight:700;">Pendentes</span>
+        <span class="chip-static" data-status="aprovado" style="cursor:pointer;">Aprovados</span>
+        <span class="chip-static" data-status="rejeitado" style="cursor:pointer;">Rejeitados</span>
+      </div>
+
+      <div id="listaModeracao"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/supabase-config.js"></script>
+  <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const avisoOffline = document.getElementById('avisoOffline');
+      const telaLogin = document.getElementById('telaLogin');
+      const telaModeracao = document.getElementById('telaModeracao');
+      const formLogin = document.getElementById('formLogin');
+      const statusLogin = document.getElementById('statusLogin');
+      const btnSair = document.getElementById('btnSair');
+      const lista = document.getElementById('listaModeracao');
+      const tabs = document.querySelectorAll('.fila-tab');
+      const filtros = document.querySelectorAll('#filtroStatus [data-status]');
+
+      let tabelaAtual = 'historias';
+      let statusAtual = 'pendente';
+
+      const rotulos = {
+        historias: { nome: 'História', respostaTipos: true },
+        cartas: { nome: 'Carta', respostaTipos: true },
+        perguntas: { nome: 'Pergunta', respostaTipos: true, exigeResposta: true },
+        diario_posts: { nome: 'Diário', respostaTipos: false },
+      };
+
+      if (!DB.disponivel()) {
+        avisoOffline.hidden = false;
+        return;
+      }
+
+      function escapeHtml(s) {
+        const div = document.createElement('div');
+        div.textContent = s || '';
+        return div.innerHTML;
+      }
+
+      async function mostrarLogin() {
+        telaLogin.hidden = false;
+        telaModeracao.hidden = true;
+        btnSair.hidden = true;
+      }
+
+      async function mostrarModeracao() {
+        telaLogin.hidden = true;
+        telaModeracao.hidden = false;
+        btnSair.hidden = false;
+        await atualizarContagens();
+        await carregarFila();
+      }
+
+      async function atualizarContagens() {
+        for (const tabela of Object.keys(rotulos)) {
+          const { dados } = await DB.listarTudo(tabela);
+          const pendentes = dados.filter((d) => d.status === 'pendente').length;
+          const alvo = document.getElementById('cont' + tabela.replace('_posts', '').replace(/^\w/, (c) => c.toUpperCase()));
+          if (alvo) alvo.textContent = pendentes > 0 ? `(${pendentes})` : '';
+        }
+      }
+
+      async function carregarFila() {
+        lista.innerHTML = '<p class="lista-vazia">Carregando…</p>';
+        const { ok, dados, erro } = await DB.listarTudo(tabelaAtual);
+        if (!ok) {
+          lista.innerHTML = `<p class="lista-vazia">Erro ao carregar: ${escapeHtml(erro)}</p>`;
+          return;
+        }
+        const filtrados = dados.filter((d) => d.status === statusAtual);
+        if (filtrados.length === 0) {
+          lista.innerHTML = `<p class="lista-vazia">Nada em "${statusAtual}" aqui.</p>`;
+          return;
+        }
+
+        lista.innerHTML = filtrados.map((item) => {
+          const rotulo = rotulos[tabelaAtual];
+          const campoResposta = rotulo.respostaTipos ? `
+            <div class="campo" style="margin-top:0.75rem;">
+              <label>Resposta (opcional, aparece publicada junto)</label>
+              <textarea class="resposta-texto" rows="2" placeholder="Escreva um resumo da sua resposta em vídeo/áudio/texto...">${escapeHtml(item.resposta_texto)}</textarea>
+            </div>` : '';
+
+          return `
+            <div class="item-moderacao" data-id="${item.id}">
+              <div class="meta">
+                <span class="badge-status ${item.status}">${item.status}</span>
+                <time>${new Date(item.criado_em).toLocaleString('pt-BR')}</time>
+              </div>
+              ${item.destinatario ? `<div class="mock-meta" style="margin-bottom:0.5rem;">Para: ${escapeHtml(item.destinatario)}</div>` : ''}
+              <div class="texto">${escapeHtml(item.texto)}</div>
+              ${campoResposta}
+              <div class="acoes">
+                <button class="btn-mod aprovar" data-acao="aprovado">✓ Aprovar${rotulo.exigeResposta ? ' e publicar' : ''}</button>
+                <button class="btn-mod rejeitar" data-acao="rejeitado">✕ Rejeitar</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        lista.querySelectorAll('.item-moderacao').forEach((el) => {
+          const id = el.getAttribute('data-id');
+          el.querySelectorAll('.btn-mod').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const acao = btn.getAttribute('data-acao');
+              const respostaEl = el.querySelector('.resposta-texto');
+              const extra = respostaEl && respostaEl.value.trim()
+                ? { resposta_texto: respostaEl.value.trim() }
+                : {};
+              btn.disabled = true;
+              const { ok } = await DB.moderar(tabelaAtual, id, acao, extra);
+              if (ok) {
+                await atualizarContagens();
+                await carregarFila();
+              } else {
+                btn.disabled = false;
+              }
+            });
+          });
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => t.classList.remove('is-active'));
+          tab.classList.add('is-active');
+          tabelaAtual = tab.getAttribute('data-tabela');
+          carregarFila();
+        });
+      });
+
+      filtros.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          filtros.forEach((c) => (c.style.fontWeight = '400'));
+          chip.style.fontWeight = '700';
+          statusAtual = chip.getAttribute('data-status');
+          carregarFila();
+        });
+      });
+
+      formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusLogin.hidden = true;
+        const email = document.getElementById('emailLogin').value.trim();
+        const senha = document.getElementById('senhaLogin').value;
+        const { ok, erro } = await DB.entrar(email, senha);
+        if (!ok) {
+          statusLogin.className = 'status-msg erro';
+          statusLogin.textContent = 'Não foi possível entrar: ' + erro;
+          statusLogin.hidden = false;
+          return;
+        }
+        mostrarModeracao();
+      });
+
+      btnSair.addEventListener('click', async () => {
+        await DB.sair();
+        mostrarLogin();
+      });
+
+      const sessao = await DB.sessaoAtual();
+      if (sessao) {
+        mostrarModeracao();
+      } else {
+        mostrarLogin();
+      }
+    });
+  </script>
+
+</body>
+</html>

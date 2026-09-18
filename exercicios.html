@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Exercícios · Natalie Thedim</title>
+  <meta name="description" content="Testes rápidos de autoconhecimento sobre relacionamentos, com resultado na hora." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
+  <meta name="theme-color" content="#5B1826" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+
+  <header class="revista-header">
+    <div class="container header-row">
+      <a href="index.html" class="revista-logo">Natalie Thedim <span>Revista de Relacionamentos</span></a>
+      <a class="header-cta" href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20atendimento." target="_blank" rel="noopener noreferrer">Agendar atendimento</a>
+    </div>
+    <nav class="revista-nav" aria-label="Navegação do site">
+      <div class="container">
+        <a href="index.html">Início</a>
+        <a href="historias.html">Histórias Reais</a>
+        <a href="cartas.html">Cartas</a>
+        <a href="pergunte.html">Pergunte p/ Natalie</a>
+        <a href="diario.html">Diário Anônimo</a>
+        <a href="biblioteca.html">Biblioteca</a>
+        <a href="exercicios.html" class="is-active">Exercícios</a>
+        <a href="e-se.html">Série "E se..."</a>
+        <a href="casos.html">Casos p/ Refletir</a>
+        <a href="emocoes.html">Mapa das Emoções</a>
+        <a href="filme.html">Clube do Filme</a>
+        <a href="livro.html">Clube do Livro</a>
+        <a href="podcast.html">Podcast</a>
+        <a href="youtube.html">YouTube</a>
+        <a href="instagram.html">Instagram</a>
+        <a href="terapeutas.html">Área p/ Terapeutas</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="breadcrumb"><a href="index.html">Início</a> / Exercícios</span>
+        <span class="proto-eyebrow">Autoconhecimento em minutos</span>
+        <h1>O Termômetro do Casamento</h1>
+        <p>5 perguntas rápidas para refletir sobre o momento atual da sua relação. Não é um diagnóstico — é um convite à reflexão.</p>
+      </div>
+    </section>
+
+    <section class="proto-section">
+      <div class="container">
+        <form class="termometro-card" id="termometroForm">
+          <div class="termometro-pergunta" data-q="1">
+            <p>1. Quando surge um desentendimento, o que costuma acontecer?</p>
+            <label><input type="radio" name="q1" value="2"> Conseguimos conversar até um acordo</label>
+            <label><input type="radio" name="q1" value="1"> Um de nós cede só para acabar a discussão</label>
+            <label><input type="radio" name="q1" value="0"> Vira silêncio ou mágoa que dura dias</label>
+          </div>
+          <div class="termometro-pergunta" data-q="2">
+            <p>2. Como está a conversa sobre o dia a dia?</p>
+            <label><input type="radio" name="q2" value="2"> Conversamos com frequência e interesse real</label>
+            <label><input type="radio" name="q2" value="1"> Conversamos, mas de forma automática</label>
+            <label><input type="radio" name="q2" value="0"> Quase não sobra conversa entre nós</label>
+          </div>
+          <div class="termometro-pergunta" data-q="3">
+            <p>3. Vocês conseguem pedir desculpas um ao outro?</p>
+            <label><input type="radio" name="q3" value="2"> Sim, com facilidade</label>
+            <label><input type="radio" name="q3" value="1"> Às vezes, com dificuldade</label>
+            <label><input type="radio" name="q3" value="0"> Quase nunca</label>
+          </div>
+          <div class="termometro-pergunta" data-q="4">
+            <p>4. Como está a intimidade e o afeto entre vocês?</p>
+            <label><input type="radio" name="q4" value="2"> Presente e cultivada</label>
+            <label><input type="radio" name="q4" value="1"> Existe, mas diminuiu bastante</label>
+            <label><input type="radio" name="q4" value="0"> Praticamente não existe mais</label>
+          </div>
+          <div class="termometro-pergunta" data-q="5">
+            <p>5. Vocês se sentem parceiros diante dos problemas da vida?</p>
+            <label><input type="radio" name="q5" value="2"> Sim, encaramos juntos</label>
+            <label><input type="radio" name="q5" value="1"> Depende do assunto</label>
+            <label><input type="radio" name="q5" value="0"> Sinto que enfrento sozinha(o)</label>
+          </div>
+
+          <button type="submit" class="btn-enviar"><span>Ver meu resultado</span></button>
+          <div class="termometro-resultado" id="termometroResultado" hidden></div>
+        </form>
+
+        <div class="proto-header" style="margin: 3rem auto 1rem; text-align:center;">
+          <span class="proto-eyebrow">Em breve</span>
+          <h2>Mais exercícios a caminho</h2>
+        </div>
+        <div class="mock-grid">
+          <div class="mock-card"><h3>🗺️ O Mapa da Comunicação</h3><p>Como cada um fala e escuta dentro do casal.</p></div>
+          <div class="mock-card"><h3>⚔️ Como Brigamos</h3><p>Identifica o padrão de conflito do casal.</p></div>
+          <div class="mock-card"><h3>🤝 Quem Costuma Ceder</h3><p>Mapeia o equilíbrio de poder nas decisões.</p></div>
+          <div class="mock-card"><h3>💗 Qual Linguagem de Afeto Usamos</h3><p>Baseado nas linguagens do amor de cada um.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <p class="footer-note">
+    Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
+  </p>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('termometroForm');
+      const resultado = document.getElementById('termometroResultado');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const perguntas = ['q1', 'q2', 'q3', 'q4', 'q5'];
+        let respondidas = 0;
+        let pontos = 0;
+
+        perguntas.forEach((nome) => {
+          const selecionado = form.querySelector(`input[name="${nome}"]:checked`);
+          if (selecionado) {
+            respondidas++;
+            pontos += parseInt(selecionado.value, 10);
+          }
+        });
+
+        if (respondidas < perguntas.length) {
+          resultado.hidden = false;
+          resultado.innerHTML = 'Responda todas as perguntas para ver o resultado. 🙂';
+          resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        let mensagem = '';
+        if (pontos >= 8) {
+          mensagem = '<strong>Vínculo aquecido.</strong> Vocês têm uma base de diálogo e afeto ativa. Continuar cuidando dessa conexão é o que mantém a relação viva.';
+        } else if (pontos >= 4) {
+          mensagem = '<strong>Vínculo em atenção.</strong> Existem pontos fortes, mas também sinais de desgaste que valem ser olhados com cuidado antes que se acumulem.';
+        } else {
+          mensagem = '<strong>Vínculo pedindo cuidado.</strong> Os sinais indicam bastante distância ou ressentimento acumulado. Um espaço neutro para conversar pode ajudar a entender o que está acontecendo.';
+        }
+
+        const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Fiz o Termômetro do Casamento no site e gostaria de conversar sobre o resultado.')}`;
+
+        resultado.hidden = false;
+        resultado.innerHTML = `${mensagem}<br><br>Isso não é um diagnóstico clínico — é só um convite à reflexão. <a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer aprofundar isso na terapia? →</a>`;
+        resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  </script>
+
+</body>
+</html>
