@@ -27,12 +27,12 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Physician",
+    "@type": "ProfessionalService",
     "name": "Natalie Thedim — Psicóloga Clínica",
     "alternateName": "Natalie Rodrigues Thedim Silvado Camardella",
     "description": "Psicóloga clínica, terapeuta de casal e família com mais de 20 anos de experiência clínica formada pela PUC-Rio. Atendimento presencial no Rio de Janeiro e online.",
     "telephone": "+55-21-99516-0968",
-    "medicalSpecialty": "Psychology",
+    "areaServed": "BR",
     "alumniOf": "Pontifícia Universidade Católica do Rio de Janeiro (PUC-Rio)",
     "address": {
       "@type": "PostalAddress",
@@ -221,429 +221,9 @@
       }
     }
 
-    /* ==========================================================================
-       BARRA DE APRESENTAÇÃO E SELETOR DE MODELOS (CLIENT REVIEW BAR)
-       ========================================================================== */
-    .client-presentation-bar {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: #1C070C;
-      color: #FFFFFF;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      font-size: 0.8125rem;
-      padding: 0.5rem 0;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-    }
-
-    .pres-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .pres-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-    }
-
-    .pres-badge {
-      background: #BD697C;
-      color: #FFFFFF;
-      padding: 0.2rem 0.6rem;
-      border-radius: var(--radius-full);
-      font-size: 0.6875rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .pres-client {
-      font-weight: 600;
-      color: #F8EDEF;
-    }
-
-    .pres-switcher {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 3px;
-      border-radius: var(--radius-full);
-      gap: 2px;
-    }
-
-    .pres-tab {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.875rem;
-      border-radius: var(--radius-full);
-      color: #D6C2C6;
-      font-weight: 500;
-      font-size: 0.78125rem;
-      transition: all var(--transition-smooth);
-    }
-
-    .pres-tab:hover {
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .pres-tab.is-active {
-      background: #5B1826;
-      color: #FFFFFF;
-      font-weight: 700;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .pres-tab .tab-num {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.625rem;
-      font-weight: 700;
-    }
-
-    .btn-toggle-annotations {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.85rem;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: var(--radius-full);
-      color: #FFFFFF;
-      font-size: 0.75rem;
-      font-weight: 600;
-      transition: all var(--transition-smooth);
-    }
-
-    .btn-toggle-annotations:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-toggle-annotations .toggle-status {
-      font-size: 0.625rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      background: #25D366;
-      color: #0A2412;
-      font-weight: 800;
-    }
-
-        /* ==========================================================================
-       PAINEL LATERAL DE PARECER ESTRATÉGICO (DRAWER) — ZERO SOBREPOSIÇÃO
-       ========================================================================== */
-    .strategy-drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 4, 6, 0.6);
-      backdrop-filter: blur(4px);
-      z-index: 99990;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .strategy-drawer-backdrop.is-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .strategy-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 420px;
-      max-width: 92vw;
-      height: 100vh;
-      height: 100dvh;
-      background: #240A10;
-      color: #FFFFFF;
-      z-index: 99999;
-      transform: translateX(105%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.65);
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid rgba(255, 255, 255, 0.14);
-    }
-
-    .strategy-drawer.is-open {
-      transform: translateX(0);
-    }
-
-    .drawer-header {
-      padding: 1.25rem 1.5rem;
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .drawer-badge {
-      display: inline-block;
-      font-size: 0.6875rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #F8EDEF;
-      background: rgba(189, 105, 124, 0.3);
-      border: 1px solid rgba(189, 105, 124, 0.5);
-      padding: 0.2rem 0.6rem;
-      border-radius: var(--radius-full);
-      margin-bottom: 0.25rem;
-    }
-
-    .drawer-heading {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #FFFFFF;
-      margin: 0;
-    }
-
-    .drawer-close-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #FFFFFF;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-    }
-
-    .drawer-close-btn:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: scale(1.08);
-    }
-
-    .drawer-nav {
-      padding: 0.75rem 1.5rem;
-      background: rgba(255, 255, 255, 0.04);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .drawer-step {
-      font-size: 0.8125rem;
-      font-weight: 600;
-      color: #E8CCD2;
-    }
-
-    .drawer-nav-btns {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .drawer-nav-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #FFFFFF;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .drawer-nav-btn:hover {
-      background: rgba(255, 255, 255, 0.22);
-    }
-
-    .drawer-cards-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-    }
-
-    .drawer-note {
-      display: none;
-      animation: fadeInNote 0.25s ease;
-    }
-
-    .drawer-note.active {
-      display: block;
-    }
-
-    @keyframes fadeInNote {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .note-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .note-target {
-      font-size: 0.75rem;
-      color: #E8CCD2;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-
-    .note-title {
-      font-family: var(--font-serif);
-      font-size: 1.35rem;
-      line-height: 1.3;
-      margin-bottom: 0.85rem;
-      color: #FFFFFF;
-    }
-
-    .note-body {
-      font-size: 0.9375rem;
-      line-height: 1.65;
-      color: #F8EDEF;
-      margin-bottom: 1.25rem;
-    }
-
-    .note-impact {
-      background: rgba(0, 0, 0, 0.35);
-      border-left: 3px solid #BD697C;
-      padding: 0.85rem 1rem;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.875rem;
-      line-height: 1.55;
-      color: #FFFFFF;
-    }
-
-    .note-impact b {
-      color: #E8CCD2;
-    }
-
-    .drawer-quick-tabs {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.2);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .quick-tab-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #E8CCD2;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.35rem 0.65rem;
-      border-radius: var(--radius-full);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .quick-tab-btn.active, .quick-tab-btn:hover {
-      background: #BD697C;
-      color: #FFFFFF;
-      border-color: #BD697C;
-    }
-
-    /* ALFINETE DISCRETO NA PÁGINA (ZERO SOBREPOSIÇÃO) */
-    .strategy-pin-trigger {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: #3A101A;
-      color: #FFFFFF;
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      padding: 0.28rem 0.7rem 0.28rem 0.5rem;
-      border-radius: var(--radius-full);
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      vertical-align: middle;
-      position: relative;
-      z-index: 10;
-    }
-
-    .strategy-pin-trigger:hover {
-      background: #5B1826;
-      border-color: #BD697C;
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 8px 20px rgba(91, 24, 38, 0.45);
-    }
-
-    .strategy-pin-trigger .pin-icon {
-      font-size: 0.85rem;
-    }
-
-    body.annotations-hidden .strategy-pin-trigger {
-      display: none !important;
-    }
-
-    /* Botões na barra de apresentação */
-    .pres-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn-open-drawer {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.35rem 0.85rem;
-      background: #5B1826;
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: var(--radius-full);
-      font-size: 0.8125rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-open-drawer:hover {
-      background: #7D2134;
-      border-color: #BD697C;
-      transform: translateY(-1px);
-    }
-
-    .btn-toggle-pins {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.75rem;
-      background: rgba(255, 255, 255, 0.08);
-      color: #F8EDEF;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: var(--radius-full);
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-toggle-pins:hover {
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    /* Posição do header abaixo da barra de apresentação */
     .site-header {
       position: sticky;
-      top: 44px;
+      top: 0;
       z-index: 100;
       background: rgba(252, 250, 247, 0.94);
       backdrop-filter: blur(12px);
@@ -1033,9 +613,9 @@
       color: var(--text-muted);
     }
 
-    .grid-temas-6 {
+    .grid-temas-6, .grid-caminhos-4 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.25rem;
     }
 
@@ -1065,11 +645,16 @@
       border-radius: 50%;
       background-color: #FFFFFF;
       color: var(--color-brand-wine);
+      font-size: 1.375rem;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid var(--border-soft);
       transition: transform var(--transition-smooth), color var(--transition-smooth);
+    }
+
+    .card-caminho {
+      cursor: pointer;
     }
 
     .card-tema:hover .icon-tema {
@@ -1100,7 +685,7 @@
 
     .grid-triade {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.75rem;
     }
 
@@ -1134,6 +719,144 @@
       font-size: 0.9375rem;
       color: var(--text-muted);
       line-height: 1.55;
+    }
+
+    .triade-note {
+      font-size: 0.8125rem !important;
+      color: var(--color-brand-wine) !important;
+      font-weight: 600;
+      margin-top: 0.75rem;
+    }
+
+    .card-cartas .triade-note {
+      color: var(--color-brand-rose-light) !important;
+      opacity: 0.9;
+    }
+
+    /* ==========================================================================
+       BIBLIOTECA DOS RELACIONAMENTOS (ÍNDICE DE TEMAS)
+       ========================================================================== */
+    .section-biblioteca {
+      padding: clamp(3rem, 6vw, 4.5rem) 0;
+    }
+
+    .biblioteca-grupos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .biblioteca-grupo {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+    }
+
+    .biblioteca-grupo h4 {
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      color: var(--color-brand-wine);
+      margin-bottom: 1rem;
+    }
+
+    .chips-temas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip-tema {
+      display: inline-block;
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-full);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       EXERCÍCIO INTERATIVO: O TERMÔMETRO DO CASAMENTO
+       ========================================================================== */
+    .section-exercicio {
+      padding: clamp(3rem, 6vw, 4.5rem) 0;
+      background: var(--bg-surface-tint);
+    }
+
+    .termometro-card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.5rem);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .termometro-pergunta p {
+      font-weight: 600;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.625rem;
+    }
+
+    .termometro-pergunta label {
+      display: block;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      padding: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    .termometro-pergunta input {
+      margin-right: 0.625rem;
+    }
+
+    .termometro-resultado {
+      background: var(--color-brand-rose-light);
+      border-left: 3px solid var(--color-brand-wine);
+      border-radius: 0 8px 8px 0;
+      padding: 1.25rem;
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: var(--text-main);
+    }
+
+    .termometro-resultado a {
+      color: var(--color-brand-wine);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       ROADMAP: O QUE VEM POR AÍ
+       ========================================================================== */
+    .section-roadmap {
+      padding: clamp(3rem, 6vw, 4.5rem) 0;
+    }
+
+    .roadmap-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .roadmap-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-accent);
+      border-radius: var(--radius-full);
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
     }
 
     .triade-btn {
@@ -1746,7 +1469,7 @@
         grid-template-columns: 1fr;
       }
 
-      .grid-temas-6 {
+      .grid-temas-6, .grid-caminhos-4 {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -1772,42 +1495,6 @@
   <div class="scroll-progress-bar" id="progressBar" aria-hidden="true"></div>
 
   <!-- ========================================================================
-       BARRA DE APRESENTAÇÃO DE MODELOS & NOTAS ESTRATÉGICAS (CLIENT REVIEW)
-       ======================================================================== -->
-  <aside class="client-presentation-bar" id="presentationBar">
-    <div class="container pres-inner">
-      <div class="pres-brand">
-        <span class="pres-badge">Apresentação Estratégica</span>
-        <span class="pres-client">Natalie Thedim</span>
-      </div>
-
-      <nav class="pres-switcher" aria-label="Alternar entre os 3 Modelos de Landing Page">
-        <a href="index.html" class="pres-tab is-active" title="Modelo 1: Linho & Marsala (Inspirações Reais)">
-          <span class="tab-num">1</span>
-          <span class="tab-name">Clássico Marsala</span>
-        </a>
-        <a href="modelo-2-editorial.html" class="pres-tab" title="Modelo 2: Editorial Luxo & Autoridade Sênior">
-          <span class="tab-num">2</span>
-          <span class="tab-name">Editorial Luxo</span>
-        </a>
-        <a href="modelo-3-bento.html" class="pres-tab" title="Modelo 3: Bento Grid Moderno & Conexão">
-          <span class="tab-num">3</span>
-          <span class="tab-name">Bento Conexão</span>
-        </a>
-      </nav>
-
-      <div class="pres-controls">
-        <button class="btn-open-drawer" id="openDrawerBtn" title="Abrir painel lateral com as 5 decisões estratégicas">
-          <span>💬 Parecer Estratégico (5)</span>
-        </button>
-        <button class="btn-toggle-pins" id="togglePinsBtn" title="Ocultar ou exibir os marcadores na página">
-          <span id="togglePinsStatus">👁️ Alfinetes: ATIVOS</span>
-        </button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ========================================================================
        BARRA DE NAVEGAÇÃO SUPERIOR
        ======================================================================== -->
   <header class="site-header" id="header">
@@ -1825,11 +1512,11 @@
 
       <nav class="header-nav" aria-label="Menu de Navegação">
         <ul class="nav-list">
+          <li><a href="#conteudos" class="nav-item-link">Histórias e Cartas</a></li>
+          <li><a href="#biblioteca" class="nav-item-link">Biblioteca</a></li>
+          <li><a href="#exercicios" class="nav-item-link">Exercícios</a></li>
           <li><a href="#sobre" class="nav-item-link">Sobre Natalie</a></li>
-          <li><a href="#temas" class="nav-item-link">Temas</a></li>
-          <li><a href="#conteudos" class="nav-item-link">Conteúdos</a></li>
           <li><a href="#atendimentos" class="nav-item-link">Atendimentos</a></li>
-          <li><a href="#contato" class="nav-item-link">Contato</a></li>
         </ul>
 
         <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
@@ -1856,16 +1543,11 @@
             <div class="badge-welcome">
               <span>Bem-vinda ao meu espaço</span>
             </div>
-            <button class="strategy-pin-trigger" data-open-note="1" title="Ver parecer da headline">
-              <span class="pin-icon">💡</span>
-              <span>Nota 1 · Headline</span>
-            </button>
-          </div>
           </div>
 
           <h1 class="hero-h1">
             Toda relação conta uma história.
-            <span class="hero-question">Qual história você está vivendo hoje?</span>
+            <span class="hero-question">Qual é a sua?</span>
           </h1>
 
           <div class="hero-quote-box">
@@ -1896,13 +1578,6 @@
         </div>
 
         <div class="hero-image-frame reveal-scale" style="position: relative;">
-          <!-- PIN ESTRATÉGICO 2 -->
-          <div style="position: absolute; top: 18px; left: 18px; z-index: 50;">
-            <button class="strategy-pin-trigger" data-open-note="2" title="Ver parecer da autoridade na foto">
-              <span class="pin-icon">💡</span>
-              <span>Nota 2 · Autoridade</span>
-            </button>
-          </div>
           <div class="hero-organic-mask">
             <!-- FOTO REAL ENVIADA PELA CLIENTE -->
             <img src="./assets/foto-natalie-thedim.png" 
@@ -1927,128 +1602,203 @@
     </section>
 
     <!-- ======================================================================
-       SEÇÃO: COMO POSSO TE AJUDAR? (6 CARTÕES TEMÁTICOS)
+       SEÇÃO: 4 GRANDES CAMINHOS (ESCOLHA DO UNIVERSO)
        ====================================================================== -->
     <section class="section-temas" id="temas">
       <div class="container">
         <div class="center-header reveal" style="position: relative;">
-          <div style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-            <span class="eyebrow-center">Reconhecer para transformar</span>
-            <button class="strategy-pin-trigger" data-open-note="3" title="Ver parecer da segmentação de temas">
-              <span class="pin-icon">💡</span>
-              <span>Nota 3 · Dores Reais</span>
-            </button>
-          </div>
+          <span class="eyebrow-center">Escolha por onde começar</span>
           <h2 class="center-h2">Como posso te ajudar?</h2>
-          <p class="center-p">Escolha o tema que mais faz sentido para você agora.</p>
+          <p class="center-p">Cada relação tem seu próprio universo. Escolha o que mais faz sentido para você agora.</p>
         </div>
 
-        <div class="grid-temas-6 stagger-container">
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
+        <div class="grid-caminhos-4 stagger-container">
+          <a href="#biblioteca" data-filtro="casamento" class="card-tema card-caminho stagger-item">
+            <div class="icon-tema" aria-hidden="true">❤️</div>
+            <h3>Casamento e relacionamentos</h3>
+            <p>Comunicação, ciúme, traição, dependência emocional, separação.</p>
+          </a>
+
+          <a href="#biblioteca" data-filtro="familia" class="card-tema card-caminho stagger-item">
+            <div class="icon-tema" aria-hidden="true">👨‍👩‍👧</div>
+            <h3>Família</h3>
+            <p>Limites, famílias recompostas, pais idosos, conflitos entre gerações.</p>
+          </a>
+
+          <a href="#biblioteca" data-filtro="filhos" class="card-tema card-caminho stagger-item">
+            <div class="icon-tema" aria-hidden="true">👦</div>
+            <h3>Filhos e educação</h3>
+            <p>Autonomia, adolescência, escola, afeto e educação dos filhos.</p>
+          </a>
+
+          <a href="#biblioteca" data-filtro="autoconhecimento" class="card-tema card-caminho stagger-item">
+            <div class="icon-tema" aria-hidden="true">🧠</div>
+            <h3>Autoconhecimento</h3>
+            <p>Apego, autoestima, luto, limites e a relação com você mesma(o).</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+       O CORAÇÃO DO SITE: HISTÓRIAS REAIS, CARTAS E PERGUNTE PARA NATALIE
+       ====================================================================== -->
+    <section class="section-triade" id="conteudos">
+      <div class="container">
+        <div class="center-header reveal">
+          <span class="eyebrow-center">O coração do site</span>
+          <h2 class="center-h2">Histórias reais, ditas com segurança</h2>
+          <p class="center-p">Um espaço vivo, alimentado por quem vive relações de verdade — sempre 100% anônimo.</p>
+        </div>
+
+        <div class="grid-triade stagger-container">
+          <div class="triade-card card-historias stagger-item">
+            <div>
+              <h3>Histórias Reais</h3>
+              <p>Relatos anônimos como <em>"Estou casada há 27 anos e meu marido nunca conversa"</em> ou <em>"Meu filho de 14 anos só fica no quarto"</em>. Cada relato recebe uma reflexão em vídeo ou texto — nunca uma resposta pronta.</p>
+              <p class="triade-note">🌱 Seção em construção — as primeiras histórias serão publicadas em breve.</p>
             </div>
-            <h3>Meu relacionamento mudou</h3>
-            <p>Já não somos mais quem éramos.</p>
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Quero%20enviar%20minha%20hist%C3%B3ria%20de%20forma%20an%C3%B4nima%20para%20o%20site." target="_blank" rel="noopener noreferrer" class="triade-btn">
+              <span>Enviar minha história →</span>
+            </a>
           </div>
 
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
+          <div class="triade-card card-cartas stagger-item">
+            <div>
+              <h3>Cartas que Nunca Enviei</h3>
+              <p>Cartas escritas para o marido, a esposa, o pai, a mãe, um filho, um ex, uma sogra — ou para você mesma(o). Algumas são selecionadas para leitura e análise clínica, sem identificar ninguém.</p>
+              <p class="triade-note">🌱 Seção em construção — envie a sua e talvez ela seja a primeira.</p>
             </div>
-            <h3>Não conseguimos conversar</h3>
-            <p>Qualquer conversa vira briga ou silêncio.</p>
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Quero%20enviar%20uma%20carta%20an%C3%B4nima%20para%20o%20site." target="_blank" rel="noopener noreferrer" class="triade-btn">
+              <span>Escrever minha carta →</span>
+            </a>
           </div>
 
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
+          <div class="triade-card card-video stagger-item">
+            <div>
+              <h3>Pergunte para Natalie</h3>
+              <p>Uma caixa de perguntas permanente. Envie a sua dúvida sobre relacionamentos, família ou filhos e receba uma resposta em vídeo, áudio ou texto — aqui, no Instagram ou no YouTube.</p>
             </div>
-            <h3>Não sei colocar limites</h3>
-            <p>Tenho medo de dizer não e magoar quem amo.</p>
-          </div>
-
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </div>
-            <h3>Minha família me sufoca</h3>
-            <p>Quando amor e invasão começam a se confundir.</p>
-          </div>
-
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="12" cy="7" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/>
-              </svg>
-            </div>
-            <h3>Dificuldades com meu filho</h3>
-            <p>Limites, autonomia, escola e afeto.</p>
-          </div>
-
-          <div class="card-tema stagger-item">
-            <div class="icon-tema">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </div>
-            <h3>Pensando em me separar</h3>
-            <p>Quando permanecer também começa a doer.</p>
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Tenho%20uma%20pergunta%20sobre%20relacionamentos%20para%20te%20enviar." target="_blank" rel="noopener noreferrer" class="triade-btn">
+              <span>Enviar minha pergunta →</span>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================
-       TRÍADE DE CONTEÚDOS: HISTÓRIAS, CARTAS E VÍDEO
+       BIBLIOTECA DOS RELACIONAMENTOS (ÍNDICE DE TEMAS)
        ====================================================================== -->
-    <section class="section-triade" id="conteudos">
+    <section class="section-biblioteca" id="biblioteca">
       <div class="container">
-        <div class="grid-triade stagger-container">
-          <div class="triade-card card-historias stagger-item">
-            <div>
-              <h3>Histórias que poderiam ser nossas</h3>
-              <p>Relatos reais e anônimos enviados por pessoas que estão vivendo situações semelhantes às suas.</p>
+        <div class="center-header reveal">
+          <span class="eyebrow-center">Para se aprofundar</span>
+          <h2 class="center-h2">Biblioteca dos Relacionamentos</h2>
+          <p class="center-p">Os temas que vão organizar artigos, vídeos, exercícios e histórias relacionadas — em construção, tema a tema.</p>
+        </div>
+
+        <div class="biblioteca-grupos">
+          <div class="biblioteca-grupo reveal">
+            <h4>❤️ Casamento e relacionamentos</h4>
+            <div class="chips-temas">
+              <span class="chip-tema">Comunicação</span>
+              <span class="chip-tema">Ciúme</span>
+              <span class="chip-tema">Traição</span>
+              <span class="chip-tema">Divórcio</span>
+              <span class="chip-tema">Dependência emocional</span>
+              <span class="chip-tema">Sexualidade</span>
             </div>
-            <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="triade-btn">
-              <span>Ler histórias no Instagram →</span>
-            </a>
           </div>
 
-          <div class="triade-card card-cartas stagger-item" style="position: relative;">
-            <div style="margin-bottom: 0.75rem;">
-              <button class="strategy-pin-trigger" data-open-note="4" title="Ver parecer da tríade de cartas">
-                <span class="pin-icon">💡</span>
-                <span>Nota 4 · Prova Social Ética</span>
-              </button>
+          <div class="biblioteca-grupo reveal">
+            <h4>👨‍👩‍👧 Família</h4>
+            <div class="chips-temas">
+              <span class="chip-tema">Limites</span>
+              <span class="chip-tema">Famílias recompostas</span>
+              <span class="chip-tema">Pais idosos</span>
+              <span class="chip-tema">Menopausa e casamento</span>
             </div>
-            <div>
-              <h3>Cartas que nunca enviei</h3>
-              <p>Cartas escritas por quem precisava falar sobre o que machuca, mas não teve coragem.</p>
-            </div>
-            <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="triade-btn">
-              <span>Acompanhar cartas →</span>
-            </a>
           </div>
 
-          <div class="triade-card card-video stagger-item">
-            <div>
-              <h3>Vídeo da semana</h3>
-              <p>Natalie comenta uma história e compartilha reflexões que podem transformar a forma como você se relaciona.</p>
+          <div class="biblioteca-grupo reveal">
+            <h4>👦 Filhos e educação</h4>
+            <div class="chips-temas">
+              <span class="chip-tema">Educação dos filhos</span>
+              <span class="chip-tema">Adolescência</span>
+              <span class="chip-tema">Limites com filhos</span>
             </div>
-            <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="triade-btn">
-              <span>Assistir agora →</span>
-            </a>
+          </div>
+
+          <div class="biblioteca-grupo reveal">
+            <h4>🧠 Autoconhecimento</h4>
+            <div class="chips-temas">
+              <span class="chip-tema">Limites</span>
+              <span class="chip-tema">Luto</span>
+              <span class="chip-tema">Dependência emocional</span>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+       EXERCÍCIO INTERATIVO: O TERMÔMETRO DO CASAMENTO
+       ====================================================================== -->
+    <section class="section-exercicio" id="exercicios">
+      <div class="container">
+        <div class="center-header reveal">
+          <span class="eyebrow-center">Exercícios</span>
+          <h2 class="center-h2">O Termômetro do Casamento</h2>
+          <p class="center-p">5 perguntas rápidas para refletir sobre o momento atual da sua relação. Não é um diagnóstico — é um convite à reflexão.</p>
+        </div>
+
+        <form class="termometro-card reveal" id="termometroForm">
+          <div class="termometro-pergunta" data-q="1">
+            <p>1. Quando surge um desentendimento, o que costuma acontecer?</p>
+            <label><input type="radio" name="q1" value="2"> Conseguimos conversar até um acordo</label>
+            <label><input type="radio" name="q1" value="1"> Um de nós cede só para acabar a discussão</label>
+            <label><input type="radio" name="q1" value="0"> Vira silêncio ou mágoa que dura dias</label>
+          </div>
+
+          <div class="termometro-pergunta" data-q="2">
+            <p>2. Como está a conversa sobre o dia a dia?</p>
+            <label><input type="radio" name="q2" value="2"> Conversamos com frequência e interesse real</label>
+            <label><input type="radio" name="q2" value="1"> Conversamos, mas de forma automática</label>
+            <label><input type="radio" name="q2" value="0"> Quase não sobra conversa entre nós</label>
+          </div>
+
+          <div class="termometro-pergunta" data-q="3">
+            <p>3. Vocês conseguem pedir desculpas um ao outro?</p>
+            <label><input type="radio" name="q3" value="2"> Sim, com facilidade</label>
+            <label><input type="radio" name="q3" value="1"> Às vezes, com dificuldade</label>
+            <label><input type="radio" name="q3" value="0"> Quase nunca</label>
+          </div>
+
+          <div class="termometro-pergunta" data-q="4">
+            <p>4. Como está a intimidade e o afeto entre vocês?</p>
+            <label><input type="radio" name="q4" value="2"> Presente e cultivada</label>
+            <label><input type="radio" name="q4" value="1"> Existe, mas diminuiu bastante</label>
+            <label><input type="radio" name="q4" value="0"> Praticamente não existe mais</label>
+          </div>
+
+          <div class="termometro-pergunta" data-q="5">
+            <p>5. Vocês se sentem parceiros diante dos problemas da vida?</p>
+            <label><input type="radio" name="q5" value="2"> Sim, encaramos juntos</label>
+            <label><input type="radio" name="q5" value="1"> Depende do assunto</label>
+            <label><input type="radio" name="q5" value="0"> Sinto que enfrento sozinha(o)</label>
+          </div>
+
+          <button type="submit" class="btn-solid-wine" style="width:100%; justify-content:center;">
+            <span>Ver meu resultado</span>
+          </button>
+
+          <div class="termometro-resultado" id="termometroResultado" hidden></div>
+        </form>
+
+        <p class="center-p" style="text-align:center; margin-top:1.5rem; font-size:0.875rem;">
+          Em breve: <strong>O Mapa da Comunicação</strong>, <strong>Como Brigamos</strong>, <strong>Quem Costuma Ceder</strong> e <strong>Qual Linguagem de Afeto Usamos</strong>.
+        </p>
       </div>
     </section>
 
@@ -2255,10 +2005,10 @@
               </ul>
             </div>
 
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal." 
-               class="btn-solid-wine" 
-               style="width: 100%;" 
-               target="_blank" 
+            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal."
+               class="btn-solid-wine"
+               style="width: 100%;"
+               target="_blank"
                rel="noopener noreferrer">
               <span>Agendar Terapia de Casal</span>
             </a>
@@ -2268,16 +2018,33 @@
     </section>
 
     <!-- ======================================================================
+       ROADMAP: O QUE VEM POR AÍ
+       ====================================================================== -->
+    <section class="section-roadmap">
+      <div class="container">
+        <div class="center-header reveal">
+          <span class="eyebrow-center">Em construção</span>
+          <h2 class="center-h2">O que vem por aí</h2>
+          <p class="center-p">Este espaço vai crescer aos poucos e virar uma revista viva sobre relacionamentos.</p>
+        </div>
+        <div class="roadmap-chips reveal">
+          <span class="roadmap-chip">📓 Diário Anônimo</span>
+          <span class="roadmap-chip">🎬 Clube do Filme</span>
+          <span class="roadmap-chip">📚 Clube do Livro</span>
+          <span class="roadmap-chip">🎙️ Podcast</span>
+          <span class="roadmap-chip">💭 Série "E se..."</span>
+          <span class="roadmap-chip">🧩 Casos para Refletir</span>
+          <span class="roadmap-chip">🗺️ Mapa das Emoções</span>
+          <span class="roadmap-chip">🎓 Área para Terapeutas</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
        BANNER DE CONVERSÃO PRÉ-RODAPÉ
        ====================================================================== -->
     <section class="container" id="contato">
       <div class="banner-cta-prefooter reveal" style="position: relative;">
-        <div style="position: absolute; top: 16px; right: 16px; z-index: 50;">
-          <button class="strategy-pin-trigger" data-open-note="5" title="Ver parecer do canal WhatsApp">
-            <span class="pin-icon">💡</span>
-            <span>Nota 5 · Conversão Direta</span>
-          </button>
-        </div>
         <div class="cta-inner-grid">
           <div class="cta-bubble-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2331,10 +2098,10 @@
         <div class="footer-col-nav">
           <h4>Navegação</h4>
           <ul>
+            <li><a href="#conteudos">Histórias e Cartas</a></li>
+            <li><a href="#biblioteca">Biblioteca</a></li>
+            <li><a href="#exercicios">Exercícios</a></li>
             <li><a href="#sobre">Sobre Natalie</a></li>
-            <li><a href="#temas">Temas</a></li>
-            <li><a href="#conteudos">Conteúdos</a></li>
-            <li><a href="#atendimentos">Atendimentos</a></li>
             <li><a href="#contato">Contato</a></li>
           </ul>
         </div>
@@ -2353,7 +2120,7 @@
           <h4>Acompanhe</h4>
           <ul>
             <li><a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-            <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+            <!-- [[PREENCHER: link do canal do YouTube quando a cliente confirmar]] -->
             <li><a href="https://wa.me/5521995160968" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
           </ul>
         </div>
@@ -2441,221 +2208,50 @@
         revealElements.forEach(el => el.classList.add('is-visible'));
       }
 
-      // 3. Controle do Painel Lateral de Parecer Estratégico (Zero Sobreposição)
-      const openDrawerBtn = document.getElementById('openDrawerBtn');
-      const togglePinsBtn = document.getElementById('togglePinsBtn');
-      const togglePinsStatus = document.getElementById('togglePinsStatus');
-      const strategyDrawer = document.getElementById('strategyDrawer');
-      const strategyBackdrop = document.getElementById('strategyBackdrop');
-      const drawerCloseBtn = document.getElementById('drawerCloseBtn');
-      const drawerPrevBtn = document.getElementById('drawerPrevBtn');
-      const drawerNextBtn = document.getElementById('drawerNextBtn');
-      const drawerStepIndicator = document.getElementById('drawerStepIndicator');
-      const notes = document.querySelectorAll('.drawer-note');
-      const quickTabs = document.querySelectorAll('.quick-tab-btn');
-      const pinTriggers = document.querySelectorAll('.strategy-pin-trigger');
-      let currentNoteIndex = 1;
-      const totalNotes = notes.length;
+      // 3. Exercício "O Termômetro do Casamento"
+      const termometroForm = document.getElementById('termometroForm');
+      const termometroResultado = document.getElementById('termometroResultado');
 
-      function showNote(noteId) {
-        currentNoteIndex = parseInt(noteId, 10);
-        notes.forEach(note => {
-          const id = parseInt(note.getAttribute('data-note-id'), 10);
-          note.classList.toggle('active', id === currentNoteIndex);
-        });
-        quickTabs.forEach(tab => {
-          const jump = parseInt(tab.getAttribute('data-jump'), 10);
-          tab.classList.toggle('active', jump === currentNoteIndex);
-        });
-        if (drawerStepIndicator) {
-          drawerStepIndicator.textContent = `Nota ${currentNoteIndex} de ${totalNotes}`;
-        }
-      }
+      if (termometroForm) {
+        termometroForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const perguntas = ['q1', 'q2', 'q3', 'q4', 'q5'];
+          let respondidas = 0;
+          let pontos = 0;
 
-      function openDrawer(noteId = 1) {
-        showNote(noteId);
-        if (strategyDrawer) {
-          strategyDrawer.classList.add('is-open');
-          strategyDrawer.setAttribute('aria-hidden', 'false');
-        }
-        if (strategyBackdrop) {
-          strategyBackdrop.classList.add('is-open');
-        }
-      }
+          perguntas.forEach((nome) => {
+            const selecionado = termometroForm.querySelector(`input[name="${nome}"]:checked`);
+            if (selecionado) {
+              respondidas++;
+              pontos += parseInt(selecionado.value, 10);
+            }
+          });
 
-      function closeDrawer() {
-        if (strategyDrawer) {
-          strategyDrawer.classList.remove('is-open');
-          strategyDrawer.setAttribute('aria-hidden', 'true');
-        }
-        if (strategyBackdrop) {
-          strategyBackdrop.classList.remove('is-open');
-        }
-      }
-
-      if (openDrawerBtn) {
-        openDrawerBtn.addEventListener('click', () => openDrawer(1));
-      }
-
-      if (drawerCloseBtn) {
-        drawerCloseBtn.addEventListener('click', closeDrawer);
-      }
-
-      if (strategyBackdrop) {
-        strategyBackdrop.addEventListener('click', closeDrawer);
-      }
-
-      if (drawerPrevBtn) {
-        drawerPrevBtn.addEventListener('click', () => {
-          const prev = currentNoteIndex > 1 ? currentNoteIndex - 1 : totalNotes;
-          showNote(prev);
-        });
-      }
-
-      if (drawerNextBtn) {
-        drawerNextBtn.addEventListener('click', () => {
-          const next = currentNoteIndex < totalNotes ? currentNoteIndex + 1 : 1;
-          showNote(next);
-        });
-      }
-
-      quickTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          const jump = tab.getAttribute('data-jump');
-          showNote(jump);
-        });
-      });
-
-      pinTriggers.forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const noteId = trigger.getAttribute('data-open-note') || 1;
-          openDrawer(noteId);
-        });
-      });
-
-      if (togglePinsBtn) {
-        togglePinsBtn.addEventListener('click', () => {
-          const isHidden = document.body.classList.toggle('annotations-hidden');
-          if (togglePinsStatus) {
-            togglePinsStatus.textContent = isHidden ? '👁️ Alfinetes: OCULTOS' : '👁️ Alfinetes: ATIVOS';
+          if (respondidas < perguntas.length) {
+            termometroResultado.hidden = false;
+            termometroResultado.innerHTML = 'Responda todas as perguntas para ver o resultado. 🙂';
+            termometroResultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
           }
+
+          let mensagem = '';
+          if (pontos >= 8) {
+            mensagem = '<strong>Vínculo aquecido.</strong> Vocês têm uma base de diálogo e afeto ativa. Continuar cuidando dessa conexão é o que mantém a relação viva.';
+          } else if (pontos >= 4) {
+            mensagem = '<strong>Vínculo em atenção.</strong> Existem pontos fortes, mas também sinais de desgaste que valem ser olhados com cuidado antes que se acumulem.';
+          } else {
+            mensagem = '<strong>Vínculo pedindo cuidado.</strong> Os sinais indicam bastante distância ou ressentimento acumulado. Um espaço neutro para conversar pode ajudar a entender o que está acontecendo.';
+          }
+
+          const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Fiz o Termômetro do Casamento no site e gostaria de conversar sobre o resultado.')}`;
+
+          termometroResultado.hidden = false;
+          termometroResultado.innerHTML = `${mensagem}<br><br>Isso não é um diagnóstico clínico — é só um convite à reflexão. <a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer aprofundar isso na terapia? →</a>`;
+          termometroResultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
       }
-
-      // Atalho teclado Esc fecha painel
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeDrawer();
-      });
     });
   </script>
-
-  <!-- ========================================================================
-       PAINEL LATERAL DE PARECER ESTRATÉGICO (DRAWER) — ZERO SOBREPOSIÇÃO
-       ======================================================================== -->
-  <div class="strategy-drawer-backdrop" id="strategyBackdrop"></div>
-  <aside class="strategy-drawer" id="strategyDrawer" aria-label="Parecer Estratégico de Decisões" aria-hidden="true">
-    <div class="drawer-header">
-      <div>
-        <span class="drawer-badge">Modelo 1 · Clássico Marsala</span>
-        <h3 class="drawer-heading">Parecer Estratégico</h3>
-      </div>
-      <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Fechar painel estratégico">✕</button>
-    </div>
-
-    <div class="drawer-nav">
-      <span class="drawer-step" id="drawerStepIndicator">Nota 1 de 5</span>
-      <div class="drawer-nav-btns">
-        <button class="drawer-nav-btn" id="drawerPrevBtn" aria-label="Nota anterior">← Anterior</button>
-        <button class="drawer-nav-btn" id="drawerNextBtn" aria-label="Próxima nota">Próxima →</button>
-      </div>
-    </div>
-
-    <div class="drawer-cards-container">
-      <!-- NOTA 1 -->
-      <div class="drawer-note active" data-note-id="1">
-        <div class="note-meta">
-          <span class="strategy-tag">Neurodesign</span>
-          <span class="note-target">🎯 Elemento: Headline Principal (H1)</span>
-        </div>
-        <h4 class="note-title">Efeito Zeigarnik & Empatia</h4>
-        <p class="note-body">
-          A pergunta aberta estimula reflexão sem tom acusatório. O cérebro busca ativamente a resposta, conectando a visitante à sua própria dor em menos de 3 segundos.
-        </p>
-        <div class="note-impact">
-          <b>💡 Por que aqui:</b> Reduz a rejeição imediata da página e cria acolhimento sem pressão de venda.
-        </div>
-      </div>
-
-      <!-- NOTA 2 -->
-      <div class="drawer-note" data-note-id="2">
-        <div class="note-meta">
-          <span class="strategy-tag">Autoridade</span>
-          <span class="note-target">🎯 Elemento: Foto Oficial & Consultório</span>
-        </div>
-        <h4 class="note-title">Ancoragem de Alta Sofisticação</h4>
-        <p class="note-body">
-          O livro de Terezinha Féres-Carneiro (pioneira da PUC-Rio) aliado à postura acolhedora na poltrona do consultório transmite sólida autoridade acadêmica sem arrogância.
-        </p>
-        <div class="note-impact">
-          <b>💡 Por que aqui:</b> Justifica honorários de consulta particular de alto padrão e transmite segurança.
-        </div>
-      </div>
-
-      <!-- NOTA 3 -->
-      <div class="drawer-note" data-note-id="3">
-        <div class="note-meta">
-          <span class="strategy-tag">CRO & Gestalt</span>
-          <span class="note-target">🎯 Elemento: 6 Temas Centrais do Casal</span>
-        </div>
-        <h4 class="note-title">Segmentação por Dores Reais</h4>
-        <p class="note-body">
-          A Lei de Hick ensina que opções abstratas causam paralisia. Reduzir as queixas a 6 cartões humanos faz o visitante pensar: <em>"Ela descreveu exatamente o meu casamento"</em>.
-        </p>
-        <div class="note-impact">
-          <b>💡 Por que aqui:</b> Aumenta a taxa de identificação imediata e incentiva o clique sem medo de julgamento.
-        </div>
-      </div>
-
-      <!-- NOTA 4 -->
-      <div class="drawer-note" data-note-id="4">
-        <div class="note-meta">
-          <span class="strategy-tag">Ética CFP</span>
-          <span class="note-target">🎯 Elemento: Cartas Anônimas & Vídeo</span>
-        </div>
-        <h4 class="note-title">Prova Social sem Quebrar Sigilo</h4>
-        <p class="note-body">
-          O Código de Ética do Psicólogo proíbe depoimentos de pacientes. A tríade de cartas e histórias cria identificação emocional profunda sem violar a confidencialidade clínica.
-        </p>
-        <div class="note-impact">
-          <b>💡 Por que aqui:</b> Gera alto valor percebido de experiência com 100% de segurança jurídica e ética perante o CRP.
-        </div>
-      </div>
-
-      <!-- NOTA 5 -->
-      <div class="drawer-note" data-note-id="5">
-        <div class="note-meta">
-          <span class="strategy-tag">Conversão CRO</span>
-          <span class="note-target">🎯 Elemento: Banner Final de Contato</span>
-        </div>
-        <h4 class="note-title">WhatsApp de Fricção Zero</h4>
-        <p class="note-body">
-          Em momentos de dor afetiva, formulários cadastrais longos causam mais de 65% de desistência. O botão direto para o WhatsApp acolhe a pessoa no instante de maior decisão.
-        </p>
-        <div class="note-impact">
-          <b>💡 Por que aqui:</b> Triplica a conversão de visitantes indecisos em consultas agendadas.
-        </div>
-      </div>
-    </div>
-
-    <div class="drawer-quick-tabs">
-      <button class="quick-tab-btn active" data-jump="1">1. Headline</button>
-      <button class="quick-tab-btn" data-jump="2">2. Autoridade</button>
-      <button class="quick-tab-btn" data-jump="3">3. Dores</button>
-      <button class="quick-tab-btn" data-jump="4">4. Cartas</button>
-      <button class="quick-tab-btn" data-jump="5">5. Contato</button>
-    </div>
-  </aside>
 
 </body>
 </html>
