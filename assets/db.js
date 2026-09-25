@@ -1,122 +1,71 @@
 // =====================================================================
 // Acesso a dados — Revista Digital · Natalie Thedim
 //
-// Camada única sobre o Supabase. As páginas nunca chamam o cliente do
-// Supabase diretamente — chamam as funções daqui. Se um dia a forma de
-// guardar os dados mudar, só este arquivo muda.
-//
-// Depende de, nesta ordem, no <head>/fim do <body> de cada página:
-//   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-//   <script src="./assets/supabase-config.js"></script>
-//   <script src="./assets/db.js"></script>
+// Camada única. As páginas chamam apenas as funções daqui; elas falam com
+// as rotas serverless em /api (Vercel), que por sua vez acessam o Turso.
+// Nenhuma credencial de banco existe no navegador.
 // =====================================================================
 
 const DB = (() => {
-  const cfg = window.SUPABASE_CONFIG || {};
-  const configurado = Boolean(cfg.url && cfg.anonKey);
-
-  const cliente = configurado && window.supabase
-    ? window.supabase.createClient(cfg.url, cfg.anonKey)
-    : null;
-
-  if (!configurado) {
-    console.warn(
-      '[DB] Supabase não configurado ainda — preencha assets/supabase-config.js. ' +
-      'Formulários e listagens vão mostrar um aviso em vez de funcionar de verdade.'
-    );
+  async function chamar(rota, { metodo = 'GET', corpo } = {}) {
+    try {
+      const r = await fetch(rota, {
+        method: metodo,
+        credentials: 'same-origin',
+        headers: corpo ? { 'Content-Type': 'application/json' } : undefined,
+        body: corpo ? JSON.stringify(corpo) : undefined,
+      });
+      const json = await r.json().catch(() => ({}));
+      if (!r.ok) return { ok: false, erro: json.erro || `erro ${r.status}`, status: r.status, json };
+      return { ok: true, erro: null, json };
+    } catch (e) {
+      console.error('[DB]', e);
+      return { ok: false, erro: 'offline', json: {} };
+    }
   }
 
-  function disponivel() {
-    return Boolean(cliente);
-  }
+  function disponivel() { return true; }
 
-  // ---- Envio público (Histórias, Cartas, Perguntas, Diário) ----------
   async function enviar(tabela, dados) {
-    if (!cliente) return { ok: false, erro: 'offline' };
-    const { error } = await cliente.from(tabela).insert(dados);
-    if (error) {
-      console.error(`[DB] erro ao enviar em ${tabela}:`, error);
-      return { ok: false, erro: error.message };
-    }
-    return { ok: true, erro: null };
+    const { ok, erro } = await chamar('/api/publico?acao=enviar', { metodo: 'POST', corpo: { tabela, dados } });
+    return { ok, erro };
   }
 
-  // ---- Leitura pública (só o que está aprovado, via RLS) -------------
-  async function listarAprovados(tabela, { limite = 20, ordenarPor = 'criado_em' } = {}) {
-    if (!cliente) return { ok: false, dados: [], erro: 'offline' };
-    const { data, error } = await cliente
-      .from(tabela)
-      .select('*')
-      .eq('status', 'aprovado')
-      .order(ordenarPor, { ascending: false })
-      .limit(limite);
-    if (error) {
-      console.error(`[DB] erro ao listar ${tabela}:`, error);
-      return { ok: false, dados: [], erro: error.message };
-    }
-    return { ok: true, dados: data || [], erro: null };
+  async function listarAprovados(tabela, { limite = 20 } = {}) {
+    const r = await chamar(`/api/publico?acao=aprovados&tabela=${encodeURIComponent(tabela)}&limite=${limite}`);
+    return { ok: r.ok, dados: r.json.dados || [], erro: r.erro };
   }
 
   async function reagirDiario(id) {
-    if (!cliente) return { ok: false, erro: 'offline' };
-    const { error } = await cliente.rpc('reagir_diario', { post_id: id });
-    if (error) return { ok: false, erro: error.message };
-    return { ok: true, erro: null };
+    const { ok, erro } = await chamar('/api/publico?acao=reagir', { metodo: 'POST', corpo: { id } });
+    return { ok, erro };
   }
 
-  // ---- Admin (moderação) ----------------------------------------------
   async function entrar(email, senha) {
-    if (!cliente) return { ok: false, erro: 'offline' };
-    const { error } = await cliente.auth.signInWithPassword({ email, password: senha });
-    if (error) return { ok: false, erro: error.message };
-    return { ok: true, erro: null };
+    const { ok, erro } = await chamar('/api/admin?acao=entrar', { metodo: 'POST', corpo: { email, senha } });
+    return { ok, erro };
   }
 
-  async function sair() {
-    if (!cliente) return;
-    await cliente.auth.signOut();
-  }
+  async function sair() { await chamar('/api/admin?acao=sair', { metodo: 'POST' }); }
 
   async function sessaoAtual() {
-    if (!cliente) return null;
-    const { data } = await cliente.auth.getSession();
-    return data?.session || null;
+    const r = await chamar('/api/admin?acao=sessao');
+    return r.ok && r.json.ativa ? { ativa: true } : null;
   }
 
-  function aoMudarSessao(callback) {
-    if (!cliente) return;
-    cliente.auth.onAuthStateChange((_evento, sessao) => callback(sessao));
-  }
+  function aoMudarSessao() {}
 
-  async function listarTudo(tabela, { ordenarPor = 'criado_em' } = {}) {
-    if (!cliente) return { ok: false, dados: [], erro: 'offline' };
-    const { data, error } = await cliente
-      .from(tabela)
-      .select('*')
-      .order(ordenarPor, { ascending: false });
-    if (error) return { ok: false, dados: [], erro: error.message };
-    return { ok: true, dados: data || [], erro: null };
+  async function listarTudo(tabela) {
+    const r = await chamar(`/api/admin?acao=listar&tabela=${encodeURIComponent(tabela)}`);
+    return { ok: r.ok, dados: r.json.dados || [], erro: r.erro };
   }
 
   async function moderar(tabela, id, novoStatus, extra = {}) {
-    if (!cliente) return { ok: false, erro: 'offline' };
-    const carimbo = tabela === 'perguntas' ? 'respondida_em' : 'moderado_em';
-    const payload = { status: novoStatus, [carimbo]: new Date().toISOString(), ...extra };
-    const { error } = await cliente.from(tabela).update(payload).eq('id', id);
-    if (error) return { ok: false, erro: error.message };
-    return { ok: true, erro: null };
+    const { ok, erro } = await chamar('/api/admin?acao=moderar', {
+      metodo: 'POST', corpo: { tabela, id, status: novoStatus, extra },
+    });
+    return { ok, erro };
   }
 
-  return {
-    disponivel,
-    enviar,
-    listarAprovados,
-    reagirDiario,
-    entrar,
-    sair,
-    sessaoAtual,
-    aoMudarSessao,
-    listarTudo,
-    moderar,
-  };
+  return { disponivel, enviar, listarAprovados, reagirDiario, entrar, sair, sessaoAtual, aoMudarSessao, listarTudo, moderar };
 })();

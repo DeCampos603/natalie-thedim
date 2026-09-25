@@ -1,0 +1,15 @@
+{
+  "name": "natalie-thedim",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Revista Digital - Natalie Thedim (site estatico + API serverless + Turso)",
+  "scripts": {
+    "init-db": "node --env-file=.env.local turso/init.mjs"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "jose": "^5.9.6"
+  },
+  "engines": { "node": ">=20" }
+}

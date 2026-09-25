@@ -54,7 +54,7 @@
     <section class="proto-section">
       <div class="container">
         <div id="avisoOffline" class="aviso-offline" hidden>
-          Este site ainda não está conectado ao banco de dados. As histórias enviadas aqui não serão salvas até o Supabase ser configurado (veja <code>assets/supabase-config.js</code>).
+          Não foi possível conectar ao servidor agora. Tente novamente em instantes.
         </div>
 
         <div id="listaHistorias" class="mock-grid" aria-live="polite">
@@ -84,8 +84,6 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="assets/supabase-config.js"></script>
   <script src="assets/db.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {

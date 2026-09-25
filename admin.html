@@ -23,8 +23,8 @@
 
   <main>
     <div id="avisoOffline" class="aviso-offline" style="margin-top:2rem;" hidden>
-      Este painel ainda não está conectado ao banco de dados. Preencha <code>assets/supabase-config.js</code> e crie o login da Natalie no Supabase (Authentication → Users) para poder moderar de verdade.
-    </div>
+          Não foi possível conectar ao servidor agora. Tente novamente em instantes.
+        </div>
 
     <section id="telaLogin" class="login-box" hidden>
       <h1>Entrar</h1>
@@ -60,8 +60,6 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="assets/supabase-config.js"></script>
   <script src="assets/db.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
