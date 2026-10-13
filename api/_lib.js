@@ -1,6 +1,5 @@
-import { createClient } from '@libsql/client';
-import { SignJWT, jwtVerify } from 'jose';
-import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
+import { getTursoClient } from '../turso/db.js';
+import { createHmac, createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 
 export const TABELAS = {
   historias: { min: 10, max: 3000, extra: [] },
@@ -11,18 +10,27 @@ export const TABELAS = {
 export const STATUS = ['pendente', 'aprovado', 'rejeitado'];
 export const COOKIE = 'nt_admin';
 
-let cliente;
 export function db() {
-  if (!cliente) {
-    cliente = createClient({ url: process.env.TURSO_DATABASE_URL, authToken: process.env.TURSO_AUTH_TOKEN });
-  }
-  return cliente;
+  return getTursoClient();
 }
 
 export const novoId = () => randomUUID();
 
 export function responder(res, status, corpo) {
-  res.status(status).setHeader('Content-Type', 'application/json; charset=utf-8').send(JSON.stringify(corpo));
+  if (typeof res.status === 'function') {
+    res.status(status);
+  } else {
+    res.statusCode = status;
+  }
+  if (typeof res.setHeader === 'function') {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  }
+  const payload = JSON.stringify(corpo);
+  if (typeof res.send === 'function') {
+    res.send(payload);
+  } else if (typeof res.end === 'function') {
+    res.end(payload);
+  }
 }
 
 export function lerBody(req) {
@@ -31,25 +39,63 @@ export function lerBody(req) {
 }
 
 export function ipHash(req) {
-  const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
+  const ip = String(req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
   return createHash('sha256').update(ip + (process.env.JWT_SECRET || '')).digest('hex').slice(0, 24);
 }
 
-const segredo = () => {
+const b64Url = (str) => Buffer.from(str).toString('base64url');
+const b64Decode = (str) => Buffer.from(str, 'base64url').toString('utf8');
+
+const obterSegredo = () => {
   const s = process.env.JWT_SECRET;
-  if (!s || s.length < 32) throw new Error('JWT_SECRET ausente ou curto');
-  return new TextEncoder().encode(s);
+  if (!s || s.length < 32) throw new Error('JWT_SECRET ausente ou curto (mínimo 32 caracteres)');
+  return s;
 };
 
-export async function criarSessao() {
-  return new SignJWT({ adm: true }).setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt().setExpirationTime('8h').sign(segredo());
+export async function criarSessao(dados = {}) {
+  const secret = obterSegredo();
+  const header = b64Url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  const payload = b64Url(JSON.stringify({
+    adm: true,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 8 * 3600,
+    ...dados
+  }));
+  const signature = createHmac('sha256', secret)
+    .update(`${header}.${payload}`)
+    .digest('base64url');
+
+  return `${header}.${payload}.${signature}`;
 }
 
 export async function sessaoValida(req) {
+  let token = null;
   const m = /(?:^|;\s*)nt_admin=([^;]+)/.exec(req.headers.cookie || '');
-  if (!m) return false;
-  try { const { payload } = await jwtVerify(m[1], segredo()); return payload.adm === true; } catch { return false; }
+  if (m) token = m[1];
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.slice(7).trim();
+  }
+  if (!token) return false;
+
+  const partes = token.split('.');
+  if (partes.length !== 3) return false;
+  const [header, payload, signature] = partes;
+
+  try {
+    const secret = obterSegredo();
+    const sigEsperada = createHmac('sha256', secret)
+      .update(`${header}.${payload}`)
+      .digest('base64url');
+
+    if (signature.length !== sigEsperada.length) return false;
+    if (!timingSafeEqual(Buffer.from(signature), Buffer.from(sigEsperada))) return false;
+
+    const dec = JSON.parse(b64Decode(payload));
+    if (dec.exp && Math.floor(Date.now() / 1000) > dec.exp) return false;
+    return dec.adm === true;
+  } catch {
+    return false;
+  }
 }
 
 export function iguais(a, b) {

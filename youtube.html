@@ -14,31 +14,70 @@
 </head>
 <body>
 
-  <header class="revista-header">
+  <header class="revista-header" id="header">
     <div class="container header-row">
-      <a href="index.html" class="revista-logo">Natalie Thedim <span>Revista de Relacionamentos</span></a>
-      <a class="header-cta" href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20atendimento." target="_blank" rel="noopener noreferrer">Agendar atendimento</a>
+      <a href="index.html" class="logo-box" aria-label="Natalie Thedim — Ir para o início">
+        <svg class="logo-heart-bubble" viewBox="0 0 32 32" fill="none">
+          <path d="M16 6.2c-2.3 0-4.3 1.4-5.1 3.4C10.1 7.6 8.1 6.2 5.8 6.2 2.7 6.2.2 8.7.2 11.8c0 6.6 9.4 12.3 15.2 16.2.4.3 1 .3 1.4 0 5.8-3.9 15.2-9.6 15.2-16.2 0-3.1-2.5-5.6-5.6-5.6-2.3 0-4.3 1.4-5.1 3.4-.8-2-2.8-3.4-5.3-3.4z" stroke="#5B1826" stroke-width="1.8" fill="#FAF4F2"/>
+          <path d="M10 13h12M10 17h8" stroke="#5B1826" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">Natalie Thedim</span>
+          <span class="logo-sub">Psicóloga Clínica</span>
+        </div>
+      </a>
+
+      <button class="btn-mobile-toggle" id="btnToggleNav" aria-label="Abrir menu de navegação">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav class="header-nav" id="mainNav" aria-label="Menu principal">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-item-link">Início</a></li>
+          <li><a href="historias.html" class="nav-item-link">Histórias e Cartas</a></li>
+          <li><a href="diario.html" class="nav-item-link">Diário</a></li>
+          <li><a href="biblioteca.html" class="nav-item-link">Biblioteca</a></li>
+          <li><a href="exercicios.html" class="nav-item-link">Exercícios</a></li>
+          <li><a href="index.html#sobre" class="nav-item-link">Sobre Natalie</a></li>
+          <li><a href="index.html#atendimentos" class="nav-item-link">Atendimentos</a></li>
+          
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+              <span>Mais</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="nav-dropdown-menu" role="menu">
+              <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
+              <a href="youtube.html" class="nav-dropdown-item is-active">YouTube <span class="badge-em-breve">Em breve</span></a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+            </div>
+          </li>
+        </ul>
+
+        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+           class="header-btn" 
+           target="_blank" 
+           rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+          </svg>
+          <span>Agendar atendimento</span>
+        </a>
+      </nav>
     </div>
-    <nav class="revista-nav" aria-label="Navegação do site">
-      <div class="container">
-        <a href="index.html">Início</a>
-        <a href="historias.html">Histórias Reais</a>
-        <a href="cartas.html">Cartas</a>
-        <a href="pergunte.html">Pergunte p/ Natalie</a>
-        <a href="diario.html">Diário Anônimo</a>
-        <a href="biblioteca.html">Biblioteca</a>
-        <a href="exercicios.html">Exercícios</a>
-        <a href="e-se.html">Série "E se..."</a>
-        <a href="casos.html">Casos p/ Refletir</a>
-        <a href="emocoes.html">Mapa das Emoções</a>
-        <a href="filme.html">Clube do Filme</a>
-        <a href="livro.html">Clube do Livro</a>
-        <a href="podcast.html">Podcast</a>
-        <a href="youtube.html" class="is-active">YouTube</a>
-        <a href="instagram.html">Instagram</a>
-        <a href="terapeutas.html">Área p/ Terapeutas</a>
-      </div>
-    </nav>
   </header>
 
   <main>
@@ -70,5 +109,6 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
+  <script src="assets/db.js"></script>
 </body>
 </html>

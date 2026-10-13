@@ -41,9 +41,12 @@ const DB = (() => {
     return { ok, erro };
   }
 
-  async function entrar(email, senha) {
-    const { ok, erro } = await chamar('/api/admin?acao=entrar', { metodo: 'POST', corpo: { email, senha } });
-    return { ok, erro };
+  async function entrar(usuario, senha) {
+    const { ok, erro, json } = await chamar('/api/admin?acao=entrar', {
+      metodo: 'POST',
+      corpo: { usuario, senha }
+    });
+    return { ok, erro, token: json?.token };
   }
 
   async function sair() { await chamar('/api/admin?acao=sair', { metodo: 'POST' }); }
@@ -54,6 +57,19 @@ const DB = (() => {
   }
 
   function aoMudarSessao() {}
+
+  async function obterConteudo() {
+    const r = await chamar('/api/conteudo');
+    return { ok: r.ok, dados: r.json.itens || r.json.dados || [], conteudo: r.json.conteudo || {}, erro: r.erro };
+  }
+
+  async function salvarConteudo(secoes) {
+    const { ok, erro, json } = await chamar('/api/conteudo', {
+      metodo: 'PUT',
+      corpo: { secoes }
+    });
+    return { ok, erro, mensagem: json?.mensagem };
+  }
 
   async function listarTudo(tabela) {
     const r = await chamar(`/api/admin?acao=listar&tabela=${encodeURIComponent(tabela)}`);
@@ -67,5 +83,52 @@ const DB = (() => {
     return { ok, erro };
   }
 
-  return { disponivel, enviar, listarAprovados, reagirDiario, entrar, sair, sessaoAtual, aoMudarSessao, listarTudo, moderar };
+  return {
+    disponivel,
+    enviar,
+    listarAprovados,
+    reagirDiario,
+    entrar,
+    sair,
+    sessaoAtual,
+    aoMudarSessao,
+    obterConteudo,
+    salvarConteudo,
+    listarTudo,
+    moderar
+  };
 })();
+
+// Inicialização Global: Menu Mobile + Hidratação Dinâmica do WhatsApp via Turso
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Menu Mobile Toggle
+  const btnToggle = document.getElementById('btnToggleNav');
+  const mainNav = document.getElementById('mainNav');
+  if (btnToggle && mainNav) {
+    btnToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('is-aberto');
+    });
+  }
+
+  // 2. Hidratação do WhatsApp e dados dinâmicos do CMS em todas as páginas
+  DB.obterConteudo().then(({ ok, conteudo }) => {
+    if (!ok || !conteudo) return;
+    if (conteudo.whatsapp_numero?.texto) {
+      const numLimpo = conteudo.whatsapp_numero.texto.replace(/\D/g, '');
+      if (numLimpo) {
+        document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+          try {
+            const u = new URL(a.href);
+            u.pathname = '/' + numLimpo;
+            a.href = u.toString();
+          } catch (_) {}
+        });
+      }
+    }
+    if (conteudo.crp_info?.texto) {
+      document.querySelectorAll('[data-cms="crp_info"]').forEach(el => {
+        el.textContent = conteudo.crp_info.texto;
+      });
+    }
+  }).catch(() => {});
+});

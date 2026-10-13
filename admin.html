@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Moderação · Natalie Thedim</title>
+  <title>Administração & CMS · Natalie Thedim</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
@@ -11,52 +11,224 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .cms-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2.5rem;
+    }
+    .cms-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .cms-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1rem;
+    }
+    .cms-header h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.25rem;
+    }
+    .cms-header p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+    .cms-grupo {
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .cms-grupo-title {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-brand-wine);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cms-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .status-toast {
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all var(--transition-smooth);
+    }
+    .status-toast.sucesso {
+      background: var(--color-ok-bg);
+      color: var(--color-ok);
+      border: 1px solid #A3D9B5;
+    }
+    .status-toast.erro {
+      background: var(--color-erro-bg);
+      color: var(--color-erro);
+      border: 1px solid #F5B5B5;
+    }
+    .status-toast.salvando {
+      background: var(--color-pendente-bg);
+      color: var(--color-pendente);
+    }
+    .nav-adm-abas {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border-soft);
+      padding-bottom: 0.5rem;
+    }
+    .nav-adm-tab {
+      padding: 0.625rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-smooth);
+      background: transparent;
+    }
+    .nav-adm-tab.is-active {
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+    }
+  </style>
 </head>
 <body>
 
   <header class="revista-header">
     <div class="container header-row">
-      <a href="index.html" class="revista-logo">Natalie Thedim <span>Painel de Moderação</span></a>
+      <a href="index.html" class="revista-logo">Natalie Thedim <span>Painel Administrativo & CMS</span></a>
       <button class="header-cta" id="btnSair" hidden>Sair</button>
     </div>
   </header>
 
   <main>
-    <div id="avisoOffline" class="aviso-offline" style="margin-top:2rem;" hidden>
-          Não foi possível conectar ao servidor agora. Tente novamente em instantes.
-        </div>
+    <div id="avisoOffline" class="aviso-offline container" style="margin-top:2rem;" hidden>
+      Não foi possível conectar ao servidor agora. Verifique a conexão com o banco Turso.
+    </div>
 
+    <!-- TELA DE LOGIN -->
     <section id="telaLogin" class="login-box" hidden>
-      <h1>Entrar</h1>
+      <h1 style="font-family: var(--font-serif); color: var(--color-brand-wine); font-size: 1.75rem; margin-bottom: 0.5rem;">Acesso Restrito</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Painel de gestão de conteúdo e moderação</p>
+      
       <form id="formLogin">
         <div class="campo">
-          <label for="emailLogin">E-mail</label>
-          <input type="text" id="emailLogin" required autocomplete="username" />
+          <label for="usuarioLogin">Usuário ou E-mail</label>
+          <input type="text" id="usuarioLogin" required autocomplete="username" placeholder="Digite seu usuário" />
         </div>
         <div class="campo">
           <label for="senhaLogin">Senha</label>
-          <input type="text" id="senhaLogin" required autocomplete="current-password" style="-webkit-text-security: disc;" />
+          <input type="password" id="senhaLogin" required autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
-        <button type="submit" class="btn-enviar">Entrar</button>
-        <div id="statusLogin" class="status-msg" hidden></div>
+        <button type="submit" class="btn-enviar" id="btnEntrar" style="width:100%; margin-top:0.5rem;">Entrar no Sistema</button>
+        <div id="statusLogin" class="status-msg" style="margin-top:1rem;" hidden></div>
       </form>
     </section>
 
-    <section id="telaModeracao" class="container" style="padding: 2rem 1.25rem;" hidden>
-      <div class="fila-tabs">
-        <button class="fila-tab is-active" data-tabela="historias">Histórias <span class="contagem" id="contHistorias"></span></button>
-        <button class="fila-tab" data-tabela="cartas">Cartas <span class="contagem" id="contCartas"></span></button>
-        <button class="fila-tab" data-tabela="perguntas">Perguntas <span class="contagem" id="contPerguntas"></span></button>
-        <button class="fila-tab" data-tabela="diario_posts">Diário <span class="contagem" id="contDiario"></span></button>
+    <!-- ÁREA AUTENTICADA (MINI-CMS + MODERAÇÃO) -->
+    <section id="telaAdmin" class="container" style="padding: 2.5rem 1.25rem;" hidden>
+      
+      <div class="nav-adm-abas">
+        <button class="nav-adm-tab is-active" data-alvo="secaoCMS">Conteúdo do Site (Mini-CMS)</button>
+        <button class="nav-adm-tab" data-alvo="secaoModeracao">Moderação da Comunidade</button>
       </div>
 
-      <div id="filtroStatus" class="chip-row" style="margin-bottom:1.5rem;">
-        <span class="chip-static" data-status="pendente" style="cursor:pointer; font-weight:700;">Pendentes</span>
-        <span class="chip-static" data-status="aprovado" style="cursor:pointer;">Aprovados</span>
-        <span class="chip-static" data-status="rejeitado" style="cursor:pointer;">Rejeitados</span>
-      </div>
+      <!-- SEÇÃO 1: MINI-CMS (site_content) -->
+      <section id="secaoCMS" class="cms-container">
+        <div class="cms-header">
+          <h2>Edição de Textos e Conteúdo</h2>
+          <p>Altere as informações dinâmicas do site principal salvas no Turso.</p>
+        </div>
 
-      <div id="listaModeracao"></div>
+        <form id="formCMS" class="cms-grid">
+          
+          <div class="cms-grupo">
+            <span class="cms-grupo-title">✨ Hero (Abertura do Site)</span>
+            <div class="campo">
+              <label for="cms_hero_title">Frase de Impacto Principal (Lema do Casal)</label>
+              <textarea id="cms_hero_title" rows="2" placeholder="Ex: Não se trata de ter razão..."></textarea>
+            </div>
+            <div class="campo">
+              <label for="cms_hero_subtitle">Subtítulo / Proposta de Valor</label>
+              <textarea id="cms_hero_subtitle" rows="3" placeholder="Ex: Psicoterapia de casal e individual..."></textarea>
+            </div>
+          </div>
+
+          <div class="cms-grupo">
+            <span class="cms-grupo-title">👤 Apresentação & Perfil Profissional</span>
+            <div class="campo">
+              <label for="cms_sobre_mim">Texto da Biografia (Sobre Natalie Thedim)</label>
+              <textarea id="cms_sobre_mim" rows="4" placeholder="Ex: Natalie Thedim Silvado Camardella..."></textarea>
+            </div>
+            <div class="campo">
+              <label for="cms_crp_info">Registro CRP</label>
+              <input type="text" id="cms_crp_info" placeholder="Ex: CRP 05/45482 (RJ)" />
+            </div>
+          </div>
+
+          <div class="cms-grupo">
+            <span class="cms-grupo-title">📞 Contato & Consultório</span>
+            <div class="campo">
+              <label for="cms_whatsapp_numero">WhatsApp para Agendamentos (com DDI e DDD)</label>
+              <input type="text" id="cms_whatsapp_numero" placeholder="Ex: +5521995160968" />
+            </div>
+            <div class="campo">
+              <label for="cms_endereco_consultorio">Endereço do Consultório / Modalidades de Atendimento</label>
+              <input type="text" id="cms_endereco_consultorio" placeholder="Ex: Consultório no Jardim Botânico, RJ..." />
+            </div>
+          </div>
+
+          <div class="cms-grupo">
+            <span class="cms-grupo-title">🖼️ Imagem e Foto Oficial</span>
+            <div class="campo">
+              <label for="cms_image_url">Caminho ou URL da Foto Profissional</label>
+              <input type="text" id="cms_image_url" placeholder="/clientes/Natalie%20Thedim/foto-natalie-thedim.png" />
+            </div>
+          </div>
+
+          <div class="cms-actions">
+            <button type="submit" class="btn-enviar" id="btnSalvarCMS" style="min-width: 220px;">Salvar Alterações</button>
+            <div id="statusCMS" class="status-toast" hidden></div>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- SEÇÃO 2: MODERAÇÃO DE ENVIOS (HISTÓRIAS, CARTAS, PERGUNTAS, DIÁRIO) -->
+      <section id="secaoModeracao" hidden>
+        <div class="fila-tabs">
+          <button class="fila-tab is-active" data-tabela="historias">Histórias <span class="contagem" id="contHistorias"></span></button>
+          <button class="fila-tab" data-tabela="cartas">Cartas <span class="contagem" id="contCartas"></span></button>
+          <button class="fila-tab" data-tabela="perguntas">Perguntas <span class="contagem" id="contPerguntas"></span></button>
+          <button class="fila-tab" data-tabela="diario_posts">Diário <span class="contagem" id="contDiario"></span></button>
+        </div>
+
+        <div id="filtroStatus" class="chip-row" style="margin-bottom:1.5rem;">
+          <span class="chip-static" data-status="pendente" style="cursor:pointer; font-weight:700;">Pendentes</span>
+          <span class="chip-static" data-status="aprovado" style="cursor:pointer;">Aprovados</span>
+          <span class="chip-static" data-status="rejeitado" style="cursor:pointer;">Rejeitados</span>
+        </div>
+
+        <div id="listaModeracao"></div>
+      </section>
+
     </section>
   </main>
 
@@ -65,13 +237,26 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const avisoOffline = document.getElementById('avisoOffline');
       const telaLogin = document.getElementById('telaLogin');
-      const telaModeracao = document.getElementById('telaModeracao');
+      const telaAdmin = document.getElementById('telaAdmin');
       const formLogin = document.getElementById('formLogin');
       const statusLogin = document.getElementById('statusLogin');
       const btnSair = document.getElementById('btnSair');
-      const lista = document.getElementById('listaModeracao');
-      const tabs = document.querySelectorAll('.fila-tab');
-      const filtros = document.querySelectorAll('#filtroStatus [data-status]');
+      const btnEntrar = document.getElementById('btnEntrar');
+      
+      // Abas de navegação do Admin
+      const abasAdmin = document.querySelectorAll('.nav-adm-tab');
+      const secaoCMS = document.getElementById('secaoCMS');
+      const secaoModeracao = document.getElementById('secaoModeracao');
+      
+      // Form CMS
+      const formCMS = document.getElementById('formCMS');
+      const btnSalvarCMS = document.getElementById('btnSalvarCMS');
+      const statusCMS = document.getElementById('statusCMS');
+
+      // Moderação
+      const listaModeracao = document.getElementById('listaModeracao');
+      const tabsModeracao = document.querySelectorAll('.fila-tab');
+      const filtrosStatus = document.querySelectorAll('#filtroStatus [data-status]');
 
       let tabelaAtual = 'historias';
       let statusAtual = 'pendente';
@@ -83,59 +268,115 @@
         diario_posts: { nome: 'Diário', respostaTipos: false },
       };
 
-      if (!DB.disponivel()) {
-        avisoOffline.hidden = false;
-        return;
-      }
-
       function escapeHtml(s) {
         const div = document.createElement('div');
         div.textContent = s || '';
         return div.innerHTML;
       }
 
-      async function mostrarLogin() {
-        telaLogin.hidden = false;
-        telaModeracao.hidden = true;
-        btnSair.hidden = true;
+      function alternarAbas(alvoId) {
+        abasAdmin.forEach(a => a.classList.toggle('is-active', a.getAttribute('data-alvo') === alvoId));
+        secaoCMS.hidden = (alvoId !== 'secaoCMS');
+        secaoModeracao.hidden = (alvoId !== 'secaoModeracao');
+        if (alvoId === 'secaoModeracao') {
+          carregarFila();
+        }
       }
 
-      async function mostrarModeracao() {
-        telaLogin.hidden = true;
-        telaModeracao.hidden = false;
-        btnSair.hidden = false;
-        await atualizarContagens();
-        await carregarFila();
+      abasAdmin.forEach(tab => {
+        tab.addEventListener('click', () => alternarAbas(tab.getAttribute('data-alvo')));
+      });
+
+      // 1. CARREGAR DADOS DO CMS NO FORMULÁRIO
+      async function carregarDadosCMS() {
+        btnSalvarCMS.disabled = true;
+        const { ok, dados, erro } = await DB.obterConteudo();
+        btnSalvarCMS.disabled = false;
+
+        if (!ok) {
+          console.warn('[CMS] Não foi possível carregar dados do Turso:', erro);
+          return;
+        }
+
+        const mapa = {};
+        for (const item of (dados || [])) {
+          mapa[item.section_name] = item;
+        }
+
+        if (mapa.hero_title) document.getElementById('cms_hero_title').value = mapa.hero_title.content_text || '';
+        if (mapa.hero_subtitle) document.getElementById('cms_hero_subtitle').value = mapa.hero_subtitle.content_text || '';
+        if (mapa.sobre_mim) {
+          document.getElementById('cms_sobre_mim').value = mapa.sobre_mim.content_text || '';
+          if (mapa.sobre_mim.image_url) document.getElementById('cms_image_url').value = mapa.sobre_mim.image_url;
+        }
+        if (mapa.crp_info) document.getElementById('cms_crp_info').value = mapa.crp_info.content_text || '';
+        if (mapa.whatsapp_numero) document.getElementById('cms_whatsapp_numero').value = mapa.whatsapp_numero.content_text || '';
+        if (mapa.endereco_consultorio) document.getElementById('cms_endereco_consultorio').value = mapa.endereco_consultorio.content_text || '';
       }
 
+      // 2. SALVAR DADOS DO CMS NO TURSO
+      formCMS.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btnSalvarCMS.disabled = true;
+        statusCMS.className = 'status-toast salvando';
+        statusCMS.textContent = 'Salvando alterações no Turso...';
+        statusCMS.hidden = false;
+
+        const payload = [
+          { section_name: 'hero_title', content_text: document.getElementById('cms_hero_title').value },
+          { section_name: 'hero_subtitle', content_text: document.getElementById('cms_hero_subtitle').value },
+          { 
+            section_name: 'sobre_mim', 
+            content_text: document.getElementById('cms_sobre_mim').value,
+            image_url: document.getElementById('cms_image_url').value.trim() || null
+          },
+          { section_name: 'crp_info', content_text: document.getElementById('cms_crp_info').value },
+          { section_name: 'whatsapp_numero', content_text: document.getElementById('cms_whatsapp_numero').value },
+          { section_name: 'endereco_consultorio', content_text: document.getElementById('cms_endereco_consultorio').value }
+        ];
+
+        const { ok, erro } = await DB.salvarConteudo(payload);
+        btnSalvarCMS.disabled = false;
+
+        if (ok) {
+          statusCMS.className = 'status-toast sucesso';
+          statusCMS.textContent = '✓ Alterações salvas com sucesso no banco de dados!';
+          setTimeout(() => { statusCMS.hidden = true; }, 4000);
+        } else {
+          statusCMS.className = 'status-toast erro';
+          statusCMS.textContent = 'Erro ao salvar: ' + (erro || 'tente novamente');
+        }
+      });
+
+      // 3. MODERAÇÃO (HISTÓRIAS, CARTAS, PERGUNTAS, DIÁRIO)
       async function atualizarContagens() {
         for (const tabela of Object.keys(rotulos)) {
           const { dados } = await DB.listarTudo(tabela);
-          const pendentes = dados.filter((d) => d.status === 'pendente').length;
+          const pendentes = (dados || []).filter((d) => d.status === 'pendente').length;
           const alvo = document.getElementById('cont' + tabela.replace('_posts', '').replace(/^\w/, (c) => c.toUpperCase()));
           if (alvo) alvo.textContent = pendentes > 0 ? `(${pendentes})` : '';
         }
       }
 
       async function carregarFila() {
-        lista.innerHTML = '<p class="lista-vazia">Carregando…</p>';
+        listaModeracao.innerHTML = '<p class="lista-vazia">Carregando…</p>';
         const { ok, dados, erro } = await DB.listarTudo(tabelaAtual);
         if (!ok) {
-          lista.innerHTML = `<p class="lista-vazia">Erro ao carregar: ${escapeHtml(erro)}</p>`;
+          listaModeracao.innerHTML = `<p class="lista-vazia">Erro ao carregar: ${escapeHtml(erro)}</p>`;
           return;
         }
-        const filtrados = dados.filter((d) => d.status === statusAtual);
+        const filtrados = (dados || []).filter((d) => d.status === statusAtual);
         if (filtrados.length === 0) {
-          lista.innerHTML = `<p class="lista-vazia">Nada em "${statusAtual}" aqui.</p>`;
+          listaModeracao.innerHTML = `<p class="lista-vazia">Nenhum item em "${statusAtual}" nesta aba.</p>`;
           return;
         }
 
-        lista.innerHTML = filtrados.map((item) => {
+        listaModeracao.innerHTML = filtrados.map((item) => {
           const rotulo = rotulos[tabelaAtual];
           const campoResposta = rotulo.respostaTipos ? `
             <div class="campo" style="margin-top:0.75rem;">
-              <label>Resposta (opcional, aparece publicada junto)</label>
-              <textarea class="resposta-texto" rows="2" placeholder="Escreva um resumo da sua resposta em vídeo/áudio/texto...">${escapeHtml(item.resposta_texto)}</textarea>
+              <label>Resposta de Natalie (opcional, aparece com o texto):</label>
+              <textarea class="resposta-texto" rows="2" placeholder="Escreva a resposta ou comentário terapêutico...">${escapeHtml(item.resposta_texto)}</textarea>
             </div>` : '';
 
           return `
@@ -148,14 +389,14 @@
               <div class="texto">${escapeHtml(item.texto)}</div>
               ${campoResposta}
               <div class="acoes">
-                <button class="btn-mod aprovar" data-acao="aprovado">✓ Aprovar${rotulo.exigeResposta ? ' e publicar' : ''}</button>
+                <button class="btn-mod aprovar" data-acao="aprovado">✓ Aprovar</button>
                 <button class="btn-mod rejeitar" data-acao="rejeitado">✕ Rejeitar</button>
               </div>
             </div>
           `;
         }).join('');
 
-        lista.querySelectorAll('.item-moderacao').forEach((el) => {
+        listaModeracao.querySelectorAll('.item-moderacao').forEach((el) => {
           const id = el.getAttribute('data-id');
           el.querySelectorAll('.btn-mod').forEach((btn) => {
             btn.addEventListener('click', async () => {
@@ -177,37 +418,60 @@
         });
       }
 
-      tabs.forEach((tab) => {
+      tabsModeracao.forEach((tab) => {
         tab.addEventListener('click', () => {
-          tabs.forEach((t) => t.classList.remove('is-active'));
+          tabsModeracao.forEach((t) => t.classList.remove('is-active'));
           tab.classList.add('is-active');
           tabelaAtual = tab.getAttribute('data-tabela');
           carregarFila();
         });
       });
 
-      filtros.forEach((chip) => {
+      filtrosStatus.forEach((chip) => {
         chip.addEventListener('click', () => {
-          filtros.forEach((c) => (c.style.fontWeight = '400'));
+          filtrosStatus.forEach((c) => (c.style.fontWeight = '400'));
           chip.style.fontWeight = '700';
           statusAtual = chip.getAttribute('data-status');
           carregarFila();
         });
       });
 
+      // 4. AUTENTICAÇÃO E CONTROLE DE TELAS
+      async function mostrarLogin() {
+        telaLogin.hidden = false;
+        telaAdmin.hidden = true;
+        btnSair.hidden = true;
+      }
+
+      async function mostrarAdmin() {
+        telaLogin.hidden = true;
+        telaAdmin.hidden = false;
+        btnSair.hidden = false;
+        await carregarDadosCMS();
+        await atualizarContagens();
+      }
+
       formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         statusLogin.hidden = true;
-        const email = document.getElementById('emailLogin').value.trim();
+        btnEntrar.disabled = true;
+        btnEntrar.textContent = 'Verificando...';
+
+        const usuario = document.getElementById('usuarioLogin').value.trim();
         const senha = document.getElementById('senhaLogin').value;
-        const { ok, erro } = await DB.entrar(email, senha);
+
+        const { ok, erro } = await DB.entrar(usuario, senha);
+        btnEntrar.disabled = false;
+        btnEntrar.textContent = 'Entrar no Sistema';
+
         if (!ok) {
           statusLogin.className = 'status-msg erro';
-          statusLogin.textContent = 'Não foi possível entrar: ' + erro;
+          statusLogin.textContent = erro || 'Credenciais inválidas.';
           statusLogin.hidden = false;
           return;
         }
-        mostrarModeracao();
+
+        mostrarAdmin();
       });
 
       btnSair.addEventListener('click', async () => {
@@ -215,9 +479,10 @@
         mostrarLogin();
       });
 
+      // Checa sessão existente na montagem
       const sessao = await DB.sessaoAtual();
       if (sessao) {
-        mostrarModeracao();
+        mostrarAdmin();
       } else {
         mostrarLogin();
       }

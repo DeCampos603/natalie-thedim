@@ -1,8 +1,20 @@
 import { readFileSync } from 'node:fs';
-import { createClient } from '@libsql/client';
+import { getTursoClient } from './db.js';
 
-const db = createClient({ url: process.env.TURSO_DATABASE_URL, authToken: process.env.TURSO_AUTH_TOKEN });
-const sql = readFileSync(new URL('./schema.sql', import.meta.url), 'utf8');
-await db.executeMultiple(sql);
-const r = await db.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-console.log('Tabelas:', r.rows.map((x) => x.name).join(', '));
+try {
+  console.log('🔄 Conectando ao Turso e aplicando o esquema SQL...');
+  const db = getTursoClient();
+  const sql = readFileSync(new URL('./schema.sql', import.meta.url), 'utf8');
+
+  await db.executeMultiple(sql);
+
+  const tables = await db.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+  console.log('✅ Tabelas criadas/verificadas com sucesso:');
+  console.log('  ', tables.rows.map((x) => x.name).join(', '));
+
+  const contentCount = await db.execute("SELECT COUNT(*) as total FROM site_content");
+  console.log(`📝 Registros em site_content: ${contentCount.rows[0].total}`);
+} catch (error) {
+  console.error('❌ Falha na inicialização do Turso:', error.message);
+  process.exit(1);
+}

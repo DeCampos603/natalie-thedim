@@ -331,6 +331,99 @@
       width: 100%;
     }
 
+    /* Dropdown 'Mais' elegante */
+    .nav-dropdown {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .nav-dropdown-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color var(--transition-smooth);
+      padding: 0.25rem 0;
+      font-family: inherit;
+    }
+
+    .nav-dropdown-btn svg {
+      transition: transform var(--transition-smooth);
+    }
+
+    .nav-dropdown:hover .nav-dropdown-btn,
+    .nav-dropdown-btn:focus-visible {
+      color: var(--color-brand-wine);
+    }
+
+    .nav-dropdown:hover .nav-dropdown-btn svg {
+      transform: rotate(180deg);
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 230px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 32px rgba(91, 24, 38, 0.12);
+      padding: 0.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: all var(--transition-smooth);
+      z-index: 250;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown-item {
+      padding: 0.625rem 0.875rem;
+      font-size: 0.875rem;
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-dropdown-item:hover {
+      background: var(--bg-surface-tint);
+      color: var(--color-brand-wine);
+      padding-left: 1.1rem;
+    }
+
+    .badge-em-breve {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface-tint);
+      color: var(--text-subtle);
+      border: 1px solid var(--border-soft);
+    }
+
     .header-btn {
       display: inline-flex;
       align-items: center;
@@ -1453,8 +1546,39 @@
         grid-template-columns: 1fr 1fr;
       }
 
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+      }
+
+      .logo-box {
+        align-self: center;
+      }
+
+      .header-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
       .nav-list {
-        display: none;
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.85rem;
+        padding-bottom: 2px;
+      }
+
+      .nav-list li {
+        flex-shrink: 0;
+      }
+
+      .header-btn {
+        flex-shrink: 0;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8rem;
       }
 
       .hero-floating-seal {
@@ -1518,6 +1642,26 @@
           <li><a href="exercicios.html" class="nav-item-link">Exercícios</a></li>
           <li><a href="#sobre" class="nav-item-link">Sobre Natalie</a></li>
           <li><a href="#atendimentos" class="nav-item-link">Atendimentos</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+              <span>Mais</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="nav-dropdown-menu" role="menu">
+              <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+            </div>
+          </li>
         </ul>
 
         <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
@@ -1552,12 +1696,12 @@
           </h1>
 
           <div class="hero-quote-box">
-            <p class="hero-quote-text">
+            <p class="hero-quote-text" data-cms="hero_title">
               “Relações não se transformam quando alguém aprende a 'ganhar' uma discussão. Elas começam a mudar quando conseguimos compreender o que acontece entre as pessoas.”
             </p>
           </div>
 
-          <p class="hero-lead">
+          <p class="hero-lead" data-cms="hero_subtitle">
             Sou Natalie Thedim, psicóloga clínica (PUC-Rio, CRP 05/45482) com mais de 20 anos de experiência clínica. Ofereço um espaço seguro para compreender conflitos, fortalecer vínculos e transformar relações.
           </p>
 
@@ -1729,7 +1873,7 @@
                  decoding="async" />
           </div>
 
-          <div class="about-quote-box">
+          <div class="about-quote-box" data-cms="hero_title">
             “Não se trata de ter razão. Trata-se de compreender relações.”
           </div>
 
@@ -1752,7 +1896,7 @@
             </div>
             <div class="badge-formation-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Registro Profissional no CRP: <b>05/45482</b></span>
+              <span>Registro Profissional no CRP: <b data-cms="crp_info">05/45482</b></span>
             </div>
           </div>
         </div>
@@ -1760,7 +1904,7 @@
         <div class="about-narrative reveal">
           <span class="badge-welcome" style="margin-bottom: -0.5rem;">Sobre Natalie Thedim</span>
           <h2 class="center-h2" style="text-align: left;">Mais de 20 anos ajudando pessoas e famílias a construírem relações mais saudáveis.</h2>
-          <p>
+          <p data-cms="sobre_mim">
             Psicóloga clínica especializada em Terapia de Casal e Família. Meu trabalho integra principalmente a <strong>Abordagem Sistêmica</strong> e a <strong>Psicanálise</strong>, buscando compreender não apenas o sintoma isolado, mas toda a história e o sistema no qual o sofrimento se manifesta.
           </p>
 
@@ -2026,7 +2170,7 @@
       </div>
 
       <div class="footer-bottom-bar">
-        <p>© 2026 Natalie Thedim – Psicóloga Clínica · CRP 05/45482. Todos os direitos reservados.</p>
+        <p>© 2026 Natalie Thedim – Psicóloga Clínica · CRP 05/45482. Todos os direitos reservados. · <a href="admin.html" class="link-edicao-discreto" style="opacity: 0.35; font-size: 0.75rem; text-decoration: none; color: inherit; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='0.35'">Edição</a></p>
         <p>Desenvolvido com rigor ético e padrões de neurodesign acessíveis.</p>
       </div>
     </div>
@@ -2096,6 +2240,37 @@
         // Fallback caso navegador não suporte IntersectionObserver
         revealElements.forEach(el => el.classList.add('is-visible'));
       }
+
+      // 3. Hidratação Dinâmica do Mini-CMS (Turso) em Tempo Real
+      fetch('/api/conteudo')
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (!data || !data.conteudo) return;
+          const c = data.conteudo;
+          if (c.hero_title?.texto) {
+            document.querySelectorAll('[data-cms="hero_title"]').forEach(el => el.textContent = c.hero_title.texto);
+          }
+          if (c.hero_subtitle?.texto) {
+            document.querySelectorAll('[data-cms="hero_subtitle"]').forEach(el => el.textContent = c.hero_subtitle.texto);
+          }
+          if (c.sobre_mim?.texto) {
+            document.querySelectorAll('[data-cms="sobre_mim"]').forEach(el => el.textContent = c.sobre_mim.texto);
+          }
+          if (c.crp_info?.texto) {
+            document.querySelectorAll('[data-cms="crp_info"]').forEach(el => el.textContent = c.crp_info.texto);
+          }
+          if (c.whatsapp_numero?.texto) {
+            const numLimpo = c.whatsapp_numero.texto.replace(/\D/g, '');
+            if (numLimpo) {
+              document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                const u = new URL(a.href);
+                u.pathname = '/' + numLimpo;
+                a.href = u.toString();
+              });
+            }
+          }
+        })
+        .catch(() => { /* Fallback gracioso mantendo o HTML padrão */ });
 
     });
   </script>
