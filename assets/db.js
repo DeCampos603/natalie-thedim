@@ -105,8 +105,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnToggle = document.getElementById('btnToggleNav');
   const mainNav = document.getElementById('mainNav');
   if (btnToggle && mainNav) {
-    btnToggle.addEventListener('click', () => {
-      mainNav.classList.toggle('is-aberto');
+    btnToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const aberto = mainNav.classList.toggle('is-aberto');
+      btnToggle.classList.toggle('is-active', aberto);
+      btnToggle.setAttribute('aria-expanded', String(aberto));
+    });
+
+    mainNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mainNav.classList.remove('is-aberto');
+        btnToggle.classList.remove('is-active');
+        btnToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mainNav.contains(e.target) && !btnToggle.contains(e.target)) {
+        mainNav.classList.remove('is-aberto');
+        btnToggle.classList.remove('is-active');
+        btnToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8" />
@@ -467,6 +467,172 @@
       background-color: var(--color-brand-wine-dark);
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(91, 24, 38, 0.28);
+    }
+
+    /* ==========================================================================
+       MENU MOBILE HAMBÚRGUER & RESPONSIVIDADE DO HEADER
+       ========================================================================== */
+    .btn-mobile-toggle {
+      display: none;
+      background: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--color-brand-wine);
+      border-radius: var(--radius-sm);
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-smooth);
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .btn-mobile-toggle:hover,
+    .btn-mobile-toggle:focus-visible {
+      background: var(--bg-surface-tint);
+      border-color: var(--border-soft);
+    }
+
+    .btn-mobile-toggle .icon-menu-close {
+      display: none;
+    }
+
+    .btn-mobile-toggle.is-active .icon-menu-open {
+      display: none;
+    }
+
+    .btn-mobile-toggle.is-active .icon-menu-close {
+      display: block;
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 500;
+      }
+
+      .header-inner {
+        position: relative;
+        justify-content: space-between;
+        height: 64px;
+      }
+
+      .btn-mobile-toggle {
+        display: inline-flex;
+        margin-left: auto;
+      }
+
+      .header-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #FFFFFF;
+        border-bottom: 2px solid var(--border-soft);
+        box-shadow: 0 16px 36px rgba(91, 24, 38, 0.14);
+        padding: 1.25rem 1.5rem 1.75rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+        display: none;
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        z-index: 499;
+        animation: slideDownNav 0.22s ease-out;
+      }
+
+      @keyframes slideDownNav {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header-nav.is-aberto {
+        display: flex;
+      }
+
+      .nav-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        width: 100%;
+        list-style: none;
+      }
+
+      .nav-list li {
+        width: 100%;
+        border-bottom: 1px solid rgba(91, 24, 38, 0.06);
+      }
+
+      .nav-item-link {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .nav-dropdown {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-dropdown-btn {
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.75rem 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .nav-dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        background: var(--bg-surface-tint);
+        border-radius: var(--radius-sm);
+        padding: 0.5rem 0.75rem;
+        margin: 0.25rem 0 0.75rem 0;
+        display: none;
+        flex-direction: column;
+        gap: 0.2rem;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .nav-dropdown.is-open .nav-dropdown-menu {
+        display: flex;
+      }
+
+      .nav-dropdown.is-open .nav-dropdown-btn svg {
+        transform: rotate(180deg);
+      }
+
+      .nav-dropdown-item {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9375rem;
+        color: var(--text-main);
+      }
+
+      .header-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.85rem 1.25rem;
+        font-size: 0.9375rem;
+        margin-top: 0.5rem;
+      }
     }
 
     /* ==========================================================================
@@ -1679,7 +1845,20 @@
         </div>
       </a>
 
-      <nav class="header-nav" aria-label="Menu de Navegação">
+      <!-- Botão Menu Mobile (Hambúrguer) -->
+      <button class="btn-mobile-toggle" id="btnToggleNav" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mainNav">
+        <svg class="icon-menu-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg class="icon-menu-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav class="header-nav" id="mainNav" aria-label="Menu de Navegação">
         <ul class="nav-list">
           <li><a href="historias.html" class="nav-item-link">Histórias e Cartas</a></li>
           <li><a href="diario.html" class="nav-item-link">Diário</a></li>
@@ -2364,6 +2543,39 @@
           });
         }
       });
+
+      // 5. Menu Mobile Hambúrguer Toggle
+      const btnToggle = document.getElementById('btnToggleNav');
+      const mainNav = document.getElementById('mainNav');
+      if (btnToggle && mainNav) {
+        btnToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const aberto = mainNav.classList.toggle('is-aberto');
+          btnToggle.classList.toggle('is-active', aberto);
+          btnToggle.setAttribute('aria-expanded', String(aberto));
+          btnToggle.setAttribute('aria-label', aberto ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+        });
+
+        // Fecha menu mobile ao clicar em links (especialmente âncoras como #sobre e #atendimentos)
+        mainNav.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => {
+            mainNav.classList.remove('is-aberto');
+            btnToggle.classList.remove('is-active');
+            btnToggle.setAttribute('aria-expanded', 'false');
+            btnToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+          });
+        });
+
+        // Fecha ao clicar fora
+        document.addEventListener('click', (e) => {
+          if (!mainNav.contains(e.target) && !btnToggle.contains(e.target)) {
+            mainNav.classList.remove('is-aberto');
+            btnToggle.classList.remove('is-active');
+            btnToggle.setAttribute('aria-expanded', 'false');
+            btnToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+          }
+        });
+      }
 
     });
   </script>
