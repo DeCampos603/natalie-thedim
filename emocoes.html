@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Mapa das Emoções · Natalie Thedim</title>
-  <meta name="description" content="Escolha como está se sentindo e encontre conteúdos para o momento." />
+  <meta name="description" content="Escolha como você está se sentindo e receba acolhimento, reflexão clínica e direções práticas imediatas." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,13 +12,207 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
   <style>
-    .emocoes-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
-    .emocao-chip {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--bg-surface); border: 1px solid var(--border-soft);
-      border-radius: var(--radius-full); padding: 0.7rem 1.25rem;
-      font-size: 0.9375rem; font-weight: 600; color: var(--color-brand-wine);
-      opacity: 0.75; cursor: not-allowed;
+    .emocoes-hero {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+    }
+    .emocoes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .emocao-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-full);
+      padding: 0.75rem 1.4rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      box-shadow: 0 2px 6px rgba(91, 24, 38, 0.03);
+    }
+    .emocao-btn:hover {
+      border-color: var(--color-brand-wine);
+      color: var(--color-brand-wine);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(91, 24, 38, 0.08);
+    }
+    .emocao-btn.is-active {
+      background: var(--color-brand-wine);
+      border-color: var(--color-brand-wine);
+      color: #FFFFFF;
+      box-shadow: 0 6px 18px rgba(91, 24, 38, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .painel-devolutiva {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.75rem);
+      box-shadow: 0 10px 30px rgba(91, 24, 38, 0.06);
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .devolutiva-header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .devolutiva-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-rose);
+      background: var(--color-brand-rose-light);
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+    .devolutiva-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      color: var(--color-brand-wine);
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .devolutiva-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .devolutiva-secao {
+      margin-bottom: 1.75rem;
+    }
+    .devolutiva-secao h3 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .devolutiva-secao p {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-main);
+    }
+
+    .box-pergunta {
+      background: var(--bg-surface-tint);
+      border-left: 3px solid var(--color-brand-wine);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+    .box-pergunta p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--color-brand-wine);
+      line-height: 1.5;
+    }
+
+    .box-pratica {
+      background: #FAF8F5;
+      border: 1px dashed var(--color-brand-rose);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 2rem;
+    }
+    .box-pratica h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-brand-wine);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+    .box-pratica p {
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      line-height: 1.55;
+    }
+
+    .trilhas-sugeridas {
+      border-top: 1px solid var(--border-soft);
+      padding-top: 1.75rem;
+    }
+    .trilhas-sugeridas h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+    .trilhas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+    .trilha-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-decoration: none;
+      transition: all var(--transition-smooth);
+    }
+    .trilha-card:hover {
+      border-color: var(--color-brand-wine);
+      background: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .trilha-card-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-brand-wine);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .trilha-card-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .placeholder-vazio {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: #FFFFFF;
+      border: 1px dashed var(--border-soft);
+      border-radius: var(--radius-lg);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .placeholder-vazio p {
+      color: var(--text-muted);
+      font-size: 1rem;
     }
   </style>
 </head>
@@ -66,7 +260,7 @@
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
               <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
               <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
-              <a href="emocoes.html" class="nav-dropdown-item is-active">Mapa das Emoções <span class="badge-em-breve">Em breve</span></a>
+              <a href="emocoes.html" class="nav-dropdown-item is-active">Mapa das Emoções</a>
               <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
               <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
               <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
@@ -92,22 +286,32 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container emocoes-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / Mapa das Emoções</span>
-        <span class="proto-eyebrow">Comece pelo sentimento</span>
-        <h1>Mapa das Emoções</h1>
-        <p>A ideia: você escolhe como está se sentindo agora, e o site indica conteúdos específicos para aquele momento — uma porta de entrada emocional, não temática. Em construção.</p>
+        <span class="proto-eyebrow">Acolhimento imediato guiado</span>
+        <h1>Como você está se sentindo agora?</h1>
+        <p>Relacionamentos despertam sentimentos intensos. Clique no que você está sentindo neste momento para entender o que essa emoção está tentando sinalizar e qual o melhor caminho prático para lidar com ela.</p>
       </div>
     </section>
 
-    <section class="proto-section">
+    <section class="proto-section" style="padding-top:0;">
       <div class="container">
-        <div class="emocoes-grid">
-          <span class="emocao-chip">😠 Estou com raiva</span>
-          <span class="emocao-chip">😨 Estou com medo</span>
-          <span class="emocao-chip">😕 Estou confuso(a)</span>
-          <span class="emocao-chip">😮‍💨 Estou cansado(a)</span>
-          <span class="emocao-chip">💔 Sinto-me rejeitado(a)</span>
+        <!-- Seletor de Emoções -->
+        <div class="emocoes-grid" id="emocoesSelector" role="tablist" aria-label="Seletor de emoções">
+          <button type="button" class="emocao-btn" data-id="raiva"><span>😠</span> Estou com raiva</button>
+          <button type="button" class="emocao-btn" data-id="solidao"><span>🥺</span> Solidão a dois</button>
+          <button type="button" class="emocao-btn" data-id="rejeicao"><span>💔</span> Sinto-me rejeitado(a)</button>
+          <button type="button" class="emocao-btn" data-id="exaustao"><span>😮‍💨</span> Estou exausto(a)</button>
+          <button type="button" class="emocao-btn" data-id="medo"><span>😨</span> Medo do término</button>
+          <button type="button" class="emocao-btn" data-id="confusao"><span>😕</span> Dúvida e confusão</button>
+          <button type="button" class="emocao-btn" data-id="culpa"><span>😔</span> Sinto culpa</button>
+        </div>
+
+        <!-- Painel de Devolutiva Dinâmica -->
+        <div id="devolutivaContainer">
+          <div class="placeholder-vazio" id="placeholderInicial">
+            <p>👆 <strong>Clique em uma das emoções acima</strong> para carregar a reflexão clínica sistêmica, uma pergunta norteadora e uma ação prática para os seus próximos minutos.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -118,5 +322,164 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script>
+    const DADOS_EMOCOES = {
+      raiva: {
+        icone: '😠',
+        titulo: 'Estou com raiva ou profunda irritação',
+        subtitulo: 'Sensação de injustiça, limites desrespeitados ou acordos quebrados',
+        tag: 'Limite & Proteção',
+        compreensao: 'Na clínica sistêmica, a raiva quase nunca é uma emoção primária; ela é o escudo que protege feridas mais profundas — como desvalorização, quebra de confiança ou sensação de invisibilidade. A raiva surge quando um limite seu foi ultrapassado. Ter raiva é legítimo, mas explodir ou usar sarcasmo faz com que a relação foque na sua forma agressiva em vez de olhar para a causa real do problema.',
+        pergunta: '\"Antes de sentir essa raiva, qual foi a dor original? O que você precisava que o outro fizesse e que não aconteceu?\"',
+        pratica: 'Regra biológica dos 20 minutos: Quando a raiva atinge o ápice, a frequência cardíaca sobe e a capacidade de diálogo racional cai a zero. Diga com calma e firmeza: \'Preciso de 20 minutos para respirar antes de continuarmos para que eu não te fira com palavras.\'. Tome um copo d\'água, afaste-se do ambiente e espere a pulsação desacelerar antes de retomar.',
+        trilhas: [
+          { label: 'Exercício', title: 'O Termômetro do Casamento', url: 'exercicios.html' },
+          { label: 'Desabafo Seguro', title: 'Cartas que Nunca Enviei', url: 'cartas.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Sinto%20muita%20raiva%20acumulada%20na%20minha%20rela%C3%A7%C3%A3o%20e%20gostaria%20de%20ajuda.' }
+        ]
+      },
+      solidao: {
+        icone: '🥺',
+        titulo: 'Solidão a dois',
+        subtitulo: 'Sob o mesmo teto, mas com a sensação de estar completamente só',
+        tag: 'Desconexão Emocional',
+        compreensao: 'A solidão compartilhada costuma ser mais dolorosa do que estar solteiro(a). Ela acontece quando o casal vira uma \'empresa familiar\' — resolvendo contas, compras e rotina de filhos —, mas a curiosidade e o interesse genuíno pelo mundo interno do outro cessaram. O outro está fisicamente na sala, mas a sensação é de estar falando com uma parede.',
+        pergunta: '\"Quando foi a última vez que vocês conversaram sobre como estão por dentro, sem tocar em tarefas domésticas, boletos ou filhos?\"',
+        pratica: 'Micro-ritual de conexão de 3 minutos: Hoje, em vez de perguntar \'pagou a conta?\' ou \'como foi o trânsito?\', busque o olhar do seu parceiro e faça uma pergunta de intimidade: \'O que mais te pesou hoje por dentro?\'. Apenas escute a resposta com atenção plena por 3 minutos, sem oferecer conselhos imediatos.',
+        trilhas: [
+          { label: 'Mural Coletivo', title: 'Diário Anônimo das Relações', url: 'diario.html' },
+          { label: 'Histórias Reais', title: 'Relatos de quem viveu o mesmo', url: 'historias.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Sinto%20uma%20solid%C3%A3o%20muito%20grande%20no%20meu%20casamento.' }
+        ]
+      },
+      rejeicao: {
+        icone: '💔',
+        titulo: 'Sinto-me rejeitado(a) ou desvalorizado(a)',
+        subtitulo: 'A sensação de não ser prioridade, não ser desejado(a) ou ser descartável',
+        tag: 'Pertencimento & Vínculo',
+        compreensao: 'Sentir-se rejeitado(a) ativa os mesmos circuitos cerebrais da dor física. Na dança do casal, a rejeição frequentemente alimenta um ciclo destrutivo: quem se sente rejeitado cobra proximidade em tom de crítica, e o parceiro, sentindo-se cobrado e insuficiente, recua ainda mais. Quanto mais um persegue, mais o outro foge.',
+        pergunta: '\"Você tem expressado a sua necessidade de forma vulnerável (\'sinto sua falta\') ou em forma de acusação que põe o outro na defensiva?\"',
+        pratica: 'Troque a acusação pela vulnerabilidade: Em vez de disparar \'Você nunca se importa comigo\', experimente dizer: \'Quando nos afastamos, eu sinto muito medo de estarmos nos perdendo. Eu sinto falta de sermos cúmplices.\'. A vulnerabilidade convida ao acolhimento; o ataque convida ao escudo.',
+        trilhas: [
+          { label: 'Pergunte', title: 'Mande uma dúvida para Natalie', url: 'pergunte.html' },
+          { label: 'Exercício', title: 'Avalie o vínculo atual', url: 'exercicios.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Tenho%20me%20sentido%20muito%20rejeitada(o)%20na%20rela%C3%A7%C3%A3o.' }
+        ]
+      },
+      exaustao: {
+        icone: '😮‍💨',
+        titulo: 'Estou exausto(a) e sobrecarregado(a)',
+        subtitulo: 'Carregando o peso emocional e logístico da relação sozinho(a)',
+        tag: 'Carga Mental & Desgaste',
+        compreensao: 'O cansaço crônico que destrói a atração não é apenas o esforço físico; é a carga mental invisível. É a sensação de ser o único adulto na sala, responsável por lembrar, cobrar, planejar e antecipar tudo. Quando um parceiro assume a função de \'gerente da vida a dois\', a parceria erótica e o respeito mútuo cedem lugar à irritação maternal ou paternal.',
+        pergunta: '\"O que você tem feito em silêncio pelo casal que deveria ser compartilhado ou simplesmente deixado de fazer?\"',
+        pratica: 'A entrega de posse integral: Escolha UMA responsabilidade da semana (por exemplo, as compras ou o jantar de quinta-feira) e entregue inteiramente ao outro — não apenas a execução, mas o planejamento. Tolere que ele faça de um jeito diferente do seu sem intervir.',
+        trilhas: [
+          { label: 'Biblioteca', title: 'Artigos sobre dinâmica familiar', url: 'biblioteca.html' },
+          { label: 'Cartas', title: 'Escreva sem remetente', url: 'cartas.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Estou%20em%20exaust%C3%A3o%20emocional%20no%20meu%20relacionamento.' }
+        ]
+      },
+      medo: {
+        icone: '😨',
+        titulo: 'Medo do término ou insegurança profunda',
+        subtitulo: 'Receio constante de que o relacionamento chegue ao fim ou de ser traído(a)',
+        tag: 'Insegurança & Futuro',
+        compreensao: 'O medo tenta antecipar cenários catastróficos para criar uma falsa ilusão de controle. No entanto, quando a insegurança domina, começamos a vigiar o parceiro, monitorar sinais sutis no celular e exigir garantias constantes. Essa hipervigilância acaba asfixiando o relacionamento, provocando involuntariamente o distanciamento que mais temíamos.',
+        pergunta: '\"Esse medo nasce de fatos reais que aconteceram recentemente ou é a memória de dores de relacionamentos passados?\"',
+        pratica: 'Separação entre Fato e Fantasia: Pegue uma folha e desenhe duas colunas. Na primeira, anote os FATOS concretos observáveis hoje. Na segunda, anote os PENSAMENTOS e suposições que sua mente criou. Foque sua energia apenas no que é fato.',
+        trilhas: [
+          { label: 'Reflexão', title: 'Pergunte para a psicóloga', url: 'pergunte.html' },
+          { label: 'Exercício', title: 'Termômetro do Casamento', url: 'exercicios.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Tenho%20muita%20inseguran%C3%A7a%20e%20medo%20de%20perder%20a%20rela%C3%A7%C3%A3o.' }
+        ]
+      },
+      confusao: {
+        icone: '😕',
+        titulo: 'Dúvida e confusão: insistir ou terminar?',
+        subtitulo: 'Preso(a) entre o apego ao passado e a frustração com o presente',
+        tag: 'Ambivalência Decisória',
+        compreensao: 'A ambivalência — estar com um pé dentro e outro fora da relação — é um dos estados emocionais mais desgastantes que existem. Quem está na dúvida não consegue se entregar para reconstruir o vínculo, nem tem coragem para encerrá-lo com dignidade. A confusão costuma mascarar o medo da solidão ou a culpa por magoar o outro.',
+        pergunta: '\"Se você tivesse a certeza absoluta de que daqui a 3 anos seu parceiro seria exatamente a mesma pessoa de hoje, você escolheria ficar?\"',
+        pratica: 'A escrita sem censura de 5 minutos: Escreva sem parar tudo o que você sente, sem pensar em gramática ou julgamento moral. Ao ler suas próprias palavras cruas, a névoa da dúvida começa a se dissipar em favor da sua verdade interna.',
+        trilhas: [
+          { label: 'Mural', title: 'Leia histórias de outras pessoas', url: 'historias.html' },
+          { label: 'Desabafo', title: 'Escreva uma carta anônima', url: 'cartas.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Estou%20muito%20confusa(o)%20sobre%20o%20futuro%20da%20minha%20rela%C3%A7%C3%A3o.' }
+        ]
+      },
+      culpa: {
+        icone: '😔',
+        titulo: 'Sinto culpa por falhar na relação',
+        subtitulo: 'Medo de estar machucando o outro ou de não ser uma boa parceira / boa mãe',
+        tag: 'Autoexigência & Reparação',
+        compreensao: 'A culpa é saudável quando serve como bússola ética para reconhecer erros, mas é tóxica quando se torna um modo de vida. Ninguém é responsável unilateralmente pelo fracasso de uma dinâmica relacional: um relacionamento é um sistema onde cada ação de um provoca uma reação no outro. Carregar toda a culpa impede a reparação real.',
+        pergunta: '\"Você está se punindo pelo passado ou está disposta(o) a construir um acordo novo para o presente?\"',
+        pratica: 'Do autoataque à ação reparadora: A culpa fica remoendo; a responsabilidade age. Em vez de pedir desculpas em looping, pergunte claramente ao parceiro: \'O que eu fiz te magoou. Como eu posso, em atitudes práticas esta semana, reparar isso com você?\'.',
+        trilhas: [
+          { label: 'Desabafo', title: 'Cartas que Nunca Enviei', url: 'cartas.html' },
+          { label: 'Diário', title: 'Mural Anônimo diário', url: 'diario.html' },
+          { label: 'Conversa', title: 'Agendar com a Natalie', url: 'https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Carrego%20muita%20culpa%20na%20minha%20rela%C3%A7%C3%A3o.' }
+        ]
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const botoes = document.querySelectorAll('.emocao-btn');
+      const container = document.getElementById('devolutivaContainer');
+
+      botoes.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const dados = DADOS_EMOCOES[id];
+          if (!dados) return;
+
+          // Atualiza estado ativo
+          botoes.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+
+          // Renderiza card de devolutiva
+          container.innerHTML = `
+            <article class="painel-devolutiva" aria-live="polite">
+              <div class="devolutiva-header">
+                <span class="devolutiva-tag">${dados.tag}</span>
+                <h2>${dados.icone} ${dados.titulo}</h2>
+                <p>${dados.subtitulo}</p>
+              </div>
+
+              <div class="devolutiva-secao">
+                <h3>🩺 O que essa emoção está dizendo</h3>
+                <p>${dados.compreensao}</p>
+              </div>
+
+              <div class="box-pergunta">
+                <p>${dados.pergunta}</p>
+              </div>
+
+              <div class="box-pratica">
+                <h4>🌿 Micro-prática para agora (3 a 5 min)</h4>
+                <p>${dados.pratica}</p>
+              </div>
+
+              <div class="trilhas-sugeridas">
+                <h4>Caminhos recomendados na Revista:</h4>
+                <div class="trilhas-grid">
+                  ${dados.trilhas.map(t => `
+                    <a href="${t.url}" class="trilha-card" ${t.url.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                      <span class="trilha-card-label">${t.label}</span>
+                      <span class="trilha-card-title">${t.title} →</span>
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            </article>
+          `;
+
+          // Rola suavemente até o card
+          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      });
+    });
+  </script>
 </body>
 </html>

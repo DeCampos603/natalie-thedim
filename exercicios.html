@@ -3,14 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Exercícios · Natalie Thedim</title>
-  <meta name="description" content="Testes rápidos de autoconhecimento sobre relacionamentos, com resultado na hora." />
+  <title>Exercícios & Testes Clínicos · Natalie Thedim</title>
+  <meta name="description" content="Testes rápidos de autoconhecimento sobre relacionamentos, comunicação e ciclos de conflito com resultado na hora." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .exercicios-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .exercicio-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border-soft);
+      background: #FFFFFF;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      box-shadow: 0 2px 6px rgba(91, 24, 38, 0.03);
+    }
+    .exercicio-tab-btn:hover {
+      border-color: var(--color-brand-wine);
+      color: var(--color-brand-wine);
+      transform: translateY(-2px);
+    }
+    .exercicio-tab-btn.is-active {
+      background: var(--color-brand-wine);
+      border-color: var(--color-brand-wine);
+      color: #FFFFFF;
+      box-shadow: 0 6px 18px rgba(91, 24, 38, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .painel-exercicio {
+      display: none;
+      animation: fadeInTab 0.35s ease forwards;
+    }
+    .painel-exercicio.is-active {
+      display: block;
+    }
+    @keyframes fadeInTab {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .termometro-card {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.5rem);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+    .termometro-pergunta p {
+      font-weight: 600;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    .termometro-pergunta label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      padding: 0.6rem 0.85rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition-smooth);
+      border: 1px solid transparent;
+    }
+    .termometro-pergunta label:hover {
+      background: var(--bg-surface-tint);
+      border-color: var(--border-soft);
+      color: var(--text-main);
+    }
+    .termometro-pergunta input {
+      margin-top: 0.2rem;
+      accent-color: var(--color-brand-wine);
+      flex-shrink: 0;
+    }
+
+    .termometro-resultado {
+      background: var(--color-brand-rose-light);
+      border-left: 3px solid var(--color-brand-wine);
+      border-radius: 0 8px 8px 0;
+      padding: 1.5rem;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      animation: fadeInTab 0.35s ease;
+    }
+    .termometro-resultado a {
+      color: var(--color-brand-wine);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .tag-exercicio {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-rose);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.5rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,13 +173,14 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="cartas.html" class="nav-dropdown-item">Mural de Cartas Abertas</a>
               <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
               <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
-              <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções <span class="badge-em-breve">Em breve</span></a>
+              <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
               <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
               <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
               <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
               <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
             </div>
           </li>
@@ -81,62 +201,152 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container" style="text-align:center; max-width: 720px; margin: 0 auto 2.5rem;">
         <span class="breadcrumb"><a href="index.html">Início</a> / Exercícios</span>
-        <span class="proto-eyebrow">Autoconhecimento em minutos</span>
-        <h1>O Termômetro do Casamento</h1>
-        <p>5 perguntas rápidas para refletir sobre o momento atual da sua relação. Não é um diagnóstico — é um convite à reflexão.</p>
+        <span class="proto-eyebrow">Autoconhecimento relacional prático</span>
+        <h1>Exercícios & Testes Clínicos</h1>
+        <p>Ferramentas rápidas de reflexão sistêmica para entender o momento atual do vínculo, os ruídos na comunicação e o padrão de conflito do casal.</p>
       </div>
     </section>
 
-    <section class="proto-section">
+    <section class="proto-section" style="padding-top:0;">
       <div class="container">
-        <form class="termometro-card" id="termometroForm">
-          <div class="termometro-pergunta" data-q="1">
-            <p>1. Quando surge um desentendimento, o que costuma acontecer?</p>
-            <label><input type="radio" name="q1" value="2"> Conseguimos conversar até um acordo</label>
-            <label><input type="radio" name="q1" value="1"> Um de nós cede só para acabar a discussão</label>
-            <label><input type="radio" name="q1" value="0"> Vira silêncio ou mágoa que dura dias</label>
-          </div>
-          <div class="termometro-pergunta" data-q="2">
-            <p>2. Como está a conversa sobre o dia a dia?</p>
-            <label><input type="radio" name="q2" value="2"> Conversamos com frequência e interesse real</label>
-            <label><input type="radio" name="q2" value="1"> Conversamos, mas de forma automática</label>
-            <label><input type="radio" name="q2" value="0"> Quase não sobra conversa entre nós</label>
-          </div>
-          <div class="termometro-pergunta" data-q="3">
-            <p>3. Vocês conseguem pedir desculpas um ao outro?</p>
-            <label><input type="radio" name="q3" value="2"> Sim, com facilidade</label>
-            <label><input type="radio" name="q3" value="1"> Às vezes, com dificuldade</label>
-            <label><input type="radio" name="q3" value="0"> Quase nunca</label>
-          </div>
-          <div class="termometro-pergunta" data-q="4">
-            <p>4. Como está a intimidade e o afeto entre vocês?</p>
-            <label><input type="radio" name="q4" value="2"> Presente e cultivada</label>
-            <label><input type="radio" name="q4" value="1"> Existe, mas diminuiu bastante</label>
-            <label><input type="radio" name="q4" value="0"> Praticamente não existe mais</label>
-          </div>
-          <div class="termometro-pergunta" data-q="5">
-            <p>5. Vocês se sentem parceiros diante dos problemas da vida?</p>
-            <label><input type="radio" name="q5" value="2"> Sim, encaramos juntos</label>
-            <label><input type="radio" name="q5" value="1"> Depende do assunto</label>
-            <label><input type="radio" name="q5" value="0"> Sinto que enfrento sozinha(o)</label>
-          </div>
-
-          <button type="submit" class="btn-enviar"><span>Ver meu resultado</span></button>
-          <div class="termometro-resultado" id="termometroResultado" hidden></div>
-        </form>
-
-        <div class="proto-header" style="margin: 3rem auto 1rem; text-align:center;">
-          <span class="proto-eyebrow">Em breve</span>
-          <h2>Mais exercícios a caminho</h2>
+        <!-- Navegação de Exercícios -->
+        <div class="exercicios-nav" role="tablist">
+          <button type="button" class="exercicio-tab-btn is-active" data-target="painelTermometro">
+            <span>🌡️</span> O Termômetro do Casamento
+          </button>
+          <button type="button" class="exercicio-tab-btn" data-target="painelComunicacao">
+            <span>🗺️</span> O Mapa da Comunicação
+          </button>
+          <button type="button" class="exercicio-tab-btn" data-target="painelConflito">
+            <span>⚔️</span> Como Brigamos? (Ciclo de Conflito)
+          </button>
         </div>
-        <div class="mock-grid">
-          <div class="mock-card"><h3>🗺️ O Mapa da Comunicação</h3><p>Como cada um fala e escuta dentro do casal.</p></div>
-          <div class="mock-card"><h3>⚔️ Como Brigamos</h3><p>Identifica o padrão de conflito do casal.</p></div>
-          <div class="mock-card"><h3>🤝 Quem Costuma Ceder</h3><p>Mapeia o equilíbrio de poder nas decisões.</p></div>
-          <div class="mock-card"><h3>💗 Qual Linguagem de Afeto Usamos</h3><p>Baseado nas linguagens do amor de cada um.</p></div>
+
+        <!-- EXERCÍCIO 1: TERMÔMETRO DO CASAMENTO -->
+        <div class="painel-exercicio is-active" id="painelTermometro">
+          <form class="termometro-card" id="termometroForm">
+            <div>
+              <span class="tag-exercicio">Vínculo & Intimidade</span>
+              <h2 style="font-family: var(--font-serif); color: var(--color-brand-wine); font-size: 1.5rem; margin-bottom: 0.35rem;">O Termômetro do Casamento</h2>
+              <p style="font-size: 0.9375rem; color: var(--text-muted);">5 perguntas para avaliar a saúde da conexão e o clima geral da relação.</p>
+            </div>
+
+            <div class="termometro-pergunta" data-q="1">
+              <p>1. Quando surge um desentendimento, o que costuma acontecer?</p>
+              <label><input type="radio" name="q1" value="2"> Conseguimos conversar até um acordo</label>
+              <label><input type="radio" name="q1" value="1"> Um de nós cede só para acabar a discussão</label>
+              <label><input type="radio" name="q1" value="0"> Vira silêncio ou mágoa que dura dias</label>
+            </div>
+            <div class="termometro-pergunta" data-q="2">
+              <p>2. Como está a conversa sobre o dia a dia?</p>
+              <label><input type="radio" name="q2" value="2"> Conversamos com frequência e interesse real</label>
+              <label><input type="radio" name="q2" value="1"> Conversamos, mas de forma automática ou burocrática</label>
+              <label><input type="radio" name="q2" value="0"> Quase não sobra conversa entre nós</label>
+            </div>
+            <div class="termometro-pergunta" data-q="3">
+              <p>3. Vocês conseguem pedir desculpas um ao outro?</p>
+              <label><input type="radio" name="q3" value="2"> Sim, com relativa facilidade e acolhimento</label>
+              <label><input type="radio" name="q3" value="1"> Às vezes, mas com bastante resistência ou orgulho</label>
+              <label><input type="radio" name="q3" value="0"> Quase nunca; cada um defende seu ponto até o fim</label>
+            </div>
+            <div class="termometro-pergunta" data-q="4">
+              <p>4. Como está a intimidade e o afeto entre vocês?</p>
+              <label><input type="radio" name="q4" value="2"> Presente, cultivada e recíproca</label>
+              <label><input type="radio" name="q4" value="1"> Existe carinho, mas o desejo e o toque diminuíram muito</label>
+              <label><input type="radio" name="q4" value="0"> Praticamente não existe mais intimidade física ou emocional</label>
+            </div>
+            <div class="termometro-pergunta" data-q="5">
+              <p>5. Vocês se sentem parceiros diante dos problemas da vida?</p>
+              <label><input type="radio" name="q5" value="2"> Sim, encaramos os desafios como um time</label>
+              <label><input type="radio" name="q5" value="1"> Depende do assunto; em alguns temas há muita rivalidade</label>
+              <label><input type="radio" name="q5" value="0"> Sinto que enfrento as crises da vida completamente sozinha(o)</label>
+            </div>
+
+            <button type="submit" class="btn-enviar"><span>Calcular resultado do Termômetro</span></button>
+            <div class="termometro-resultado" id="termometroResultado" hidden></div>
+          </form>
         </div>
+
+        <!-- EXERCÍCIO 2: MAPA DA COMUNICAÇÃO -->
+        <div class="painel-exercicio" id="painelComunicacao">
+          <form class="termometro-card" id="comunicacaoForm">
+            <div>
+              <span class="tag-exercicio">Escuta & Diálogo</span>
+              <h2 style="font-family: var(--font-serif); color: var(--color-brand-wine); font-size: 1.5rem; margin-bottom: 0.35rem;">O Mapa da Comunicação</h2>
+              <p style="font-size: 0.9375rem; color: var(--text-muted);">4 perguntas para entender se suas conversas constroem pontes ou erguem muros defensivos.</p>
+            </div>
+
+            <div class="termometro-pergunta" data-q="c1">
+              <p>1. Quando seu parceiro traz uma queixa sobre você, qual é sua primeira reação?</p>
+              <label><input type="radio" name="c1" value="2"> Escuto com curiosidade para entender a dor dele, antes de me defender</label>
+              <label><input type="radio" name="c1" value="1"> Fico tensa(o), mas tento me explicar para não piorar o clima</label>
+              <label><input type="radio" name="c1" value="0"> Contra-ataco de imediato lembrando de algo que ele também fez de errado</label>
+            </div>
+            <div class="termometro-pergunta" data-q="c2">
+              <p>2. Com que frequência vocês interrompem um ao outro durante discussões?</p>
+              <label><input type="radio" name="c2" value="2"> Raras vezes; conseguimos esperar o outro concluir o raciocínio</label>
+              <label><input type="radio" name="c2" value="1"> Interrompemos quando o tom sobe ou quando achamos uma injustiça</label>
+              <label><input type="radio" name="c2" value="0"> É uma disputa de interrupções constantes onde ninguém se sente ouvido</label>
+            </div>
+            <div class="termometro-pergunta" data-q="c3">
+              <p>3. Quando você precisa pedir algo importante, como formula?</p>
+              <label><input type="radio" name="c3" value="2"> Falo da minha necessidade de forma clara ("Eu sinto falta de... Você toparia?")</label>
+              <label><input type="radio" name="c3" value="1"> Espero que ele perceba sozinho e só falo quando já acumulei irritação</label>
+              <label><input type="radio" name="c3" value="0"> Falo com ironia ou cobrança ("Como sempre você não lembra...")</label>
+            </div>
+            <div class="termometro-pergunta" data-q="c4">
+              <p>4. Como fica o ambiente após uma conversa difícil?</p>
+              <label><input type="radio" name="c4" value="2"> Há uma sensação de alívio e reconexão; o carinho volta rapidamente</label>
+              <label><input type="radio" name="c4" value="1"> Ficamos um pouco estranhos por algumas horas, mas depois relaxamos</label>
+              <label><input type="radio" name="c4" value="0"> Fica um clima de gelo, ressentimento e silêncio que dura dias</label>
+            </div>
+
+            <button type="submit" class="btn-enviar"><span>Ver resultado da Comunicação</span></button>
+            <div class="termometro-resultado" id="comunicacaoResultado" hidden></div>
+          </form>
+        </div>
+
+        <!-- EXERCÍCIO 3: COMO BRIGAMOS? -->
+        <div class="painel-exercicio" id="painelConflito">
+          <form class="termometro-card" id="conflitoForm">
+            <div>
+              <span class="tag-exercicio">Padrão Sistêmico</span>
+              <h2 style="font-family: var(--font-serif); color: var(--color-brand-wine); font-size: 1.5rem; margin-bottom: 0.35rem;">Como Brigamos? (Ciclo de Conflito)</h2>
+              <p style="font-size: 0.9375rem; color: var(--text-muted);">4 perguntas para mapear qual dança automática o casal executa quando o estresse bate à porta.</p>
+            </div>
+
+            <div class="termometro-pergunta" data-q="k1">
+              <p>1. Quando a tensão sobe, qual é a atitude mais comum do seu parceiro?</p>
+              <label><input type="radio" name="k1" value="persegue"> Insiste em falar e discutir na mesma hora, exigindo respostas imediatas</label>
+              <label><input type="radio" name="k1" value="distancia"> Fica mudo, se esquiva, sai de perto ou se fecha no celular / outro cômodo</label>
+              <label><input type="radio" name="k1" value="ataca"> Eleva a voz, ironiza e usa palavras duras para demonstrar indignação</label>
+            </div>
+            <div class="termometro-pergunta" data-q="k2">
+              <p>2. E qual costuma ser a SUA reação principal nesse mesmo momento?</p>
+              <label><input type="radio" name="k2" value="distancia"> Sinto vontade de me fechar, acho inútil falar e prefiro o silêncio</label>
+              <label><input type="radio" name="k2" value="persegue"> Sinto desespero com o silêncio dele e sigo cobrando para que ele responda</label>
+              <label><input type="radio" name="k2" value="ataca"> Sinto muita raiva e mostro que não vou aceitar ser tratada(o) daquele jeito</label>
+            </div>
+            <div class="termometro-pergunta" data-q="k3">
+              <p>3. Qual é o sentimento secreto que fica por baixo da briga?</p>
+              <label><input type="radio" name="k3" value="persegue"> Medo de abandono e sensação de que o outro não se importa mais</label>
+              <label><input type="radio" name="k3" value="distancia"> Sensação de ser inadequada(o), criticada(o) e de que nada do que faço basta</label>
+              <label><input type="radio" name="k3" value="ataca"> Sentimento de injustiça e necessidade urgente de provar quem está certo</label>
+            </div>
+            <div class="termometro-pergunta" data-q="k4">
+              <p>4. Como a briga geralmente é suspensa?</p>
+              <label><input type="radio" name="k4" value="distancia"> Um dos dois desiste por exaustão e o assunto é engolido sem solução</label>
+              <label><input type="radio" name="k4" value="persegue"> Ficamos em tensão até que a rotina obrigue uma trégua funcional</label>
+              <label><input type="radio" name="k4" value="ataca"> Acaba em mágoa profunda, com arrependimento pelas palavras disparadas</label>
+            </div>
+
+            <button type="submit" class="btn-enviar"><span>Identificar padrão de briga</span></button>
+            <div class="termometro-resultado" id="conflitoResultado" hidden></div>
+          </form>
+        </div>
+
       </div>
     </section>
   </main>
@@ -145,50 +355,129 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
+  <script src="assets/db.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('termometroForm');
-      const resultado = document.getElementById('termometroResultado');
+      // 1. Alternador de Abas
+      const tabBtns = document.querySelectorAll('.exercicio-tab-btn');
+      const paineis = document.querySelectorAll('.painel-exercicio');
 
-      form.addEventListener('submit', (e) => {
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-target');
+          tabBtns.forEach(b => b.classList.remove('is-active'));
+          paineis.forEach(p => p.classList.remove('is-active'));
+
+          btn.classList.add('is-active');
+          const painelAlvo = document.getElementById(targetId);
+          if (painelAlvo) {
+            painelAlvo.classList.add('is-active');
+          }
+        });
+      });
+
+      // 2. Formulário 1: Termômetro do Casamento
+      const f1 = document.getElementById('termometroForm');
+      const r1 = document.getElementById('termometroResultado');
+      f1.addEventListener('submit', (e) => {
         e.preventDefault();
         const perguntas = ['q1', 'q2', 'q3', 'q4', 'q5'];
         let respondidas = 0;
         let pontos = 0;
-
-        perguntas.forEach((nome) => {
-          const selecionado = form.querySelector(`input[name="${nome}"]:checked`);
-          if (selecionado) {
-            respondidas++;
-            pontos += parseInt(selecionado.value, 10);
-          }
+        perguntas.forEach((n) => {
+          const s = f1.querySelector(`input[name="${n}"]:checked`);
+          if (s) { respondidas++; pontos += parseInt(s.value, 10); }
         });
-
         if (respondidas < perguntas.length) {
-          resultado.hidden = false;
-          resultado.innerHTML = 'Responda todas as perguntas para ver o resultado. 🙂';
-          resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          r1.hidden = false;
+          r1.innerHTML = '⚠️ Por favor, responda todas as 5 perguntas para calcular seu resultado.';
+          r1.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
 
-        let mensagem = '';
+        let msg = '';
         if (pontos >= 8) {
-          mensagem = '<strong>Vínculo aquecido.</strong> Vocês têm uma base de diálogo e afeto ativa. Continuar cuidando dessa conexão é o que mantém a relação viva.';
+          msg = '<strong>Vínculo aquecido e seguro.</strong> Vocês sustentam uma base viva de diálogo, carinho e companheirismo. Os conflitos existem, mas não corroem a confiança fundamental do casal.';
         } else if (pontos >= 4) {
-          mensagem = '<strong>Vínculo em atenção.</strong> Existem pontos fortes, mas também sinais de desgaste que valem ser olhados com cuidado antes que se acumulem.';
+          msg = '<strong>Vínculo em ponto de atenção.</strong> Existem sentimentos reais e companheirismo, mas a rotina e o acúmulo de pequenos ressentimentos começam a cobrar seu preço. Vale cuidar antes que vire distanciamento crônico.';
         } else {
-          mensagem = '<strong>Vínculo pedindo cuidado.</strong> Os sinais indicam bastante distância ou ressentimento acumulado. Um espaço neutro para conversar pode ajudar a entender o que está acontecendo.';
+          msg = '<strong>Vínculo pedindo acolhimento urgente.</strong> Os sinais apontam para esgotamento, mágoas profundas e um muro de silêncio ou cobrança. Um espaço neutro e seguro de terapia é essencial para entender se o vínculo pode ser restaurado.';
         }
 
-        const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Fiz o Termômetro do Casamento no site e gostaria de conversar sobre o resultado.')}`;
+        const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Fiz o Termômetro do Casamento no site (' + pontos + ' pts) e gostaria de conversar.')}`;
+        r1.hidden = false;
+        r1.innerHTML = `${msg}<br><br><span style="font-size:0.875rem; color:var(--text-muted);">Isso não é um veredito, mas um espelho reflexivo.</span><br><br><a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer conversar com a Natalie sobre o momento do seu casamento? →</a>`;
+        r1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
 
-        resultado.hidden = false;
-        resultado.innerHTML = `${mensagem}<br><br>Isso não é um diagnóstico clínico — é só um convite à reflexão. <a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer aprofundar isso na terapia? →</a>`;
-        resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // 3. Formulário 2: Mapa da Comunicação
+      const f2 = document.getElementById('comunicacaoForm');
+      const r2 = document.getElementById('comunicacaoResultado');
+      f2.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const perguntas = ['c1', 'c2', 'c3', 'c4'];
+        let respondidas = 0;
+        let pontos = 0;
+        perguntas.forEach((n) => {
+          const s = f2.querySelector(`input[name="${n}"]:checked`);
+          if (s) { respondidas++; pontos += parseInt(s.value, 10); }
+        });
+        if (respondidas < perguntas.length) {
+          r2.hidden = false;
+          r2.innerHTML = '⚠️ Responda as 4 perguntas para visualizar seu mapa de comunicação.';
+          r2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        let msg = '';
+        if (pontos >= 6) {
+          msg = '<strong>Comunicação Consciente & Construtiva.</strong> Vocês conseguem falar sobre temas delicados preservando a dignidade um do outro. A escuta ativa existe mesmo quando há divergências.';
+        } else if (pontos >= 3) {
+          msg = '<strong>Comunicação sob Ruído e Reatividade.</strong> O amor existe, mas o formato das conversas dispara defesas imediatas. O foco vira quem tem razão em vez de como resolver a dor.';
+        } else {
+          msg = '<strong>Comunicação em Ciclo de Ataque-Defesa.</strong> As conversas viraram campos de batalha onde um ataca para não ser ferido e o outro se fecha para não explodir. O casal precisa aprender a desarmar os gatilhos.';
+        }
+
+        const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Fiz o teste do Mapa da Comunicação no site e gostaria de orientação.')}`;
+        r2.hidden = false;
+        r2.innerHTML = `${msg}<br><br><span style="font-size:0.875rem; color:var(--text-muted);">Exercício prático: na próxima conversa, tente escutar 3 minutos sem interromper uma única vez.</span><br><br><a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer aprender a dialogar sem brigar com a Natalie? →</a>`;
+        r2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      // 4. Formulário 3: Como Brigamos?
+      const f3 = document.getElementById('conflitoForm');
+      const r3 = document.getElementById('conflitoResultado');
+      f3.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const perguntas = ['k1', 'k2', 'k3', 'k4'];
+        let respondidas = 0;
+        const contagem = { persegue: 0, distancia: 0, ataca: 0 };
+        perguntas.forEach((n) => {
+          const s = f3.querySelector(`input[name="${n}"]:checked`);
+          if (s) { respondidas++; contagem[s.value]++; }
+        });
+        if (respondidas < perguntas.length) {
+          r3.hidden = false;
+          r3.innerHTML = '⚠️ Responda todas as 4 perguntas para mapear o ciclo de briga.';
+          r3.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        let padrao = '';
+        if (contagem.persegue >= 2 && contagem.distancia >= 1) {
+          padrao = '<strong>Padrão Perseguidor vs. Distanciador.</strong> Este é o ciclo mais clássico da psicologia de casal. Um parceiro sente urgência de se conectar e cobra com ansiedade; o outro se sente sufocado e insuficiente, retirando-se para uma concha protetora. Quanto mais um cobra, mais o outro foge.';
+        } else if (contagem.ataca >= 2) {
+          padrao = '<strong>Padrão de Escalada Simétrica (Ataque e Contra-ataque).</strong> Cada fala do parceiro é interpretada como um golpe que exige uma resposta imediata ainda mais dura. A briga só termina por pura exaustão, deixando cicatrizes verbais profundas.';
+        } else {
+          padrao = '<strong>Padrão de Silenciamento e Gelo Emocional.</strong> O casal evita o confronto direto com medo de piorar as coisas, mas o preço é um muro de frieza e ressentimentos engolidos que sufoca a intimidade e a alegria a dois.';
+        }
+
+        const linkWhats = `https://wa.me/5521995160968?text=${encodeURIComponent('Olá, Natalie! Mapeei o padrão de conflito do meu relacionamento no site e gostaria de agendar uma consulta.')}`;
+        r3.hidden = false;
+        r3.innerHTML = `${padrao}<br><br><span style="font-size:0.875rem; color:var(--text-muted);">Identificar a dança é o primeiro passo para parar de lutar um contra o outro e começar a lutar contra o padrão.</span><br><br><a href="${linkWhats}" target="_blank" rel="noopener noreferrer">Quer ajuda para desarmar esse ciclo vicioso com a Natalie? →</a>`;
+        r3.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
   </script>
-
-  <script src="assets/db.js"></script>
 </body>
 </html>
