@@ -201,17 +201,19 @@ img { max-width: 100%; display: block; }
 }
 
 .nav-dropdown:hover .nav-dropdown-btn,
+.nav-dropdown.is-open .nav-dropdown-btn,
 .nav-dropdown-btn:focus-visible {
   color: var(--color-brand-wine);
 }
 
-.nav-dropdown:hover .nav-dropdown-btn svg {
+.nav-dropdown:hover .nav-dropdown-btn svg,
+.nav-dropdown.is-open .nav-dropdown-btn svg {
   transform: rotate(180deg);
 }
 
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   right: 0;
   min-width: 230px;
   background: #FFFFFF;
@@ -219,15 +221,36 @@ img { max-width: 100%; display: block; }
   border-radius: var(--radius-md);
   box-shadow: 0 12px 32px rgba(91, 24, 38, 0.12);
   padding: 0.5rem;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: all var(--transition-smooth);
+  z-index: 300;
+  display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  z-index: 300;
+  pointer-events: none;
+}
+
+/* Ponte transparente que impede o mouse de perder o hover ao descer para o menu */
+.nav-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: transparent;
+  pointer-events: auto;
 }
 
 .nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.is-open .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .nav-dropdown-item {

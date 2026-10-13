@@ -358,17 +358,19 @@
     }
 
     .nav-dropdown:hover .nav-dropdown-btn,
+    .nav-dropdown.is-open .nav-dropdown-btn,
     .nav-dropdown-btn:focus-visible {
       color: var(--color-brand-wine);
     }
 
-    .nav-dropdown:hover .nav-dropdown-btn svg {
+    .nav-dropdown:hover .nav-dropdown-btn svg,
+    .nav-dropdown.is-open .nav-dropdown-btn svg {
       transform: rotate(180deg);
     }
 
     .nav-dropdown-menu {
       position: absolute;
-      top: calc(100% + 8px);
+      top: calc(100% + 6px);
       right: 0;
       min-width: 230px;
       background: #FFFFFF;
@@ -380,17 +382,32 @@
       visibility: hidden;
       transform: translateY(6px);
       transition: all var(--transition-smooth);
-      z-index: 250;
+      z-index: 300;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
+      pointer-events: none;
+    }
+
+    /* Ponte transparente para movimento suave do mouse sem fechamento prematuro */
+    .nav-dropdown-menu::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 0;
+      right: 0;
+      height: 14px;
+      background: transparent;
+      pointer-events: auto;
     }
 
     .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown.is-open .nav-dropdown-menu,
     .nav-dropdown:focus-within .nav-dropdown-menu {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
+      pointer-events: auto;
     }
 
     .nav-dropdown-item {
@@ -2270,7 +2287,55 @@
             }
           }
         })
-        .catch(() => { /* Fallback gracioso mantendo o HTML padrão */ });
+      // 4. Dropdown Persistente (Hover Intent + Buffer de 250ms sem fechamento acidental)
+      document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
+        let timer = null;
+        const btn = dropdown.querySelector('.nav-dropdown-btn');
+
+        function abrir() {
+          if (timer) clearTimeout(timer);
+          dropdown.classList.add('is-open');
+          if (btn) btn.setAttribute('aria-expanded', 'true');
+        }
+
+        function fechar() {
+          timer = setTimeout(() => {
+            dropdown.classList.remove('is-open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }, 250);
+        }
+
+        dropdown.addEventListener('mouseenter', abrir);
+        dropdown.addEventListener('mouseleave', fechar);
+        dropdown.addEventListener('focusin', abrir);
+        dropdown.addEventListener('focusout', (e) => {
+          if (!dropdown.contains(e.relatedTarget)) fechar();
+        });
+
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (dropdown.classList.contains('is-open')) {
+              dropdown.classList.remove('is-open');
+              btn.setAttribute('aria-expanded', 'false');
+            } else {
+              abrir();
+            }
+          });
+        }
+      });
+
+      // Fecha dropdown se clicar fora
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-dropdown')) {
+          document.querySelectorAll('.nav-dropdown.is-open').forEach((d) => {
+            d.classList.remove('is-open');
+            const b = d.querySelector('.nav-dropdown-btn');
+            if (b) b.setAttribute('aria-expanded', 'false');
+          });
+        }
+      });
 
     });
   </script>

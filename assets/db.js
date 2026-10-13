@@ -131,4 +131,62 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }).catch(() => {});
+
+  // 3. Dropdown Persistente "Mais" (Hover Intent com buffer 250ms e clique)
+  document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
+    if (dropdown.dataset.hasDropdownInit) return;
+    dropdown.dataset.hasDropdownInit = 'true';
+    let timer = null;
+    const btn = dropdown.querySelector('.nav-dropdown-btn');
+
+    function abrir() {
+      if (timer) clearTimeout(timer);
+      dropdown.classList.add('is-open');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    }
+
+    function fechar() {
+      timer = setTimeout(() => {
+        dropdown.classList.remove('is-open');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }, 250);
+    }
+
+    dropdown.addEventListener('mouseenter', abrir);
+    dropdown.addEventListener('mouseleave', fechar);
+    dropdown.addEventListener('focusin', abrir);
+    dropdown.addEventListener('focusout', (e) => {
+      if (!dropdown.contains(e.relatedTarget)) {
+        fechar();
+      }
+    });
+
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains('is-open');
+        if (isOpen) {
+          dropdown.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          abrir();
+        }
+      });
+    }
+  });
+
+  // Fecha dropdown se clicar fora
+  if (!window.__dropdownClickOutsideAttached) {
+    window.__dropdownClickOutsideAttached = true;
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-dropdown')) {
+        document.querySelectorAll('.nav-dropdown.is-open').forEach((d) => {
+          d.classList.remove('is-open');
+          const b = d.querySelector('.nav-dropdown-btn');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  }
 });
+
