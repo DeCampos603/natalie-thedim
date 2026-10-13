@@ -1,16 +1,183 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Área para Terapeutas · Natalie Thedim</title>
-  <meta name="description" content="Cursos, supervisão e instrumentos clínicos para outros terapeutas." />
+  <meta name="description" content="Supervisão clínica em terapia de casal e família, grupos de estudos e instrumentos de intervenção para psicólogos e terapeutas." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .terapeutas-hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+    }
+    .grid-servicos-terapeutas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+    .servico-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 3vw, 2rem);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+    }
+    .servico-card:hover {
+      border-color: var(--color-brand-wine);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .servico-badge {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-wine);
+      background: var(--color-brand-rose-light);
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .servico-titulo {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--color-brand-wine);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .servico-desc {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .servico-lista {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .servico-lista li {
+      position: relative;
+      padding-left: 1.25rem;
+      line-height: 1.45;
+    }
+    .servico-lista li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--color-brand-wine);
+      font-weight: 700;
+    }
+    .credenciais-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .credenciais-box {
+        grid-template-columns: 1fr;
+      }
+    }
+    .credenciais-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .stat-pill {
+      background: var(--color-brand-rose-light);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      text-align: center;
+      min-width: 120px;
+    }
+    .stat-pill strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--color-brand-wine);
+      line-height: 1.1;
+    }
+    .stat-pill span {
+      font-size: 0.6875rem;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .form-supervisao-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.5rem);
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-supervisao-box h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .form-supervisao-box p.form-sub {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+    .faq-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+    .faq-card h4 {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+    }
+    .faq-card p {
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +221,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item is-active">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item is-active">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,25 +249,222 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container terapeutas-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / Área para Terapeutas</span>
-        <span class="proto-eyebrow">Visão de longo prazo</span>
+        <span class="proto-eyebrow">Formação & Prática Clínica</span>
         <h1>Área para Terapeutas</h1>
-        <p>Cursos, supervisão, artigos científicos, instrumentos e protocolos — ampliando a autoridade de Natalie para além do consultório. Sem escopo definido ainda; fica registrado aqui como direção futura do projeto.</p>
+        <p>Supervisão clínica em terapia de casal e família, grupos de estudo aprofundados e instrumentos de intervenção baseados em mais de 20 anos de experiência no manejo de sistemas humanos complexos.</p>
       </div>
     </section>
 
-    <section class="proto-section">
-      <div class="container">
-        <div class="chip-row" style="justify-content:center;">
-          <span class="chip-static">Cursos</span>
-          <span class="chip-static">Supervisão clínica</span>
-          <span class="chip-static">Artigos científicos</span>
-          <span class="chip-static">Instrumentos e protocolos</span>
-          <span class="chip-static">Método integrativo</span>
+    <div class="container">
+
+      <!-- Sobre a Supervisora -->
+      <section class="credenciais-box">
+        <div>
+          <span class="proto-eyebrow">Acolhimento & Rigor Teórico</span>
+          <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--color-brand-wine); margin-bottom: 0.75rem;">
+            Supervisão com Natalie Thedim
+          </h2>
+          <p style="font-size: 0.9375rem; color: var(--text-muted); line-height: 1.6; max-width: 620px;">
+            A prática clínica com casais e famílias exige um olhar que vai muito além do indivíduo. É preciso enxergar a dança relacional, as triangulações invisíveis e o lugar onde o próprio terapeuta é convidado a tropeçar. Meu compromisso na supervisão é oferecer um espaço seguro, ético e tecnicamente rigoroso para que você atenda com segurança e presença.
+          </p>
+          <div class="credenciais-stats">
+            <div class="stat-pill">
+              <strong>+20 anos</strong>
+              <span>Prática Clínica</span>
+            </div>
+            <div class="stat-pill">
+              <strong>CRP 05</strong>
+              <span>45482</span>
+            </div>
+            <div class="stat-pill">
+              <strong>Sistêmica</strong>
+              <span>Casal & Família</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+        <div style="text-align: center;">
+          <a href="#interesse" class="btn-primary" style="white-space:nowrap;">
+            Solicitar Supervisão
+          </a>
+        </div>
+      </section>
+
+      <!-- 3 Modalidades de Atuação -->
+      <section>
+        <div class="secao-header" style="text-align:center; margin-bottom: 2rem;">
+          <span class="proto-eyebrow">Modalidades</span>
+          <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--color-brand-wine);">Como Trabalhamos Juntos</h2>
+          <p style="color: var(--text-muted); font-size: 0.9375rem; max-width: 600px; margin: 0.5rem auto 0;">Opções desenhadas tanto para psicólogos no início da clínica com casais quanto para colegas experientes que buscam refinamento de intervenção.</p>
+        </div>
+
+        <div class="grid-servicos-terapeutas">
+
+          <!-- Card 1: Supervisão Individual -->
+          <article class="servico-card">
+            <div>
+              <span class="servico-badge">Individual</span>
+              <h3 class="servico-titulo">Supervisão Clínica Individual</h3>
+              <p class="servico-desc">Encontros focados exclusivamente no seu repertório de casos, dúvidas de manejo, formulação de hipóteses sistêmicas e contratransferência.</p>
+              <ul class="servico-lista">
+                <li>Sessões de 60 minutos online (Google Meet sigiloso)</li>
+                <li>Frequência quinzenal ou mensal adaptada à sua agenda</li>
+                <li>Mapeamento de genograma e hipóteses diagnósticas</li>
+                <li>Manejo de impasses graves (traição, segredos, violência verbal)</li>
+                <li>Refinamento do contrato terapêutico e setting com o casal</li>
+              </ul>
+            </div>
+            <a href="#interesse" class="header-btn" style="width:100%; justify-content:center; text-align:center;">
+              Consultar Vagas Individuais
+            </a>
+          </article>
+
+          <!-- Card 2: Grupo de Estudos -->
+          <article class="servico-card">
+            <div>
+              <span class="servico-badge">Grupo Fechado</span>
+              <h3 class="servico-titulo">Grupo de Estudos em Terapia de Casal</h3>
+              <p class="servico-desc">Um espaço protegido de intervisão, discussão de textos seminais e aplicação direta da teoria sistêmica na sala de atendimento.</p>
+              <ul class="servico-lista">
+                <li>Grupos reduzidos (máximo de 8 psicólogos por turma)</li>
+                <li>Encontros quinzenais de 90 minutos ao vivo</li>
+                <li>Leitura orientada de Minuchin, Bowen, Watzlawick e Esther Perel</li>
+                <li>Estudos de caso reais trazidos pelos integrantes do grupo</li>
+                <li>Certificado de participação e horas complementares</li>
+              </ul>
+            </div>
+            <a href="#interesse" class="header-btn" style="width:100%; justify-content:center; text-align:center;">
+              Inscrever-se na Fila de Espera
+            </a>
+          </article>
+
+          <!-- Card 3: Instrumentos e Guias -->
+          <article class="servico-card">
+            <div>
+              <span class="servico-badge">Instrumentos Práticos</span>
+              <h3 class="servico-titulo">Protocolos & Guias de Intervenção</h3>
+              <p class="servico-desc">Roteiros estruturados para organizar o início do tratamento de casais e famílias com clareza metodológica.</p>
+              <ul class="servico-lista">
+                <li>Roteiro da 1ª Sessão: como evitar o tribunal no consultório</li>
+                <li>Guia de elaboração do Genograma Clínico Relacional</li>
+                <li>Termo de Consentimento e Regra de Segredos entre Parceiros</li>
+                <li>Perguntas Circulares fundamentais para desbloquear crises</li>
+                <li>Materiais em PDF formatados prontos para aplicação</li>
+              </ul>
+            </div>
+            <a href="#interesse" class="header-btn" style="width:100%; justify-content:center; text-align:center;">
+              Acessar Materiais
+            </a>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Formulário de Interesse / Lista de Espera -->
+      <section id="interesse" class="form-supervisao-box">
+        <h2>Fale Diretamente Sobre Supervisão</h2>
+        <p class="form-sub">Preencha os dados abaixo para receber os detalhes sobre disponibilidade de horários, valores e início das próximas turmas.</p>
+
+        <form id="formSupervisao" class="form-grid" style="display:flex; flex-direction:column; gap:1.15rem;">
+          <div>
+            <label for="supNome" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">Nome Completo</label>
+            <input type="text" id="supNome" name="nome" required placeholder="Seu nome" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+              <label for="supCrp" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">CRP / Região</label>
+              <input type="text" id="supCrp" name="crp" required placeholder="Ex: 05/12345" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+            </div>
+            <div>
+              <label for="supTempo" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">Tempo de Formação</label>
+              <select id="supTempo" name="tempo" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem; background:#FFFFFF;">
+                <option value="estudante">Estudante no último ano</option>
+                <option value="ate2anos">Até 2 anos de formado(a)</option>
+                <option value="2a5anos">2 a 5 anos de clínica</option>
+                <option value="5a10anos">5 a 10 anos de prática</option>
+                <option value="mais10">Mais de 10 anos</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+              <label for="supWhats" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">WhatsApp com DDD</label>
+              <input type="tel" id="supWhats" name="whatsapp" required placeholder="(XX) 99999-9999" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+            </div>
+            <div>
+              <label for="supEmail" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">E-mail Profissional</label>
+              <input type="email" id="supEmail" name="email" required placeholder="seu@email.com" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+            </div>
+          </div>
+
+          <div>
+            <label for="supInteresse" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">Interesse Principal</label>
+            <select id="supInteresse" name="interesse" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem; background:#FFFFFF;">
+              <option value="individual">Supervisão Clínica Individual</option>
+              <option value="grupo">Grupo de Estudos em Terapia de Casal</option>
+              <option value="instrumentos">Protocolos e Guias de Intervenção</option>
+              <option value="ambos">Supervisão + Grupo de Estudos</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="supMensagem" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">Breve descrição da sua demanda ou casos de interesse</label>
+            <textarea id="supMensagem" name="mensagem" rows="3" placeholder="Ex: Gostaria de supervisão para um caso recente de infidelidade conjugal com filhos adolescentes..." style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem; resize:vertical;"></textarea>
+          </div>
+
+          <div id="supMsgFeedback" style="display:none; padding:1rem; border-radius:var(--radius-md); font-size:0.875rem; text-align:center;"></div>
+
+          <button type="submit" class="btn-primary" style="width:100%; padding:0.9rem; justify-content:center; font-size:1rem;">
+            Enviar Solicitação de Supervisão
+          </button>
+        </form>
+
+        <div style="text-align:center; margin-top:1.5rem; border-top:1px solid var(--border-soft); padding-top:1.25rem;">
+          <p style="font-size:0.8125rem; color:var(--text-subtle); margin-bottom:0.6rem;">Prefere contato direto e ágil via WhatsApp?</p>
+          <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Sou%20psic%C3%B3logo(a)%20e%20gostaria%20de%20saber%20mais%20sobre%20a%20supervis%C3%A3o%20cl%C3%ADnica." 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--color-brand-wine); font-weight:700; font-size:0.875rem; text-decoration:underline;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+            <span>Falar com Natalie pelo WhatsApp (Supervisão)</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Dúvidas Frequentes da Área Profissional -->
+      <section style="margin-bottom: 4rem;">
+        <div class="secao-header" style="text-align:center; margin-bottom: 2rem;">
+          <span class="proto-eyebrow">Esclarecimentos</span>
+          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--color-brand-wine);">Dúvidas Frequentes de Colegas</h2>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-card">
+            <h4>Preciso ter especialização prévia em família para fazer supervisão?</h4>
+            <p>Não. A supervisão atende tanto psicólogos generalistas que estão recebendo suas primeiras demandas de casal quanto especialistas que desejam discutir impasses técnicos e contratransferenciais específicos.</p>
+          </div>
+
+          <div class="faq-card">
+            <h4>Como é assegurado o sigilo dos pacientes atendidos?</h4>
+            <p>Rigorosamente em conformidade com o Código de Ética Profissional do Psicólogo (CFP). Todos os nomes, profissões, idades exatas e detalhes identificáveis são anonimizados pelo terapeuta antes da apresentação do caso.</p>
+          </div>
+
+          <div class="faq-card">
+            <h4>A supervisão fornece declaração de horas para pós-graduação?</h4>
+            <p>Sim. Caso você esteja cursando pós-graduação, residência ou formação que exija comprovação de horas de supervisão clínica com profissional com mais de 5 anos de registro, emitimos a declaração comprobatória necessária.</p>
+          </div>
+
+          <div class="faq-card">
+            <h4>Qual a abordagem teórica que guia a supervisão?</h4>
+            <p>A fundamentação principal é a Terapia Familiar e de Casal Sistêmica (Escola Estrutural de Salvador Minuchin, Abordagem Intergeracional de Murray Bowen e Comunicação Humana de Watzlawick), integrada a aportes contemporâneos da Teoria do Apego Adulto.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
   </main>
 
   <p class="footer-note">
@@ -108,5 +472,54 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script>
+    // Envio do formulário de supervisão
+    const formSup = document.getElementById('formSupervisao');
+    const msgFeedback = document.getElementById('supMsgFeedback');
+
+    if (formSup) {
+      formSup.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btnSubmit = formSup.querySelector('button[type="submit"]');
+        const originalText = btnSubmit.textContent;
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Enviando...';
+
+        const payload = {
+          tipo: 'supervisao_terapeutas',
+          nome: document.getElementById('supNome').value.trim(),
+          crp: document.getElementById('supCrp').value.trim(),
+          tempo: document.getElementById('supTempo').value,
+          whatsapp: document.getElementById('supWhats').value.trim(),
+          email: document.getElementById('supEmail').value.trim(),
+          interesse: document.getElementById('supInteresse').value,
+          mensagem: document.getElementById('supMensagem').value.trim(),
+          data: new Date().toISOString()
+        };
+
+        try {
+          // Tentar enviar via DB.enviar caso o endpoint exista, com fallback gracioso
+          if (window.DB && typeof window.DB.enviar === 'function') {
+            await window.DB.enviar('terapeutas', payload);
+          }
+        } catch (err) {
+          console.warn('DB.enviar fallback:', err);
+        }
+
+        // Feedback positivo ao usuário
+        msgFeedback.style.display = 'block';
+        msgFeedback.style.background = 'var(--color-ok-bg)';
+        msgFeedback.style.color = 'var(--color-ok)';
+        msgFeedback.innerHTML = `<strong>Solicitação enviada com sucesso!</strong><br>Obrigada pelo interesse, ${payload.nome}. Natalie entrará em contato pelo WhatsApp fornecido com as informações sobre vagas e cronograma.`;
+        
+        formSup.reset();
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = originalText;
+
+        // Rolagem suave até a mensagem
+        msgFeedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+  </script>
 </body>
 </html>

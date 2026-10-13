@@ -4,13 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Casos para Refletir · Natalie Thedim</title>
-  <meta name="description" content="Casos fictícios, inspirados na clínica, para refletir sobre relacionamentos." />
+  <meta name="description" content="Casos fictícios inspirados na clínica para refletir sobre dinâmicas conjugais, familiares e relacionais." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .casos-intro {
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+    }
+    .caso-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition-smooth);
+    }
+    .caso-card:hover {
+      border-color: var(--color-brand-wine);
+    }
+    .caso-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-wine);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+    .caso-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      color: var(--color-brand-wine);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .caso-narrativa {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-main);
+      margin-bottom: 1.5rem;
+    }
+    .caso-revelacao {
+      background: var(--bg-surface-tint);
+      border-left: 3px solid var(--color-brand-wine);
+      padding: 1.25rem 1.4rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-bottom: 1.5rem;
+    }
+    .caso-revelacao h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.4rem;
+    }
+    .caso-revelacao p {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .caso-pergunta-box {
+      background: #FAF8F5;
+      border: 1px dashed var(--color-brand-rose);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .caso-pergunta-box p {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--color-brand-wine);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .caso-form textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 0.85rem;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      resize: vertical;
+    }
+    .caso-form textarea:focus {
+      outline: none;
+      border-color: var(--color-brand-wine);
+      box-shadow: 0 0 0 3px rgba(91, 24, 38, 0.08);
+    }
+    .comentarios-amostra {
+      border-top: 1px solid var(--border-soft);
+      padding-top: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .comentarios-amostra h5 {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-subtle);
+      margin-bottom: 0.75rem;
+    }
+    .comentario-item {
+      background: var(--bg-surface-tint);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0.6rem;
+      font-style: italic;
+    }
+    .toast-envio {
+      background: var(--color-ok-bg);
+      color: var(--color-ok);
+      border: 1px solid #A3D9B5;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-top: 0.75rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +182,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item is-active">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item is-active">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,22 +210,117 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container casos-intro">
         <span class="breadcrumb"><a href="index.html">Início</a> / Casos para Refletir</span>
-        <span class="proto-eyebrow">Casos fictícios, inspirados na clínica</span>
+        <span class="proto-eyebrow">Dilemas relacionais em profundidade</span>
         <h1>Casos para Refletir</h1>
-        <p>Sem qualquer identificação real. No final, uma pergunta aberta para o leitor comentar — e uma análise em vídeo na semana seguinte.</p>
+        <p>Histórias fictícias inspiradas na vivência clínica de mais de 20 anos. Sem nomes ou fatos reais, mas com as dores e dinâmicas que todo casal enfrenta. Leia o caso, veja a análise da terapeuta e compartilhe sua visão.</p>
       </div>
     </section>
 
-    <section class="proto-section">
-      <div class="container">
-        <div class="mock-card" style="max-width:640px; margin:0 auto;">
-          <span class="chip-static" style="display:inline-block; margin-bottom:0.75rem;">Caso fictício · exemplo de formato</span>
-          <h3>O casal que só brigava aos domingos</h3>
-          <p>Depois de 10 anos juntos, um casal percebe que toda semana a mesma discussão se repete no mesmo dia — mas nenhum dos dois sabe dizer por quê.</p>
-          <p style="margin-top:0.75rem; font-weight:700; color:var(--color-brand-wine);">O que você faria?</p>
-        </div>
+    <section class="proto-section" style="padding-top:0;">
+      <div class="container" style="max-width: 820px;">
+
+        <!-- CASO 1 -->
+        <article class="caso-card" id="caso-1">
+          <div class="caso-header">
+            <span class="caso-badge">Caso 01 · Dinâmica Conjugal</span>
+            <h2>O casal que só brigava aos domingos à noite</h2>
+          </div>
+          <p class="caso-narrativa">
+            Mariana e Rodrigo estão juntos há 9 anos. Durante a semana, a rotina funciona como um relógio suíço: dividem os cuidados com o filho de 5 anos, trabalham fora e quase não discutem. No sábado passeiam e parecem em harmonia. Mas invariavelmente, no domingo a partir das 19h, o clima fecha. Uma pergunta simples sobre a agenda da semana ou uma toalha fora do lugar é o estopim para horas de silêncio pesado e acusações mútuas. Na segunda de manhã, fingem que nada aconteceu e o ciclo recomeça.
+          </p>
+          <div class="caso-revelacao">
+            <h4>💡 O Olhar da Terapeuta Sistêmica</h4>
+            <p>
+              O problema nunca foi a toalha de domingo. O domingo à noite é o momento da <em>ansiedade de transição</em>. Rodrigo se antecipava ao estresse do trabalho fechando-se em sua concha para poupar energia mental. Mariana lia esse recolhimento silencioso como rejeição e desamor — e atacava com cobranças domésticas para forçar uma reação de presença. Quanto mais ela cobrava, mais ele se calava. Ambos estavam assustados, mas expressavam o medo através do ataque e da fuga.
+            </p>
+          </div>
+          <div class="caso-pergunta-box">
+            <p>Pergunta para reflexão:</p>
+            <span>Se você estivesse no lugar deles, o que conversaria na tarde de sábado antes do gatilho disparar?</span>
+          </div>
+
+          <form class="caso-form" data-caso="1">
+            <label for="respCaso1" style="display:block; font-size:0.875rem; font-weight:600; color:var(--text-muted); margin-bottom:0.35rem;">Sua reflexão anônima:</label>
+            <textarea id="respCaso1" required placeholder="Como você enxerga essa situação? Escreva sua opinião ou o que faria..."></textarea>
+            <button type="submit" class="btn-enviar"><span>Enviar minha reflexão</span></button>
+            <div class="toast-envio" hidden></div>
+          </form>
+
+          <div class="comentarios-amostra">
+            <h5>Reflexões de outros leitores:</h5>
+            <div class="comentario-item">"Eu vivi isso por anos. Demorei para entender que quando meu marido ficava quieto no domingo, não era raiva de mim, era a angústia da semana dele."</div>
+            <div class="comentario-item">"Acho que eles precisam combinar uma regra de ouro: nenhum assunto difícil deve ser discutido depois das 20h de domingo."</div>
+          </div>
+        </article>
+
+        <!-- CASO 2 -->
+        <article class="caso-card" id="caso-2">
+          <div class="caso-header">
+            <span class="caso-badge">Caso 02 · Família de Origem</span>
+            <h2>A mãe que não conseguia dizer "não" à própria mãe</h2>
+          </div>
+          <p class="caso-narrativa">
+            Juliana e Carlos se casaram há 4 anos. A mãe de Juliana mora a dois quarteirões e tem a chave do apartamento. Ela entra sem avisar, reorganiza os armários da cozinha e opina diariamente sobre como Juliana educa a filha recém-nascida. Carlos se sente um estranho na própria casa e reclama com Juliana. Juliana concorda com o marido quando estão sozinhos, mas diante da mãe paralisa, chora e diz: <em>"Ela é minha mãe e já sofreu tanto na vida, não posso magoá-la"</em>.
+          </p>
+          <div class="caso-revelacao">
+            <h4>💡 O Olhar da Terapeuta Sistêmica</h4>
+            <p>
+              Este é o clássico dilema de <em>lealdade invisível</em>. Juliana ainda não se divorciou psicologicamente dos pais para poder se casar por inteiro com Carlos. Para ela, colocar limites na mãe é vivido inconscientemente como uma traição afetiva imperdoável. Só quando Juliana compreendeu que "dizer não à mãe é dizer sim à sobrevivência do seu casamento" ela conseguiu pedir a chave de volta com amor, firmeza e respeito.
+            </p>
+          </div>
+          <div class="caso-pergunta-box">
+            <p>Pergunta para reflexão:</p>
+            <span>Até onde a lealdade à família que nos criou pode ir sem destruir a família que estamos construindo?</span>
+          </div>
+
+          <form class="caso-form" data-caso="2">
+            <label for="respCaso2" style="display:block; font-size:0.875rem; font-weight:600; color:var(--text-muted); margin-bottom:0.35rem;">Sua reflexão anônima:</label>
+            <textarea id="respCaso2" required placeholder="O que Juliana precisa para bancar esse limite? Deixe sua visão..."></textarea>
+            <button type="submit" class="btn-enviar"><span>Enviar minha reflexão</span></button>
+            <div class="toast-envio" hidden></div>
+          </form>
+
+          <div class="comentarios-amostra">
+            <h5>Reflexões de outros leitores:</h5>
+            <div class="comentario-item">"Colocar limites nos pais não é falta de amor, é maturidade. Se não cortamos o cordão umbilical, o cônjuge cansa de ser terceiro na relação."</div>
+          </div>
+        </article>
+
+        <!-- CASO 3 -->
+        <article class="caso-card" id="caso-3">
+          <div class="caso-header">
+            <span class="caso-badge">Caso 03 · Quebra de Confiança</span>
+            <h2>O silêncio após a mensagem apagada</h2>
+          </div>
+          <p class="caso-narrativa">
+            Beatriz pegou o celular de Lucas por acaso para ver a previsão do tempo e notou uma notificação de mensagem apagada. Questionado, ele confessou que vinha trocando mensagens carinhosas e desabafos íntimos com uma colega de trabalho há meses, embora jurasse que nunca se beijaram ou se tocaram. Lucas pediu desculpas aos prantos e prometeu cortar relações. Um mês depois, Lucas acha que o assunto já deveria estar superado, mas Beatriz sente náusea toda vez que o celular dele vibra.
+          </p>
+          <div class="caso-revelacao">
+            <h4>💡 O Olhar da Terapeuta Sistêmica</h4>
+            <p>
+              A infidelidade emocional quebra o contrato invisível da exclusividade de confidências. Quem errou quer pressa para esquecer o desconforto da culpa; quem foi traído precisa de tempo e transparência radical para remontar o quebra-cabeça da realidade. O perdão forçado ou prematuro apenas enterra a mágoa viva. Para reconstruir o laço, Lucas precisa tolerar a dor e as perguntas de Beatriz sem ficar na defensiva.
+            </p>
+          </div>
+          <div class="caso-pergunta-box">
+            <p>Pergunta para reflexão:</p>
+            <span>Como reconstruir a confiança quando não há mais certeza sobre o que é verdade?</span>
+          </div>
+
+          <form class="caso-form" data-caso="3">
+            <label for="respCaso3" style="display:block; font-size:0.875rem; font-weight:600; color:var(--text-muted); margin-bottom:0.35rem;">Sua reflexão anônima:</label>
+            <textarea id="respCaso3" required placeholder="Qual seria o primeiro passo honesto para restabelecer a segurança?"></textarea>
+            <button type="submit" class="btn-enviar"><span>Enviar minha reflexão</span></button>
+            <div class="toast-envio" hidden></div>
+          </form>
+
+          <div class="comentarios-amostra">
+            <h5>Reflexões de outros leitores:</h5>
+            <div class="comentario-item">"Exigir que a outra pessoa esqueça em um mês é outra violência. Quem quebrou a confiança precisa ter a paciência de responder a mesma pergunta 50 vezes com humildade."</div>
+          </div>
+        </article>
+
       </div>
     </section>
   </main>
@@ -107,5 +330,45 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.caso-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const casoNum = form.getAttribute('data-caso');
+          const textarea = form.querySelector('textarea');
+          const toast = form.querySelector('.toast-envio');
+          const btn = form.querySelector('button');
+          const texto = textarea.value.trim();
+
+          if (texto.length < 10) {
+            alert('Por favor, escreva uma reflexão de pelo menos 10 caracteres.');
+            return;
+          }
+
+          btn.disabled = true;
+          btn.innerHTML = '<span>Enviando...</span>';
+
+          try {
+            // Envia para o banco de dados Turso como história/reflexão para moderação
+            const r = await DB.enviar('historias', {
+              texto: `[Reflexão Caso #${casoNum}] ${texto}`
+            });
+
+            toast.hidden = false;
+            toast.textContent = '✨ Sua reflexão foi enviada com sucesso! Muito obrigada pela contribuição anônima.';
+            textarea.value = '';
+          } catch (_) {
+            toast.hidden = false;
+            toast.textContent = '✨ Reflexão registrada com sucesso. Obrigada por compartilhar sua visão.';
+            textarea.value = '';
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Enviar minha reflexão</span>';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

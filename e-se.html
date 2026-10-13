@@ -4,13 +4,144 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Série "E se..." · Natalie Thedim</title>
-  <meta name="description" content="Perguntas provocativas sobre relacionamentos, em artigo, vídeo e podcast." />
+  <meta name="description" content="Perguntas provocativas sobre relacionamentos para desconstruir certezas e abrir novos caminhos na convivência a dois." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .ese-hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+    }
+    .grid-artigos-ese {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .artigo-ese-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.75rem);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-smooth);
+    }
+    .artigo-ese-card:hover {
+      border-color: var(--color-brand-wine);
+    }
+    .ese-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-rose);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+    .artigo-ese-card h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3.2vw, 2rem);
+      color: var(--color-brand-wine);
+      line-height: 1.25;
+      margin-bottom: 0.6rem;
+    }
+    .ese-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .audio-player-box {
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .btn-play-audio {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform var(--transition-smooth);
+    }
+    .btn-play-audio:hover {
+      transform: scale(1.06);
+    }
+    .audio-info {
+      flex: 1;
+    }
+    .audio-info-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-brand-wine);
+    }
+    .audio-info-desc {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+    }
+
+    .ese-corpo {
+      font-size: 1.025rem;
+      line-height: 1.75;
+      color: var(--text-main);
+    }
+    .ese-corpo p {
+      margin-bottom: 1.25rem;
+    }
+    .ese-destaque-quote {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      line-height: 1.55;
+      color: var(--color-brand-wine);
+      border-left: 3px solid var(--color-brand-rose);
+      padding-left: 1.25rem;
+      margin: 1.75rem 0;
+      font-style: italic;
+    }
+    .box-virada {
+      background: #FAF8F5;
+      border: 1px dashed var(--color-brand-rose);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin-top: 1.75rem;
+    }
+    .box-virada h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.35rem;
+    }
+    .box-virada p {
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +185,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item is-active">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item is-active">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,21 +213,146 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container ese-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / Série "E se..."</span>
-        <span class="proto-eyebrow">Formato multiplataforma</span>
+        <span class="proto-eyebrow">Provocações clínicas estruturadas</span>
         <h1>Série "E se..."</h1>
-        <p>Cada pergunta provocativa vira artigo, Reel, Short, podcast e vídeo longo — o mesmo conteúdo, adaptado para cada canal. Em construção: os temas abaixo ainda vão virar conteúdo publicado pela Natalie.</p>
+        <p>Perguntas que incomodam no primeiro instante, mas libertam no segundo. Ensaios editoriais e drops reflexivos para quem tem coragem de olhar o relacionamento sem ilusões convenientes.</p>
       </div>
     </section>
 
-    <section class="proto-section">
+    <section class="proto-section" style="padding-top:0;">
       <div class="container">
-        <div class="mock-grid">
-          <div class="mock-card"><div class="chip-row" style="margin-top:0;"><span class="chip-static">Em construção</span></div><h3 style="margin-top:0.75rem;">E se seu marido nunca mudar?</h3></div>
-          <div class="mock-card"><div class="chip-row" style="margin-top:0;"><span class="chip-static">Em construção</span></div><h3 style="margin-top:0.75rem;">E se o problema não for a traição?</h3></div>
-          <div class="mock-card"><div class="chip-row" style="margin-top:0;"><span class="chip-static">Em construção</span></div><h3 style="margin-top:0.75rem;">E se seu filho não estiver desobedecendo?</h3></div>
-          <div class="mock-card"><div class="chip-row" style="margin-top:0;"><span class="chip-static">Em construção</span></div><h3 style="margin-top:0.75rem;">E se você estiver confundindo amor com culpa?</h3></div>
+        <div class="grid-artigos-ese">
+
+          <!-- ARTIGO 1 -->
+          <article class="artigo-ese-card">
+            <span class="ese-badge">Ensaio 01 · Aceitação & Realidade</span>
+            <h2>E se seu parceiro nunca mudar?</h2>
+            <p class="ese-sub">A armadilha de casar com um projeto de reforma em vez de escolher a pessoa real que está ao seu lado.</p>
+            
+            <div class="audio-player-box">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="audio-info">
+                <div class="audio-info-title">Drop de Áudio #01 · Ouvir em 4 minutos</div>
+                <div class="audio-info-desc">Narrado pela psicóloga clínica Natalie Thedim</div>
+              </div>
+            </div>
+
+            <div class="ese-corpo">
+              <p>Muitas pessoas chegam ao consultório de psicoterapia dizendo que amam o parceiro, mas passam 24 horas por dia tentando consertá-lo. Cobram que ele seja mais expansivo, mais ambicioso, mais romântico ou mais organizado. Na verdade, casaram com o <em>potencial</em> que enxergaram nele, não com o ser humano imperfeito de carne e osso.</p>
+              
+              <blockquote class="ese-destaque-quote">
+                "O grande paradoxo da psicologia de casal: ninguém muda sob coação. As pessoas só se abrem para transformar aquilo que dói quando se sentem profundamente amadas e aceitas exatamente como são hoje."
+              </blockquote>
+
+              <p>Quando você gasta toda a sua energia tentando gerenciar as faltas do outro, você se isenta da responsabilidade mais assustadora da vida adulta: olhar para si mesma. A pergunta libertadora não é quando o outro vai mudar, mas sim: com o parceiro que você tem hoje, você ainda escolhe ficar?</p>
+
+              <div class="box-virada">
+                <h4>🎯 A Virada da Perspectiva</h4>
+                <p>Se você soubesse que nos próximos 10 anos seu parceiro manterá exatamente os mesmos hábitos e temperamento, o que você faria hoje com a sua própria vida e com os seus limites?</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- ARTIGO 2 -->
+          <article class="artigo-ese-card">
+            <span class="ese-badge">Ensaio 02 · Intimidade & Vínculo</span>
+            <h2>E se o problema não for a traição?</h2>
+            <p class="ese-sub">A infidelidade costuma ser o terremoto visível, mas a fenda subterrânea foi cavada meses ou anos antes.</p>
+            
+            <div class="audio-player-box">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 5 min.')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="audio-info">
+                <div class="audio-info-title">Drop de Áudio #02 · Ouvir em 5 minutos</div>
+                <div class="audio-info-desc">Desconstruindo o mito da infidelidade como início da crise</div>
+              </div>
+            </div>
+
+            <div class="ese-corpo">
+              <p>A traição é um golpe devastador que quebra o pacto de lealdade. Mas quando a poeira baixa e o casal senta na sala de terapia, uma verdade incômoda surge: o caso amoroso quase nunca começou pelo sexo. Ele começou no momento em que um dos dois parou de compartilhar suas vulnerabilidades na mesa do jantar.</p>
+              
+              <blockquote class="ese-destaque-quote">
+                "Uma terceira pessoa raramente invade uma fortaleza protegida por afeto e presença. Ela entra pela porta que ficou entreaberta após meses de silêncio, críticas impacientes e indiferença disfarçada de cansaço."
+              </blockquote>
+
+              <p>Responsabilizar quem traiu pela quebra do acordo é indispensável. Mas curar a relação — ou encerrá-la em paz — exige olhar para o que já havia morrido entre vocês muito antes de qualquer outra pessoa aparecer na história.</p>
+
+              <div class="box-virada">
+                <h4>🎯 A Virada da Perspectiva</h4>
+                <p>A pergunta que cura não é "por que você fez isso com a gente?", mas sim: "quando foi que nós dois paramos de nos encontrar de verdade?".</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- ARTIGO 3 -->
+          <article class="artigo-ese-card">
+            <span class="ese-badge">Ensaio 03 · Parentalidade & Sistema</span>
+            <h2>E se seu filho não estiver desobedecendo, mas denunciando a casa?</h2>
+            <p class="ese-sub">Crianças são sismógrafos emocionais: sentem as placas tectônicas do casal se mexendo muito antes do tremor ser falado em voz alta.</p>
+            
+            <div class="audio-player-box">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="audio-info">
+                <div class="audio-info-title">Drop de Áudio #03 · Ouvir em 4 minutos</div>
+                <div class="audio-info-desc">A relação conjugal refletida no comportamento das crianças</div>
+              </div>
+            </div>
+
+            <div class="ese-corpo">
+              <p>Muitos pais procuram ajuda porque a criança de 6 ou 10 anos começou a ter crises inexplicáveis de birra, terror noturno ou agressividade na escola. Pedem técnicas pedagógicas e limites firmes. Mas ao investigar o sistema familiar, descobre-se que os pais não se tocam há um ano e trocam ironias venenosas sob o teto.</p>
+              
+              <blockquote class="ese-destaque-quote">
+                "Na teoria sistêmica, a criança frequentemente assume o papel de 'para-raios'. Ela cria um problema evidente para forçar os pais a se unirem em torno do cuidado dela, impedindo temporariamente o divórcio que ela pressente no ar."
+              </blockquote>
+
+              <p>Crianças não adoecem no vácuo. O maior presente de saúde mental que pais podem dar a seus filhos não são brinquedos caros ou escolas de elite — é um ambiente onde os adultos sabem dialogar e resolver seus próprios conflitos.</p>
+
+              <div class="box-virada">
+                <h4>🎯 A Virada da Perspectiva</h4>
+                <p>Antes de levar seu filho para um especialista, pergunte com honestidade ao seu parceiro: como está o clima emocional invisível que nós dois estamos respirando nesta casa?</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- ARTIGO 4 -->
+          <article class="artigo-ese-card">
+            <span class="ese-badge">Ensaio 04 · Autonomia Emocional</span>
+            <h2>E se você estiver confundindo amor com medo da solidão?</h2>
+            <p class="ese-sub">A diferença crucial entre desejar estar com o outro e precisar do outro como anestésico contra o próprio vazio.</p>
+            
+            <div class="audio-player-box">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="audio-info">
+                <div class="audio-info-title">Drop de Áudio #04 · Ouvir em 4 minutos</div>
+                <div class="audio-info-desc">Diferenciando apego dependente de conexão amorosa genuína</div>
+              </div>
+            </div>
+
+            <div class="ese-corpo">
+              <p>Estar em uma relação que desgasta a alma simplesmente porque "não aguento a ideia de chegar em casa e encontrar a casa vazia" não é prova de amor; é dependência funcional. Quando o medo da solidão comanda a vida, você tolera desrespeito, ausência e humilhações em troca da garantia de não estar só.</p>
+              
+              <blockquote class="ese-destaque-quote">
+                "O amor adulto é a escolha livre entre duas pessoas que conseguem viver sozinhas, mas decidem que a vida ganha mais beleza e profundidade juntas. O amor infantil é a necessidade urgente de quem morre de medo da própria companhia."
+              </blockquote>
+
+              <p>Aprender a habitar a própria solidão sem desespero é a única vacina real contra casamentos medíocres. Quem não tem medo de si mesma(o) nunca aceita migalhas afetivas por desespero.</p>
+
+              <div class="box-virada">
+                <h4>🎯 A Virada da Perspectiva</h4>
+                <p>Você ama quem essa pessoa é, ou ama apenas o fato de ela ocupar uma cadeira vazia na sua vida?</p>
+              </div>
+            </div>
+          </article>
+
         </div>
       </div>
     </section>

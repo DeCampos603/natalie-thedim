@@ -1,16 +1,341 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Instagram Integrado · Natalie Thedim</title>
-  <meta name="description" content="Curadoria dos posts mais salvos e dos Reels mais comentados." />
+  <meta name="description" content="Curadoria dos carrosséis clínicos mais salvos, pílulas de reflexão e conteúdos que mais tocam a nossa comunidade no Instagram." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .insta-hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 2rem;
+    }
+    .insta-profile-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem clamp(1.25rem, 4vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .insta-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .insta-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F3696E 0%, #C42D50 50%, #5B1826 100%);
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .insta-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #FAF4F2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-brand-wine);
+    }
+    .insta-handle {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-brand-wine);
+      line-height: 1.2;
+    }
+    .insta-bio {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .insta-stats {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    .insta-stats strong {
+      color: var(--color-brand-wine);
+    }
+    .insta-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .filter-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-full);
+      padding: 0.5rem 1.1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+    .filter-btn:hover,
+    .filter-btn.is-active {
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      border-color: var(--color-brand-wine);
+    }
+    .grid-carrosseis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+    .carrossel-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: all var(--transition-smooth);
+    }
+    .carrossel-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-brand-rose);
+    }
+    .carrossel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FCF8F7;
+    }
+    .carrossel-tag {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-brand-wine);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-full);
+    }
+    .carrossel-counter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-subtle);
+    }
+    .carrossel-viewport {
+      position: relative;
+      background: #2C2523;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      overflow: hidden;
+    }
+    .carrossel-slides {
+      width: 100%;
+    }
+    .carrossel-slide {
+      display: none;
+      animation: fadeIn 0.3s ease;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    .carrossel-slide.is-active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide-eyebrow {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #E29FA7;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+    .slide-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.15rem, 3vw, 1.35rem);
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+      color: #FFFFFF;
+    }
+    .slide-text {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #FAF4F2;
+      opacity: 0.95;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .carrossel-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      z-index: 5;
+    }
+    .carrossel-nav-btn:hover {
+      background: var(--color-brand-wine);
+      border-color: var(--color-brand-wine);
+    }
+    .carrossel-nav-prev { left: 0.75rem; }
+    .carrossel-nav-next { right: 0.75rem; }
+    .carrossel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.75rem;
+      background: #241D1C;
+    }
+    .carrossel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+    .carrossel-dot.is-active {
+      background: var(--color-brand-rose);
+      width: 18px;
+      border-radius: 4px;
+    }
+    .carrossel-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .carrossel-insight {
+      background: var(--color-brand-rose-light);
+      border-left: 3px solid var(--color-brand-wine);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0.85rem 1rem;
+      font-size: 0.8125rem;
+      color: var(--text-main);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+    .carrossel-actions {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .btn-insta-post {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-brand-wine);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      text-decoration: none;
+      transition: color var(--transition-smooth);
+    }
+    .btn-insta-post:hover {
+      color: var(--color-brand-rose);
+      text-decoration: underline;
+    }
+
+    /* Sessão de Reels */
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+    .reel-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+    }
+    .reel-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-brand-wine);
+    }
+    .reel-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #C42D50;
+      background: #FAF0F2;
+      padding: 0.25rem 0.55rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+    .reel-quote {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      line-height: 1.45;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.75rem;
+    }
+    .reel-desc {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+    .reel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      border-top: 1px solid var(--border-soft);
+      padding-top: 0.75rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +379,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item is-active">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item is-active">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,25 +407,384 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container insta-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / Instagram Integrado</span>
-        <span class="proto-eyebrow">Curadoria, não só o feed</span>
+        <span class="proto-eyebrow">Curadoria de Conteúdo</span>
         <h1>Instagram Integrado</h1>
-        <p>A ideia: em vez de incorporar o feed inteiro, o site destaca o que mais engaja — uma curadoria, não uma vitrine repetida do Instagram. Isso depende de conectar a API do Instagram, ainda não configurada.</p>
+        <p>Mais do que um feed replicado: aqui reunimos os carrosséis clínicos mais salvos, as pílulas reflexivas mais debatidas e as ideias que transformam o cotidiano de casais e famílias.</p>
       </div>
     </section>
 
-    <section class="proto-section">
-      <div class="container">
-        <div class="mock-grid">
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>📌 Os posts mais salvos</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>💬 Os Reels mais comentados</h3></div>
+    <div class="container">
+      <!-- Profile Header Banner -->
+      <div class="insta-profile-card">
+        <div class="insta-profile-info">
+          <div class="insta-avatar">
+            <div class="insta-avatar-inner">NT</div>
+          </div>
+          <div>
+            <div class="insta-handle">@psicologa.nataliethedim</div>
+            <div class="insta-bio">Psicóloga Clínica · Terapia de Casal, Família e Relações Sistêmicas · CRP 05/45482</div>
+            <div class="insta-stats">
+              <span><strong>Comunidade</strong> ativa e acolhedora</span>
+              <span><strong>+20 anos</strong> de prática clínica</span>
+            </div>
+          </div>
         </div>
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8125rem; color:var(--text-subtle);">
-          Enquanto isso, acompanhe no <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand-wine); font-weight:700;">@psicologa.nataliethedim</a>.
-        </p>
+        <a href="https://www.instagram.com/psicologa.nataliethedim/" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-primary" 
+           style="background:#C42D50; border-color:#C42D50; padding:0.65rem 1.4rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Seguir no Instagram</span>
+        </a>
       </div>
-    </section>
+
+      <!-- Filtro por Categoria -->
+      <div class="insta-filter-bar">
+        <button class="filter-btn is-active" data-filter="all">Todos os Carrosséis</button>
+        <button class="filter-btn" data-filter="comunicacao">Comunicação de Casal</button>
+        <button class="filter-btn" data-filter="limites">Limites & Autoestima</button>
+        <button class="filter-btn" data-filter="sistemica">Dinâmica Familiar</button>
+      </div>
+
+      <!-- Grid de Carrosséis Interativos -->
+      <div class="grid-carrosseis">
+
+        <!-- Carrossel 1 -->
+        <article class="carrossel-card" data-category="comunicacao">
+          <div class="carrossel-header">
+            <span class="carrossel-tag">Comunicação</span>
+            <span class="carrossel-counter js-counter">Slide 1 de 5</span>
+          </div>
+
+          <div class="carrossel-viewport js-carousel">
+            <button class="carrossel-nav-btn carrossel-nav-prev js-prev" aria-label="Slide anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+
+            <div class="carrossel-slides">
+              <div class="carrossel-slide is-active">
+                <div class="slide-eyebrow">Carrossel Salvo #1</div>
+                <h3 class="slide-title">O que NÃO é DR:<br>4 diferenças vitais entre desabafo e ataque</h3>
+                <p class="slide-text">Por que tantas conversas que começam com o desejo de aproximação terminam com portas batendo e silêncio hostil?</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Diferença 1</div>
+                <h3 class="slide-title">Ataque vs. Vulnerabilidade</h3>
+                <p class="slide-text"><strong>Ataque:</strong> "Você nunca se importa comigo e sempre esquece o combinado."<br><br><strong>Vulnerabilidade:</strong> "Eu me sinto desamparada e solitária quando isso acontece."</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Diferença 2</div>
+                <h3 class="slide-title">Histórico vs. Fato Presente</h3>
+                <p class="slide-text">Ataque desenterra os últimos 5 anos de mágoas acumuladas. DR saudável tem foco cirúrgico: trata de <strong>um acontecimento específico de hoje</strong>.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Diferença 3</div>
+                <h3 class="slide-title">Sentença vs. Acordo</h3>
+                <p class="slide-text">Quem ataca busca a confissão de culpa do réu. Quem dialoga busca um novo combinado funcional para que ambos respirem melhor amanhã.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Síntese Clínica</div>
+                <h3 class="slide-title">O objetivo não é vencer</h3>
+                <p class="slide-text">Em um relacionamento amoroso, se um dos dois "ganha" a discussão com humilhação, os dois perdem o vínculo. Conversar é se aliar contra o problema.</p>
+              </div>
+            </div>
+
+            <button class="carrossel-nav-btn carrossel-nav-next js-next" aria-label="Próximo slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="carrossel-dots js-dots"></div>
+
+          <div class="carrossel-body">
+            <div class="carrossel-insight">
+              <strong>Nota da Terapeuta:</strong> O maior gatilho de defesa no casal não é o tema da queixa, mas o tom acusatório inicial. Mudar o pronome de "você" para "eu sinto" desarma o sistema límbico do outro.
+            </div>
+            <div class="carrossel-actions">
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-insta-post">
+                <span>Ver post original no Instagram</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Carrossel 2 -->
+        <article class="carrossel-card" data-category="limites">
+          <div class="carrossel-header">
+            <span class="carrossel-tag">Limites</span>
+            <span class="carrossel-counter js-counter">Slide 1 de 5</span>
+          </div>
+
+          <div class="carrossel-viewport js-carousel">
+            <button class="carrossel-nav-btn carrossel-nav-prev js-prev" aria-label="Slide anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+
+            <div class="carrossel-slides">
+              <div class="carrossel-slide is-active">
+                <div class="slide-eyebrow">Carrossel Salvo #2</div>
+                <h3 class="slide-title">Ceder por amor vs. Anular-se:<br>Onde mora o ressentimento?</h3>
+                <p class="slide-text">Você cede para nutrir a relação ou porque tem pavor de decepcionar e enfrentar a reação do outro?</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Ponto 1</div>
+                <h3 class="slide-title">Ceder com Consciência</h3>
+                <p class="slide-text">É uma escolha lúcida: hoje você abre mão de algo sem esperar que o outro pague uma fatura emocional invisível depois. Você não perde sua dignidade no processo.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Ponto 2</div>
+                <h3 class="slide-title">A Armadilha da Anulação</h3>
+                <p class="slide-text">Você engole seu desejo por medo do abandono ou da cara feia. A mente silencia, mas o corpo cobra: gastrite, insônia, perda de libido e ironia diária.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Ponto 3</div>
+                <h3 class="slide-title">A Paz Falsa</h3>
+                <p class="slide-text">Quem se anula para manter a paz dentro de casa, declara uma guerra silenciosa dentro de si mesma. O ressentimento é veneno que fermenta devagar.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Pílula Sistêmica</div>
+                <h3 class="slide-title">Amor Suporta Divergência</h3>
+                <p class="slide-text">Relação madura não exige cópias idênticas. Se o preço para ter harmonia ao lado de alguém é o seu desaparecimento, isso não é amor — é subserviência.</p>
+              </div>
+            </div>
+
+            <button class="carrossel-nav-btn carrossel-nav-next js-next" aria-label="Próximo slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="carrossel-dots js-dots"></div>
+
+          <div class="carrossel-body">
+            <div class="carrossel-insight">
+              <strong>Nota da Terapeuta:</strong> Aprender a dizer "não" para o parceiro em coisas pontuais é a melhor vacina para não ter que dizer "adeus" para o casamento anos depois.
+            </div>
+            <div class="carrossel-actions">
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-insta-post">
+                <span>Ver post original no Instagram</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Carrossel 3 -->
+        <article class="carrossel-card" data-category="sistemica">
+          <div class="carrossel-header">
+            <span class="carrossel-tag">Dinâmica Sistêmica</span>
+            <span class="carrossel-counter js-counter">Slide 1 de 5</span>
+          </div>
+
+          <div class="carrossel-viewport js-carousel">
+            <button class="carrossel-nav-btn carrossel-nav-prev js-prev" aria-label="Slide anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+
+            <div class="carrossel-slides">
+              <div class="carrossel-slide is-active">
+                <div class="slide-eyebrow">Carrossel Salvo #3</div>
+                <h3 class="slide-title">Sinais sutis de que você<br>virou mãe do seu parceiro</h3>
+                <p class="slide-text">Quando o cuidado afetuoso se transforma em tutela parental, o desejo sexual do casal é a primeira vítima.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Sinal 1</div>
+                <h3 class="slide-title">Gerência da Vida Alheia</h3>
+                <p class="slide-text">Você agenda as consultas médicas dele, lembra dos compromissos básicos e fiscaliza o que ele come como se ele fosse um garoto de 12 anos.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Sinal 2</div>
+                <h3 class="slide-title">A Raiva da Passividade</h3>
+                <p class="slide-text">Você assume todas as decisões da casa porque "se deixar na mão dele não sai". Ao mesmo tempo, você o despreza secretamente pela falta de iniciativa.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Sinal 3</div>
+                <h3 class="slide-title">Deslocamento Erótico</h3>
+                <p class="slide-text">É impossível desejar na cama alguém a quem você acabou de dar uma bronca sobre toalha molhada. A dinâmica mãe-filho castra a cumplicidade erótica.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Caminho de Cura</div>
+                <h3 class="slide-title">Voltar à Horizontalidade</h3>
+                <p class="slide-text">Solte a tutela. Deixe ele arcar com as consequências naturais dos próprios esquecimentos. Casamento só se sustenta de adulto para adulto.</p>
+              </div>
+            </div>
+
+            <button class="carrossel-nav-btn carrossel-nav-next js-next" aria-label="Próximo slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="carrossel-dots js-dots"></div>
+
+          <div class="carrossel-body">
+            <div class="carrossel-insight">
+              <strong>Nota da Terapeuta:</strong> Em terapia sistêmica, investigamos a herança de papéis: frequentemente a mulher viu a mãe assumir tudo e repete a sobrecarga por lealdade invisível.
+            </div>
+            <div class="carrossel-actions">
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-insta-post">
+                <span>Ver post original no Instagram</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Carrossel 4 -->
+        <article class="carrossel-card" data-category="comunicacao">
+          <div class="carrossel-header">
+            <span class="carrossel-tag">Reparação</span>
+            <span class="carrossel-counter js-counter">Slide 1 de 5</span>
+          </div>
+
+          <div class="carrossel-viewport js-carousel">
+            <button class="carrossel-nav-btn carrossel-nav-prev js-prev" aria-label="Slide anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+
+            <div class="carrossel-slides">
+              <div class="carrossel-slide is-active">
+                <div class="slide-eyebrow">Carrossel Salvo #4</div>
+                <h3 class="slide-title">Como pedir desculpas<br>sem se defender no "mas..."</h3>
+                <p class="slide-text">A palavra "mas" é uma borracha mágica que apaga completamente qualquer pedido de desculpas proferido antes dela.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">A Falsa Desculpa</div>
+                <h3 class="slide-title">Desculpa com Condicional</h3>
+                <p class="slide-text">"Me desculpe se você se ofendeu, mas você me provocou primeiro."<br><br>Essa frase transfere a culpa da agressão para a vulnerabilidade de quem ouviu.</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">O Primeiro Passo</div>
+                <h3 class="slide-title">Foco no Impacto Gerado</h3>
+                <p class="slide-text">A sua intenção não neutraliza o machucado causado. Diga: "Eu vejo o quanto fui grosseiro e o quanto isso te entristeceu. Sinto muito."</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">A Reparação Ativa</div>
+                <h3 class="slide-title">A Pergunta Restauradora</h3>
+                <p class="slide-text">Em vez de exigir perdão imediato para aliviar a sua culpa, pergunte com humildade: "O que eu posso fazer agora para te ajudar a se sentir segura?"</p>
+              </div>
+
+              <div class="carrossel-slide">
+                <div class="slide-eyebrow">Maturidade Relacional</div>
+                <h3 class="slide-title">A Relação Acima do Ego</h3>
+                <p class="slide-text">Pedir desculpas não é perder a discussão; é comunicar que o bem-estar do parceiro tem mais valor do que o capricho de estar certo.</p>
+              </div>
+            </div>
+
+            <button class="carrossel-nav-btn carrossel-nav-next js-next" aria-label="Próximo slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="carrossel-dots js-dots"></div>
+
+          <div class="carrossel-body">
+            <div class="carrossel-insight">
+              <strong>Nota da Terapeuta:</strong> Quem não consegue pedir desculpas sem se justificar geralmente tem uma criança ferida por trás, com medo de ser rotulada como "má" ou imperfeita.
+            </div>
+            <div class="carrossel-actions">
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-insta-post">
+                <span>Ver post original no Instagram</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Sessão de Reels e Pílulas Mais Comentadas -->
+      <section style="margin-bottom: 4rem;">
+        <div class="secao-header" style="text-align:center; margin-bottom: 2rem;">
+          <span class="proto-eyebrow">Vídeos Curtos & Pílulas</span>
+          <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--color-brand-wine);">Reels com Maior Repercussão</h2>
+          <p style="color: var(--text-muted); font-size: 0.9375rem; max-width: 600px; margin: 0.5rem auto 0;">Reflexões de 60 a 90 segundos que geraram centenas de comentários e identificação imediata.</p>
+        </div>
+
+        <div class="reels-grid">
+          <div class="reel-card">
+            <div>
+              <div class="reel-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Reel Mais Salvo</span>
+              </div>
+              <h3 class="reel-quote">"Por que o silêncio após uma briga dói mais do que o grito?"</h3>
+              <p class="reel-desc">O tratamento de silêncio (stonewalling) não é calma nem elegância; na neurobiologia do apego, é percebido como ameaça existencial de abandono.</p>
+            </div>
+            <div class="reel-footer">
+              <span>Duração: 1:12</span>
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand-wine); font-weight:700;">Assistir no Reels →</a>
+            </div>
+          </div>
+
+          <div class="reel-card">
+            <div>
+              <div class="reel-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Comunicação Imediata</span>
+              </div>
+              <h3 class="reel-quote">"A pergunta de 10 segundos que desarma a briga na cozinha"</h3>
+              <p class="reel-desc">Quando você percebe que a irritação está subindo por causa de uma louça, pare e pergunte: "Você está precisando de ajuda na tarefa ou de um abraço meu?"</p>
+            </div>
+            <div class="reel-footer">
+              <span>Duração: 0:58</span>
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand-wine); font-weight:700;">Assistir no Reels →</a>
+            </div>
+          </div>
+
+          <div class="reel-card">
+            <div>
+              <div class="reel-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Vínculo e Cansaço</span>
+              </div>
+              <h3 class="reel-quote">"Você não está cansada da casa. Você está cansada da solidão a dois."</h3>
+              <p class="reel-desc">A sobrecarga doméstica se torna insuportável quando não há cumplicidade emocional. O que esgota a mente não é a pilha de roupas, é sentir-se invisível.</p>
+            </div>
+            <div class="reel-footer">
+              <span>Duração: 1:25</span>
+              <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand-wine); font-weight:700;">Assistir no Reels →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Banner de Fechamento -->
+      <section style="background: var(--color-brand-rose-light); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; margin-bottom: 3rem;">
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--color-brand-wine); margin-bottom: 0.5rem;">Acompanhe as reflexões diárias de Natalie</h3>
+        <p style="color: var(--text-muted); font-size: 0.9375rem; max-width: 580px; margin: 0 auto 1.5rem;">Caixas de perguntas semanais nos Stories, análises de casos e debates ao vivo sobre a vida a dois.</p>
+        <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Ir para @psicologa.nataliethedim</span>
+        </a>
+      </section>
+
+    </div>
   </main>
 
   <p class="footer-note">
@@ -108,5 +792,71 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script>
+    // Gerenciamento dos Carrosséis Interativos
+    document.querySelectorAll('.carrossel-card').forEach(card => {
+      const slides = card.querySelectorAll('.carrossel-slide');
+      const counter = card.querySelector('.js-counter');
+      const prevBtn = card.querySelector('.js-prev');
+      const nextBtn = card.querySelector('.js-next');
+      const dotsContainer = card.querySelector('.js-dots');
+      let currentIdx = 0;
+      const total = slides.length;
+
+      // Criar dots
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carrossel-dot' + (i === 0 ? ' is-active' : '');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      }
+      const dots = dotsContainer.querySelectorAll('.carrossel-dot');
+
+      function updateSlide() {
+        slides.forEach((s, idx) => {
+          s.classList.toggle('is-active', idx === currentIdx);
+        });
+        dots.forEach((d, idx) => {
+          d.classList.toggle('is-active', idx === currentIdx);
+        });
+        if (counter) {
+          counter.textContent = `Slide ${currentIdx + 1} de ${total}`;
+        }
+      }
+
+      function goToSlide(idx) {
+        currentIdx = (idx + total) % total;
+        updateSlide();
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => goToSlide(currentIdx - 1));
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => goToSlide(currentIdx + 1));
+      }
+    });
+
+    // Filtro de categorias
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.carrossel-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const filter = btn.dataset.filter;
+
+        cards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

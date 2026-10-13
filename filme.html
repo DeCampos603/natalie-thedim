@@ -4,13 +4,120 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Clube do Filme · Natalie Thedim</title>
-  <meta name="description" content="Um filme por semana, com reflexão sistêmica sobre relacionamentos." />
+  <meta name="description" content="Cinema com olhar clínico: o que observar, perguntas para o casal e reflexões sistêmicas sobre relacionamentos." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .filme-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 4vw, 2.75rem);
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-smooth);
+    }
+    .filme-card:hover {
+      border-color: var(--color-brand-wine);
+    }
+    .filme-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-wine);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+    .filme-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3.2vw, 1.95rem);
+      color: var(--color-brand-wine);
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .filme-meta {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .filme-bloco {
+      margin-bottom: 1.5rem;
+    }
+    .filme-bloco h3 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .filme-bloco p {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-main);
+    }
+    .box-perguntas-casal {
+      background: var(--bg-surface-tint);
+      border-left: 3px solid var(--color-brand-rose);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+    .box-perguntas-casal h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.6rem;
+    }
+    .box-perguntas-casal ol {
+      margin: 0;
+      padding-left: 1.25rem;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+    .box-perguntas-casal li {
+      margin-bottom: 0.5rem;
+    }
+    .box-perguntas-casal li:last-child {
+      margin-bottom: 0;
+    }
+    .box-reflexao-sistemica {
+      background: #FAF8F5;
+      border: 1px dashed var(--color-brand-rose);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+    }
+    .box-reflexao-sistemica h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.35rem;
+    }
+    .box-reflexao-sistemica p {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--color-brand-wine);
+      line-height: 1.55;
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +161,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item is-active">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item is-active">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,26 +189,107 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container" style="text-align:center; max-width:760px; margin:0 auto 2.5rem;">
         <span class="breadcrumb"><a href="index.html">Início</a> / Clube do Filme</span>
         <span class="proto-eyebrow">Cinema com olhar clínico</span>
         <h1>Clube do Filme</h1>
-        <p>Um filme por semana, com o que observar, perguntas para o casal e uma reflexão sistêmica sobre o que a história revela. A Natalie ainda vai escolher o primeiro título.</p>
+        <p>A arte como espelho: usamos grandes histórias do cinema para enxergar nossos próprios nós relacionais sem o peso da defensiva. Um filme por reflexão, com perguntas para discutir a dois.</p>
       </div>
     </section>
 
-    <section class="proto-section">
-      <div class="container">
-        <div class="mock-card" style="max-width:640px;">
-          <span class="chip-static" style="display:inline-block; margin-bottom:0.75rem;">Em construção</span>
-          <h3>Filme da semana: a definir</h3>
-          <div class="chip-row">
-            <span class="chip-static">O que observar</span>
-            <span class="chip-static">Perguntas para o casal</span>
-            <span class="chip-static">Reflexão sistêmica</span>
-            <span class="chip-static">Comentários</span>
+    <section class="proto-section" style="padding-top:0;">
+      <div class="container" style="max-width:820px;">
+
+        <!-- FILME 1 -->
+        <article class="filme-card">
+          <span class="filme-badge">Filme #01 · Ruptura & Identidade</span>
+          <div class="filme-header">
+            <h2>História de um Casamento (Marriage Story)</h2>
+            <div class="filme-meta">Dir. Noah Baumbach · Com Scarlett Johansson e Adam Driver</div>
           </div>
-        </div>
+
+          <div class="filme-bloco">
+            <h3>👁️ O que observar com olhar clínico</h3>
+            <p>
+              Observe a cena da discussão no apartamento: repare como o diálogo começa em busca de um acordo racional e, em questão de minutos, escala para um ataque cruel que deixa os dois em choque. Nicole passou anos vivendo na órbita artística de Charlie, calando seus desejos para manter a paz. Quando ela decide ter voz, Charlie não sabe como lidar com uma esposa que não seja sua colaboradora submissa.
+            </p>
+          </div>
+
+          <div class="box-perguntas-casal">
+            <h4>💬 3 Perguntas para o casal discutir juntos após assistir:</h4>
+            <ol>
+              <li>"Você sente que precisou diminuir algum sonho ou parte de quem você é para caber na nossa relação?"</li>
+              <li>"Quando começamos a brigar, em que momento paramos de tentar resolver a dor e passamos a tentar ferir o outro?"</li>
+              <li>"Como podemos garantir que a voz de nós dois tenha o mesmo peso nas decisões da casa?"</li>
+            </ol>
+          </div>
+
+          <div class="box-reflexao-sistemica">
+            <h4>🧠 Reflexão Sistêmica da Natalie</h4>
+            <p>"O fim não nasce do desamor, mas da invisibilidade acumulada. Quando um dos parceiros passa anos calando o próprio ressentimento, o amor vira cinza e a dor terceirizada destrói até as melhores lembranças."</p>
+          </div>
+        </article>
+
+        <!-- FILME 2 -->
+        <article class="filme-card">
+          <span class="filme-badge">Filme #02 · Presença & Vínculo</span>
+          <div class="filme-header">
+            <h2>Questão de Tempo (About Time)</h2>
+            <div class="filme-meta">Dir. Richard Curtis · Com Domhnall Gleeson e Rachel McAdams</div>
+          </div>
+
+          <div class="filme-bloco">
+            <h3>👁️ O que observar com olhar clínico</h3>
+            <p>
+              Apesar do elemento de fantasia sobre voltar no tempo, o coração do filme é a aceitação da imperfeição da vida. Note como o protagonista descobre que a felicidade no casamento e na família não depende de controlar todos os detalhes ou ter dias perfeitos, mas de estar presente nos dias difíceis com ternura e humor.
+            </p>
+          </div>
+
+          <div class="box-perguntas-casal">
+            <h4>💬 3 Perguntas para o casal discutir juntos após assistir:</h4>
+            <ol>
+              <li>"O quanto da nossa ansiedade a dois vem de tentar controlar o futuro em vez de desfrutar do presente?"</li>
+              <li>"Quais pequenos momentos do nosso cotidiano comum nós temos deixado passar sem celebrar?"</li>
+              <li>"O que nós aprendemos com as histórias das nossas famílias que gostaríamos de cultivar na nossa relação?"</li>
+            </ol>
+          </div>
+
+          <div class="box-reflexao-sistemica">
+            <h4>🧠 Reflexão Sistêmica da Natalie</h4>
+            <p>"A intimidade duradoura não é construída nos grandes momentos cinematográficos, mas na ternura de tolerar o cansaço do dia a dia e ainda assim escolher o olhar do outro na mesa do café."</p>
+          </div>
+        </article>
+
+        <!-- FILME 3 -->
+        <article class="filme-card">
+          <span class="filme-badge">Filme #03 · Autenticidade & Conflito</span>
+          <div class="filme-header">
+            <h2>Cenas de um Casamento (Scenes from a Marriage)</h2>
+            <div class="filme-meta">Minissérie HBO / Dir. Hagai Levi · Com Jessica Chastain e Oscar Isaac</div>
+          </div>
+
+          <div class="filme-bloco">
+            <h3>👁️ O que observar com olhar clínico</h3>
+            <p>
+              Preste atenção no primeiro episódio: o casal parece o modelo ideal de estabilidade e polidez civilizada. Nunca gritam, dividem a louça e conversam em tom pausado. Porém, por baixo dessa superfície impecável, a paixão e o desejo morreram há anos sufocados pela covardia de tocar nas feridas reais. A polidez vira uma anestesia mortal.
+            </p>
+          </div>
+
+          <div class="box-perguntas-casal">
+            <h4>💬 3 Perguntas para o casal discutir juntos após assistir:</h4>
+            <ol>
+              <li>"Existe algum tema que nós evitamos tocar porque morremos de medo de abalar a 'harmonia' aparente?"</li>
+              <li>"Nós temos sido gentis por afeto genuíno ou polidos por preguiça e medo de nos aprofundar?"</li>
+              <li>"Como podemos aprender a discordar de forma apaixonada sem colocar em risco nosso compromisso?"</li>
+            </ol>
+          </div>
+
+          <div class="box-reflexao-sistemica">
+            <h4>🧠 Reflexão Sistêmica da Natalie</h4>
+            <p>"A ausência de brigas não é sinônimo de um casamento saudável; muitas vezes é apenas o sinal de que ambos já desistiram de se fazer ouvir. Conflitos autênticos, quando respeitosos, são o oxigênio da paixão."</p>
+          </div>
+        </article>
+
       </div>
     </section>
   </main>

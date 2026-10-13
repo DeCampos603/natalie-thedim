@@ -1,16 +1,154 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Podcast · Natalie Thedim</title>
-  <meta name="description" content="Episódios curtos de reflexão sobre relacionamentos." />
+  <meta name="description" content="Episódios curtos e diretos ao ponto sobre relacionamentos, casamento e dinâmicas familiares para ouvir no seu dia a dia." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .podcast-hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+    }
+    .podcast-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .podcast-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 4vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-smooth);
+    }
+    .podcast-card:hover {
+      border-color: var(--color-brand-wine);
+    }
+    .podcast-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .podcast-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-brand-wine);
+      background: var(--color-brand-rose-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+    }
+    .podcast-duracao {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+      font-weight: 600;
+    }
+    .podcast-card h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+      color: var(--color-brand-wine);
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    .podcast-sinopse {
+      font-size: 0.965rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Player Miniatura */
+    .mini-player {
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .btn-play-pause {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform var(--transition-smooth);
+    }
+    .btn-play-pause:hover {
+      transform: scale(1.06);
+    }
+    .progress-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--border-soft);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--color-brand-wine);
+      transition: width 0.2s linear;
+    }
+    .time-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+
+    .podcast-plataformas {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .plataforma-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-main);
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-full);
+      padding: 0.35rem 0.8rem;
+      text-decoration: none;
+      transition: all var(--transition-smooth);
+    }
+    .plataforma-pill:hover {
+      border-color: var(--color-brand-wine);
+      color: var(--color-brand-wine);
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +192,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item is-active">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item is-active">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,20 +220,142 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container podcast-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / Podcast</span>
-        <span class="proto-eyebrow">10 minutos de reflexão</span>
-        <h1>Podcast</h1>
-        <p>Episódios curtos, direto ao ponto — pensados para ouvir no trajeto do dia a dia. Nenhum episódio foi gravado ainda.</p>
+        <span class="proto-eyebrow">10 minutos de psicologia no trânsito</span>
+        <h1>Podcast · Natalie Thedim</h1>
+        <p>Episódios curtos, sensíveis e direto ao ponto. Pílulas de clareza para ouvir a caminho do trabalho, enquanto caminha ou antes de dormir.</p>
       </div>
     </section>
 
-    <section class="proto-section">
+    <section class="proto-section" style="padding-top:0;">
       <div class="container">
-        <div class="mock-grid cols-2">
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>🎙️ O silêncio dentro do casamento</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>🎙️ As frases que destroem um relacionamento</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>🎙️ O filho que virou adulto cedo demais</h3></div>
+        <div class="podcast-grid">
+
+          <!-- EPISÓDIO 1 -->
+          <article class="podcast-card" data-ep="1">
+            <div class="podcast-top">
+              <span class="podcast-tag">Episódio #01 · Dinâmica Conjugal</span>
+              <span class="podcast-duracao">⏱️ 8 min 45s</span>
+            </div>
+            <h2>O silêncio dentro do casamento</h2>
+            <p class="podcast-sinopse">
+              Muitos casais se vangloriam de não brigar, mas a paz aparente é mantida à base de um muro de gelo. Entenda quando o silêncio deixa de ser respeito ao tempo do outro e passa a ser uma forma passiva-agressiva de punição.
+            </p>
+            <div class="mini-player">
+              <button class="btn-play-pause" aria-label="Reproduzir episódio 1">
+                <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track"><div class="progress-fill"></div></div>
+                <div class="time-labels">
+                  <span class="current-time">0:00</span>
+                  <span class="total-time">8:45</span>
+                </div>
+              </div>
+            </div>
+            <div class="podcast-plataformas">
+              <span style="font-size:0.75rem; color:var(--text-subtle);">Ouvir também em:</span>
+              <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟢 Spotify</a>
+              <a href="https://apple.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟣 Apple Podcasts</a>
+              <a href="youtube.html" class="plataforma-pill">🔴 YouTube Music</a>
+            </div>
+          </article>
+
+          <!-- EPISÓDIO 2 -->
+          <article class="podcast-card" data-ep="2">
+            <div class="podcast-top">
+              <span class="podcast-tag">Episódio #02 · Comunicação</span>
+              <span class="podcast-duracao">⏱️ 10 min 12s</span>
+            </div>
+            <h2>As 3 frases que disfarçam o fim da escuta</h2>
+            <p class="podcast-sinopse">
+              "Você sempre faz isso", "Não foi nada" e "Você é louca". Como expressões cotidianas bloqueiam qualquer possibilidade de reparação e colocam o parceiro imediatamente na defensiva antes mesmo da conversa começar.
+            </p>
+            <div class="mini-player">
+              <button class="btn-play-pause" aria-label="Reproduzir episódio 2">
+                <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track"><div class="progress-fill"></div></div>
+                <div class="time-labels">
+                  <span class="current-time">0:00</span>
+                  <span class="total-time">10:12</span>
+                </div>
+              </div>
+            </div>
+            <div class="podcast-plataformas">
+              <span style="font-size:0.75rem; color:var(--text-subtle);">Ouvir também em:</span>
+              <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟢 Spotify</a>
+              <a href="https://apple.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟣 Apple Podcasts</a>
+              <a href="youtube.html" class="plataforma-pill">🔴 YouTube Music</a>
+            </div>
+          </article>
+
+          <!-- EPISÓDIO 3 -->
+          <article class="podcast-card" data-ep="3">
+            <div class="podcast-top">
+              <span class="podcast-tag">Episódio #03 · Família & Filhos</span>
+              <span class="podcast-duracao">⏱️ 9 min 30s</span>
+            </div>
+            <h2>O filho que virou adulto cedo demais</h2>
+            <p class="podcast-sinopse">
+              Parentalização: o que acontece quando a criança vira o confidente emocional da mãe ou do pai? O peso invisível de mediar brigas de adultos e como isso reflete na dificuldade de construir relações saudáveis no futuro.
+            </p>
+            <div class="mini-player">
+              <button class="btn-play-pause" aria-label="Reproduzir episódio 3">
+                <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track"><div class="progress-fill"></div></div>
+                <div class="time-labels">
+                  <span class="current-time">0:00</span>
+                  <span class="total-time">9:30</span>
+                </div>
+              </div>
+            </div>
+            <div class="podcast-plataformas">
+              <span style="font-size:0.75rem; color:var(--text-subtle);">Ouvir também em:</span>
+              <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟢 Spotify</a>
+              <a href="https://apple.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟣 Apple Podcasts</a>
+              <a href="youtube.html" class="plataforma-pill">🔴 YouTube Music</a>
+            </div>
+          </article>
+
+          <!-- EPISÓDIO 4 -->
+          <article class="podcast-card" data-ep="4">
+            <div class="podcast-top">
+              <span class="podcast-tag">Episódio #04 · Reparação & Crise</span>
+              <span class="podcast-duracao">⏱️ 11 min 05s</span>
+            </div>
+            <h2>Reconstruir a confiança após a tempestade</h2>
+            <p class="podcast-sinopse">
+              Perdoar não é fingir que nada aconteceu para não criar clima ruim. O perdão maduro é um processo doloroso que exige transparência radical de quem errou e tolerância ao tempo de cura de quem foi ferido.
+            </p>
+            <div class="mini-player">
+              <button class="btn-play-pause" aria-label="Reproduzir episódio 4">
+                <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              </button>
+              <div class="progress-bar-wrap">
+                <div class="progress-track"><div class="progress-fill"></div></div>
+                <div class="time-labels">
+                  <span class="current-time">0:00</span>
+                  <span class="total-time">11:05</span>
+                </div>
+              </div>
+            </div>
+            <div class="podcast-plataformas">
+              <span style="font-size:0.75rem; color:var(--text-subtle);">Ouvir também em:</span>
+              <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟢 Spotify</a>
+              <a href="https://apple.com" target="_blank" rel="noopener noreferrer" class="plataforma-pill">🟣 Apple Podcasts</a>
+              <a href="youtube.html" class="plataforma-pill">🔴 YouTube Music</a>
+            </div>
+          </article>
+
         </div>
       </div>
     </section>
@@ -106,5 +366,51 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Simulação Interativa do Player Web
+      document.querySelectorAll('.podcast-card').forEach(card => {
+        const btn = card.querySelector('.btn-play-pause');
+        const iconPlay = card.querySelector('.icon-play');
+        const iconPause = card.querySelector('.icon-pause');
+        const progressFill = card.querySelector('.progress-fill');
+        const currentTimeSpan = card.querySelector('.current-time');
+        let tocando = false;
+        let progresso = 0;
+        let timer = null;
+
+        btn.addEventListener('click', () => {
+          tocando = !tocando;
+          if (tocando) {
+            // Pausa outros players
+            document.querySelectorAll('.podcast-card').forEach(outro => {
+              if (outro !== card) {
+                outro.querySelector('.icon-play').style.display = 'block';
+                outro.querySelector('.icon-pause').style.display = 'none';
+              }
+            });
+
+            iconPlay.style.display = 'none';
+            iconPause.style.display = 'block';
+            
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+              progresso += 1;
+              if (progresso > 100) progresso = 0;
+              progressFill.style.width = progresso + '%';
+              const segs = Math.floor((progresso / 100) * 540);
+              const m = Math.floor(segs / 60);
+              const s = segs % 60;
+              currentTimeSpan.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+            }, 500);
+          } else {
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+            if (timer) clearInterval(timer);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,16 +1,150 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>YouTube Integrado · Natalie Thedim</title>
-  <meta name="description" content="Vídeos organizados por assunto, não por data." />
+  <title>YouTube & Vídeos Clínicos · Natalie Thedim</title>
+  <meta name="description" content="Aulas, reflexões e análises em vídeo organizadas por tema: comunicação, crises, filhos e reconstrução do vínculo." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .youtube-hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+    }
+    .video-categoria-section {
+      margin-bottom: 3rem;
+    }
+    .video-categoria-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 2px solid var(--border-soft);
+      padding-bottom: 0.65rem;
+      margin-bottom: 1.5rem;
+    }
+    .video-categoria-header h2 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      color: var(--color-brand-wine);
+    }
+    .grid-videos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .video-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: all var(--transition-smooth);
+    }
+    .video-card:hover {
+      border-color: var(--color-brand-wine);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .video-thumb-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      background: #2C2523;
+      cursor: pointer;
+    }
+    .video-thumb-placeholder {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #5B1826 0%, #2C2523 100%);
+      color: #FFFFFF;
+      padding: 1rem;
+      text-align: center;
+    }
+    .play-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      transition: transform var(--transition-smooth);
+    }
+    .video-thumb-wrap:hover .play-circle {
+      transform: scale(1.12);
+      background: var(--color-brand-wine);
+    }
+    .video-card-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .video-card-tag {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-rose);
+      margin-bottom: 0.4rem;
+    }
+    .video-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-brand-wine);
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+    }
+    .video-card-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    .video-card-footer {
+      border-top: 1px solid var(--border-soft);
+      padding-top: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+    .btn-canal-yt {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #CC0000;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      transition: all var(--transition-smooth);
+      box-shadow: 0 4px 12px rgba(204, 0, 0, 0.25);
+    }
+    .btn-canal-yt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(204, 0, 0, 0.35);
+    }
+  </style>
 </head>
 <body>
 
@@ -54,15 +188,15 @@
             </button>
             <div class="nav-dropdown-menu" role="menu">
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
-              <a href="e-se.html" class="nav-dropdown-item">Série "E se..." <span class="badge-em-breve">Em breve</span></a>
-              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir <span class="badge-em-breve">Em breve</span></a>
+              <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
+              <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
               <a href="emocoes.html" class="nav-dropdown-item">Mapa das Emoções</a>
-              <a href="filme.html" class="nav-dropdown-item">Clube do Filme <span class="badge-em-breve">Em breve</span></a>
-              <a href="livro.html" class="nav-dropdown-item">Clube do Livro <span class="badge-em-breve">Em breve</span></a>
-              <a href="podcast.html" class="nav-dropdown-item">Podcast <span class="badge-em-breve">Em breve</span></a>
-              <a href="youtube.html" class="nav-dropdown-item is-active">YouTube <span class="badge-em-breve">Em breve</span></a>
-              <a href="instagram.html" class="nav-dropdown-item">Instagram <span class="badge-em-breve">Em breve</span></a>
-              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas <span class="badge-em-breve">Em breve</span></a>
+              <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
+              <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
+              <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item is-active">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
+              <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
@@ -82,25 +216,121 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container youtube-hero">
         <span class="breadcrumb"><a href="index.html">Início</a> / YouTube Integrado</span>
         <span class="proto-eyebrow">Organizado por assunto, não por data</span>
-        <h1>YouTube Integrado</h1>
-        <p>A ideia: todo vídeo publicado no canal da Natalie aparece aqui automaticamente, agrupado por tema — assim o conteúdo nunca envelhece. Isso depende de conectar a API do YouTube, ainda não configurada.</p>
+        <h1>YouTube & Aulas Clínicas</h1>
+        <p>Vídeos e reflexões aprofundadas agrupadas por dores centrais. Um acervo permanente para entender a dinâmica das suas relações com o olhar da psicologia clínica.</p>
+        <div style="margin-top: 1.5rem;">
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="btn-canal-yt">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            <span>Inscrever-se no Canal Oficial</span>
+          </a>
+        </div>
       </div>
     </section>
 
-    <section class="proto-section">
-      <div class="container">
-        <div class="mock-grid">
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>▶️ Comunicação</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>▶️ Traição</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>▶️ Filhos e adolescência</h3></div>
-          <div class="mock-card"><span class="chip-static" style="display:inline-block; margin-bottom:0.5rem;">Em construção</span><h3>▶️ Separação e luto</h3></div>
+    <section class="proto-section" style="padding-top:0;">
+      <div class="container" style="max-width: 900px;">
+
+        <!-- CATEGORIA 1: COMUNICAÇÃO -->
+        <div class="video-categoria-section">
+          <div class="video-categoria-header">
+            <span>💬</span>
+            <h2>Comunicação & Conversas Difíceis</h2>
+          </div>
+          <div class="grid-videos">
+            <div class="video-card">
+              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+                <div class="video-thumb-placeholder">
+                  <div class="play-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </div>
+                  <span style="font-size:0.8125rem; font-weight:600;">Assistir aula (14 min)</span>
+                </div>
+              </div>
+              <div class="video-card-body">
+                <span class="video-card-tag">Diálogo Sem Ataque</span>
+                <h3 class="video-card-title">Como conversar sem explodir: a regra dos 20 minutos</h3>
+                <p class="video-card-desc">O que acontece com o cérebro quando a discussão esquenta e como estabelecer pausas biológicas para salvar o casamento.</p>
+                <div class="video-card-footer">
+                  <span>⏱️ 14:20</span>
+                  <span style="color:var(--color-brand-wine); font-weight:700;">Ver vídeo →</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+                <div class="video-thumb-placeholder">
+                  <div class="play-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </div>
+                  <span style="font-size:0.8125rem; font-weight:600;">Assistir aula (11 min)</span>
+                </div>
+              </div>
+              <div class="video-card-body">
+                <span class="video-card-tag">Escuta Ativa</span>
+                <h3 class="video-card-title">Por que seu parceiro se fecha quando você reclama?</h3>
+                <p class="video-card-desc">A diferença entre fazer um pedido vulnerável de conexão e emitir uma acusação disfarçada de desabafo.</p>
+                <div class="video-card-footer">
+                  <span>⏱️ 11:45</span>
+                  <span style="color:var(--color-brand-wine); font-weight:700;">Ver vídeo →</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8125rem; color:var(--text-subtle);">
-          Enquanto isso, acompanhe no <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" style="color:var(--color-brand-wine); font-weight:700;">Instagram oficial</a>.
-        </p>
+
+        <!-- CATEGORIA 2: CRISES & VÍNCULO -->
+        <div class="video-categoria-section">
+          <div class="video-categoria-header">
+            <span>💔</span>
+            <h2>Crises Conjugais & Quebra de Confiança</h2>
+          </div>
+          <div class="grid-videos">
+            <div class="video-card">
+              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+                <div class="video-thumb-placeholder">
+                  <div class="play-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </div>
+                  <span style="font-size:0.8125rem; font-weight:600;">Assistir aula (16 min)</span>
+                </div>
+              </div>
+              <div class="video-card-body">
+                <span class="video-card-tag">Infidelidade & Verdade</span>
+                <h3 class="video-card-title">Reconstruir a relação após a traição: é realmente possível?</h3>
+                <p class="video-card-desc">Os pilares indispensáveis da transparência ativa e por que o perdão forçado só empurra o ressentimento para a gaveta.</p>
+                <div class="video-card-footer">
+                  <span>⏱️ 16:30</span>
+                  <span style="color:var(--color-brand-wine); font-weight:700;">Ver vídeo →</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+                <div class="video-thumb-placeholder">
+                  <div class="play-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </div>
+                  <span style="font-size:0.8125rem; font-weight:600;">Assistir aula (13 min)</span>
+                </div>
+              </div>
+              <div class="video-card-body">
+                <span class="video-card-tag">Decisão Madura</span>
+                <h3 class="video-card-title">Como saber se ainda vale a pena insistir no casamento</h3>
+                <p class="video-card-desc">Critérios psicológicos objetivos para diferenciar uma crise passageira de uma relação que já perdeu a essência.</p>
+                <div class="video-card-footer">
+                  <span>⏱️ 13:10</span>
+                  <span style="color:var(--color-brand-wine); font-weight:700;">Ver vídeo →</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   </main>
