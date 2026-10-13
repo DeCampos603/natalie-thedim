@@ -243,24 +243,27 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 78px;
+      height: 70px;
       transition: height var(--transition-smooth);
     }
 
     .site-header.is-scrolled .header-inner {
-      height: 66px;
+      height: 62px;
     }
 
     .logo-box {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
+      text-decoration: none;
+      flex-shrink: 0;
     }
 
     .logo-heart-bubble {
-      width: 42px;
-      height: 42px;
+      width: 32px;
+      height: 32px;
       flex-shrink: 0;
+      overflow: visible;
       transition: transform var(--transition-smooth);
     }
 
@@ -271,36 +274,41 @@
     .logo-text {
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      white-space: nowrap;
     }
 
     .logo-name {
       font-family: var(--font-serif);
-      font-size: 1.35rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: var(--color-brand-wine);
-      line-height: 1.1;
+      line-height: 1.15;
       letter-spacing: -0.01em;
+      white-space: nowrap;
     }
 
     .logo-sub {
-      font-size: 0.6875rem;
+      font-size: 0.5875rem;
       font-weight: 700;
       color: var(--color-brand-wine);
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-top: 2px;
+      margin-top: 1px;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .header-nav {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      gap: 1.25rem;
     }
 
     .nav-list {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.1rem;
       list-style: none;
     }
 
@@ -1563,14 +1571,34 @@
         grid-template-columns: 1fr 1fr;
       }
 
-      .header-inner {
+      .site-header,
+      .site-header.is-scrolled {
+        height: auto;
+      }
+
+      .header-inner,
+      .site-header.is-scrolled .header-inner {
+        height: auto;
+        min-height: auto;
         flex-direction: column;
         align-items: stretch;
-        gap: 0.6rem;
+        gap: 0.45rem;
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
       }
 
       .logo-box {
         align-self: center;
+        justify-content: center;
+      }
+
+      .logo-name {
+        font-size: 1.05rem;
+      }
+
+      .logo-heart-bubble {
+        width: 28px;
+        height: 28px;
       }
 
       .header-nav {
@@ -1641,7 +1669,7 @@
   <header class="site-header" id="header">
     <div class="container header-inner">
       <a href="#topo" class="logo-box" aria-label="Natalie Thedim — Ir para o topo">
-        <svg class="logo-heart-bubble" viewBox="0 0 32 32" fill="none">
+        <svg class="logo-heart-bubble" viewBox="-2 -1 36 34" fill="none">
           <path d="M16 6.2c-2.3 0-4.3 1.4-5.1 3.4C10.1 7.6 8.1 6.2 5.8 6.2 2.7 6.2.2 8.7.2 11.8c0 6.6 9.4 12.3 15.2 16.2.4.3 1 .3 1.4 0 5.8-3.9 15.2-9.6 15.2-16.2 0-3.1-2.5-5.6-5.6-5.6-2.3 0-4.3 1.4-5.1 3.4-.8-2-2.8-3.4-5.3-3.4z" stroke="#5B1826" stroke-width="1.8" fill="#FAF4F2"/>
           <path d="M10 13h12M10 17h8" stroke="#5B1826" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
