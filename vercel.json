@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/raizes", "destination": "/raizes.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/login", "destination": "/admin.html" }
   ],

@@ -1505,6 +1505,205 @@
     }
 
     /* ==========================================================================
+       ABAS DE AGENDAMENTO & INTEGRAÇÃO DOCTORALIA
+       ========================================================================== */
+    .agendamento-tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.25rem;
+      flex-wrap: wrap;
+    }
+
+    .agendamento-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.75rem 1.625rem;
+      border-radius: var(--radius-full);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .agendamento-tab-btn:hover {
+      border-color: var(--color-brand-rose);
+      color: var(--color-brand-wine);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .agendamento-tab-btn.is-active {
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      border-color: var(--color-brand-wine);
+      box-shadow: 0 8px 24px rgba(91, 24, 38, 0.22);
+    }
+
+    .agendamento-tab-btn.is-active svg {
+      stroke: #FFFFFF;
+    }
+
+    .agendamento-panel {
+      display: none;
+      animation: agendamentoFade 0.35s ease-out;
+    }
+
+    .agendamento-panel.is-active {
+      display: block;
+    }
+
+    @keyframes agendamentoFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card Oficial Doctoralia */
+    .doctoralia-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 3.5vw, 2.75rem);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doctoralia-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .doctoralia-header-text h3 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+      font-weight: 600;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.375rem;
+    }
+
+    .doctoralia-header-text p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.55;
+    }
+
+    .doctoralia-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.625rem;
+      align-items: center;
+    }
+
+    .badge-pill-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      background: var(--color-brand-rose-light);
+      color: var(--color-brand-wine);
+      border: 1px solid rgba(189, 105, 124, 0.25);
+    }
+
+    .badge-pill-soft svg {
+      color: var(--color-brand-wine);
+      flex-shrink: 0;
+    }
+
+    .doctoralia-widget-wrapper {
+      min-height: 520px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .doctoralia-widget-wrapper iframe {
+      width: 100% !important;
+      max-width: 100% !important;
+      border: none !important;
+      border-radius: var(--radius-md);
+    }
+
+    a.zl-url {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: var(--color-brand-wine);
+      color: #FFFFFF !important;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--transition-smooth);
+      box-shadow: 0 4px 14px rgba(91, 24, 38, 0.2);
+    }
+
+    a.zl-url:hover {
+      background: var(--color-brand-wine-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(91, 24, 38, 0.3);
+    }
+
+    .doctoralia-card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .doctoralia-footer-help {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .doctoralia-card-footer a,
+    .doctoralia-card-footer button {
+      color: var(--color-brand-wine);
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .doctoralia-card-footer button:hover,
+    .doctoralia-card-footer a:hover {
+      color: var(--color-brand-rose);
+    }
+
+
+    /* ==========================================================================
        BANNER DE CONVERSÃO PRÉ-RODAPÉ
        ========================================================================== */
     .banner-cta-prefooter {
@@ -1827,8 +2026,9 @@
           <li><a href="diario.html" class="nav-item-link">Diário</a></li>
           <li><a href="biblioteca.html" class="nav-item-link">Biblioteca</a></li>
           <li><a href="exercicios.html" class="nav-item-link">Exercícios</a></li>
+          <li><a href="raizes.html" class="nav-item-link">RAÍZES</a></li>
           <li><a href="#sobre" class="nav-item-link">Sobre Natalie</a></li>
-          <li><a href="#atendimentos" class="nav-item-link">Atendimentos</a></li>
+          <li><a href="#agendamentos" class="nav-item-link">Agendamentos</a></li>
           <li class="nav-dropdown">
             <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
               <span>Mais</span>
@@ -1837,6 +2037,7 @@
               </svg>
             </button>
             <div class="nav-dropdown-menu" role="menu">
+              <a href="raizes.html" class="nav-dropdown-item">🌱 RAÍZES (Genograma)</a>
               <a href="pergunte.html" class="nav-dropdown-item">Pergunte à Psicóloga</a>
               <a href="e-se.html" class="nav-dropdown-item">Série "E se..."</a>
               <a href="casos.html" class="nav-dropdown-item">Casos p/ Refletir</a>
@@ -1851,10 +2052,9 @@
           </li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+        <a href="#agendamentos" 
            class="header-btn" 
-           target="_blank" 
-           rel="noopener noreferrer">
+           aria-label="Ir para seção de agendamento de consultas">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
           </svg>
@@ -2133,102 +2333,200 @@
     </section>
 
     <!-- ======================================================================
-       SEÇÃO: ATENDIMENTOS (INDIVIDUAL E CASAL)
+       SEÇÃO: ATENDIMENTOS & AGENDAMENTOS (DOCTORALIA + WHATSAPP)
        ====================================================================== -->
-    <section class="section-atendimentos" id="atendimentos">
+    <section class="section-atendimentos" id="agendamentos">
+      <!-- Âncora de compatibilidade para links antigos com #atendimentos -->
+      <span id="atendimentos" style="display:block; position:relative; top:-90px; visibility:hidden;"></span>
+      
       <div class="container">
         <div class="center-header reveal">
+          <span class="eyebrow-center">Agendamento Online & Atendimento Clínico</span>
           <h2 class="center-h2">Como posso caminhar com você?</h2>
-          <p class="center-p">Um espaço seguro para compreender, elaborar e transformar.</p>
+          <p class="center-p">Escolha o melhor dia e horário na agenda oficial do Doctoralia ou consulte os formatos de atendimento direto pelo WhatsApp.</p>
         </div>
 
-        <div class="grid-atendimentos-2 stagger-container">
-          <!-- Card Individual -->
-          <div class="service-card stagger-item">
-            <div>
-              <div class="service-header">
-                <div class="service-icon-circle">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                  </svg>
+        <!-- Seletor de Abas de Agendamento -->
+        <div class="agendamento-tabs-nav reveal" role="tablist" aria-label="Abas de agendamento">
+          <button type="button" 
+                  class="agendamento-tab-btn is-active" 
+                  id="tabBtnDoctoralia" 
+                  role="tab" 
+                  aria-selected="true" 
+                  aria-controls="panelDoctoralia">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Agenda Online (Doctoralia)</span>
+          </button>
+
+          <button type="button" 
+                  class="agendamento-tab-btn" 
+                  id="tabBtnWhatsapp" 
+                  role="tab" 
+                  aria-selected="false" 
+                  aria-controls="panelWhatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.01.79.8-2.93-.19-.3a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.63c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.72 4.31 3.81.6.26 1.07.42 1.44.54.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/>
+            </svg>
+            <span>Modalidades & WhatsApp</span>
+          </button>
+        </div>
+
+        <!-- ABA 1: DOCTORALIA CALENDAR WIDGET -->
+        <div class="agendamento-panel is-active" id="panelDoctoralia" role="tabpanel" aria-labelledby="tabBtnDoctoralia">
+          <div class="doctoralia-card reveal">
+            <div class="doctoralia-card-header">
+              <div class="doctoralia-header-text">
+                <div class="doctoralia-badges-row" style="margin-bottom:0.75rem;">
+                  <span class="badge-pill-soft">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Integração Oficial Doctoralia
+                  </span>
+                  <span class="badge-pill-soft">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Disponibilidade em Tempo Real
+                  </span>
+                  <span class="badge-pill-soft">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Presencial RJ & Teleconsulta
+                  </span>
                 </div>
-                <div>
-                  <h3>Terapia Individual</h3>
-                  <p style="font-size:0.875rem; color:var(--text-muted)">Autoconhecimento e Transformação</p>
-                </div>
+                <h3>Selecione seu dia e horário na agenda online</h3>
+                <p>Consulte a disponibilidade em tempo real para psicoterapia individual ou de casal. Escolha o melhor formato e confirme sua consulta com agilidade.</p>
               </div>
-
-              <p style="font-size:0.9375rem; color:var(--text-muted); margin-top:1rem;">
-                Para quem busca autoconhecimento, equilíbrio emocional e deseja transformar padrões de apego e sofrimento.
-              </p>
-
-              <ul class="service-bullets">
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Adultos e adolescentes</span>
-                </li>
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Questões emocionais e autoconhecimento</span>
-                </li>
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Ansiedade, dependência afetiva e luto</span>
-                </li>
-              </ul>
             </div>
 
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20Individual." 
-               class="btn-solid-wine" 
-               style="width: 100%;" 
-               target="_blank" 
-               rel="noopener noreferrer">
-              <span>Agendar Terapia Individual</span>
-            </a>
+            <!-- Widget Doctoralia Oficial -->
+            <div class="doctoralia-widget-wrapper">
+              <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/perfil/natalie-rodrigues-thedim-silvado" rel="nofollow" data-zlw-doctor="natalie-rodrigues-thedim-silvado" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
+              <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
+            </div>
+
+            <div class="doctoralia-card-footer">
+              <div class="doctoralia-footer-help">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-brand-wine); flex-shrink:0;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>Dúvidas sobre horários ou formatos? </span>
+                <button type="button" id="linkGoToWhatsapp">Ver detalhes das modalidades e falar no WhatsApp →</button>
+              </div>
+              <div class="doctoralia-footer-crp">
+                <span>Natalie Rodrigues Thedim Silvado Camardella · CRP 05/45482</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 2: MODALIDADES CLÍNICAS & CONTATO WHATSAPP -->
+        <div class="agendamento-panel" id="panelWhatsapp" role="tabpanel" aria-labelledby="tabBtnWhatsapp">
+          <div class="grid-atendimentos-2 stagger-container">
+            <!-- Card Individual -->
+            <div class="service-card stagger-item">
+              <div>
+                <div class="service-header">
+                  <div class="service-icon-circle">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Terapia Individual</h3>
+                    <p style="font-size:0.875rem; color:var(--text-muted)">Autoconhecimento e Transformação</p>
+                  </div>
+                </div>
+
+                <p style="font-size:0.9375rem; color:var(--text-muted); margin-top:1rem;">
+                  Para quem busca autoconhecimento, equilíbrio emocional e deseja transformar padrões de apego e sofrimento.
+                </p>
+
+                <ul class="service-bullets">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Adultos e adolescentes</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Questões emocionais e autoconhecimento</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Ansiedade, dependência afetiva e luto</span>
+                  </li>
+                </ul>
+              </div>
+
+              <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20Individual." 
+                 class="btn-solid-wine" 
+                 style="width: 100%;" 
+                 target="_blank" 
+                 rel="noopener noreferrer">
+                <span>Agendar Terapia Individual</span>
+              </a>
+            </div>
+
+            <!-- Card Casal -->
+            <div class="service-card stagger-item">
+              <div>
+                <div class="service-header">
+                  <div class="service-icon-circle">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Terapia de Casal</h3>
+                    <p style="font-size:0.875rem; color:var(--text-muted)">Diálogo, Intimidade e Resolução</p>
+                  </div>
+                </div>
+
+                <p style="font-size:0.9375rem; color:var(--text-muted); margin-top:1rem;">
+                  Reconstruímos o diálogo, a intimidade e a parceria. Para casais que desejam superar conflitos e fortalecer a conexão.
+                </p>
+
+                <ul class="service-bullets">
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Comunicação assertiva e diálogo seguro</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Conflitos recorrentes e desgaste do dia a dia</span>
+                  </li>
+                  <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Reorganização da vida a dois e confiança</span>
+                  </li>
+                </ul>
+              </div>
+
+              <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal."
+                 class="btn-solid-wine"
+                 style="width: 100%;"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                <span>Agendar Terapia de Casal</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Card Casal -->
-          <div class="service-card stagger-item">
-            <div>
-              <div class="service-header">
-                <div class="service-icon-circle">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3>Terapia de Casal</h3>
-                  <p style="font-size:0.875rem; color:var(--text-muted)">Diálogo, Intimidade e Resolução</p>
-                </div>
-              </div>
-
-              <p style="font-size:0.9375rem; color:var(--text-muted); margin-top:1rem;">
-                Reconstruímos o diálogo, a intimidade e a parceria. Para casais que desejam superar conflitos e fortalecer a conexão.
-              </p>
-
-              <ul class="service-bullets">
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Comunicação assertiva e diálogo seguro</span>
-                </li>
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Conflitos recorrentes e desgaste do dia a dia</span>
-                </li>
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Reorganização da vida a dois e confiança</span>
-                </li>
-              </ul>
-            </div>
-
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal."
-               class="btn-solid-wine"
-               style="width: 100%;"
-               target="_blank"
-               rel="noopener noreferrer">
-              <span>Agendar Terapia de Casal</span>
-            </a>
+          <div style="text-align: center; margin-top: 2rem;">
+            <button type="button" id="linkGoToDoctoralia" style="background: none; border: none; color: var(--color-brand-wine); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-family: inherit; font-size: 0.9375rem;">
+              ← Ou escolha um dia e horário na Agenda Online do Doctoralia
+            </button>
           </div>
         </div>
       </div>
@@ -2329,6 +2627,7 @@
         <div class="footer-col-nav">
           <h4>Atendimento</h4>
           <ul>
+            <li><a href="#agendamentos">Agendamento Online (Doctoralia)</a></li>
             <li><a href="#atendimentos">Terapia Individual</a></li>
             <li><a href="#atendimentos">Terapia de Casal</a></li>
             <li><span>Presencial: Rio de Janeiro</span></li>
@@ -2540,6 +2839,51 @@
         });
       }
 
+      // 6. Abas de Agendamento (Doctoralia vs Modalidades/WhatsApp)
+      const tabBtnDoctoralia = document.getElementById('tabBtnDoctoralia');
+      const tabBtnWhatsapp = document.getElementById('tabBtnWhatsapp');
+      const panelDoctoralia = document.getElementById('panelDoctoralia');
+      const panelWhatsapp = document.getElementById('panelWhatsapp');
+      const linkGoToWhatsapp = document.getElementById('linkGoToWhatsapp');
+      const linkGoToDoctoralia = document.getElementById('linkGoToDoctoralia');
+
+      function switchAgendamentoTab(toDoctoralia) {
+        if (!tabBtnDoctoralia || !tabBtnWhatsapp || !panelDoctoralia || !panelWhatsapp) return;
+        
+        tabBtnDoctoralia.classList.toggle('is-active', toDoctoralia);
+        tabBtnDoctoralia.setAttribute('aria-selected', String(toDoctoralia));
+        panelDoctoralia.classList.toggle('is-active', toDoctoralia);
+
+        tabBtnWhatsapp.classList.toggle('is-active', !toDoctoralia);
+        tabBtnWhatsapp.setAttribute('aria-selected', String(!toDoctoralia));
+        panelWhatsapp.classList.toggle('is-active', !toDoctoralia);
+      }
+
+      if (tabBtnDoctoralia && tabBtnWhatsapp) {
+        tabBtnDoctoralia.addEventListener('click', () => switchAgendamentoTab(true));
+        tabBtnWhatsapp.addEventListener('click', () => switchAgendamentoTab(false));
+      }
+
+      if (linkGoToWhatsapp) {
+        linkGoToWhatsapp.addEventListener('click', () => switchAgendamentoTab(false));
+      }
+      if (linkGoToDoctoralia) {
+        linkGoToDoctoralia.addEventListener('click', () => switchAgendamentoTab(true));
+      }
+
+      // Suporte a âncoras diretas na URL (#atendimentos abre a aba de WhatsApp, #agendamentos abre Doctoralia)
+      if (window.location.hash === '#atendimentos') {
+        switchAgendamentoTab(false);
+      } else if (window.location.hash === '#agendamentos') {
+        switchAgendamentoTab(true);
+      }
+      window.addEventListener('hashchange', () => {
+        if (window.location.hash === '#atendimentos') {
+          switchAgendamentoTab(false);
+        } else if (window.location.hash === '#agendamentos') {
+          switchAgendamentoTab(true);
+        }
+      });
     });
   </script>
 

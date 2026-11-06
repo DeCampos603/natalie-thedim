@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  
+  <title>RAÍZES — Minha História, Meus Vínculos · Natalie Thedim (CRP 05/45482)</title>
+  <meta name="description" content="Mapeamento estrutural e transgeracional de história familiar, vínculos e padrões emocionais para psicoterapia com Natalie Thedim." />
+  <meta name="author" content="Natalie Thedim Silvado Camardella" />
+  
+  <!-- Favicon SVG: Balão em formato de coração -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
+  <meta name="theme-color" content="#5B1826" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="assets/site.css" />
+
+  <style>
+    /* Estilos específicos para o Instrumento Clínico RAÍZES */
+    .raizes-hero {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+      background: linear-gradient(180deg, var(--color-brand-rose-light) 0%, var(--bg-canvas) 100%);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .raizes-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-brand-wine);
+      background: #FFFFFF;
+      padding: 0.35rem 1rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-soft);
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .raizes-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--color-brand-wine);
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .raizes-subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 0.5rem;
+      line-height: 1.5;
+    }
+    .raizes-cred {
+      font-size: 0.875rem;
+      color: var(--color-brand-wine);
+      font-weight: 600;
+    }
+
+    /* Container do Formulário */
+    .raizes-container {
+      max-width: 820px;
+      margin: -1.5rem auto 4rem;
+      padding: 0 clamp(1rem, 3vw, 2rem);
+      position: relative;
+      z-index: 10;
+    }
+
+    .raizes-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.5rem, 4vw, 2.75rem);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Barra de Progresso Superior */
+    .raizes-progress-wrapper {
+      margin-bottom: 2rem;
+    }
+    .raizes-progress-bar {
+      height: 6px;
+      background: var(--border-soft);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-bottom: 0.85rem;
+    }
+    .raizes-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-brand-wine), var(--color-brand-rose));
+      width: 11%;
+      transition: width 0.35s ease;
+    }
+    .raizes-step-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+    .raizes-save-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--color-ok);
+      font-weight: 600;
+      background: var(--color-ok-bg);
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      transition: opacity 0.2s;
+    }
+
+    /* Seções e Passos */
+    .raizes-step {
+      display: none;
+      animation: fadeInStep 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .raizes-step.is-active {
+      display: block;
+    }
+    @keyframes fadeInStep {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+    .step-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.55;
+    }
+
+    /* Campos e Controles */
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      margin-bottom: 0.45rem;
+    }
+    .form-group .field-hint {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: normal;
+      color: var(--text-subtle);
+      margin-top: 0.2rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      background: #FFFFFF;
+      padding: 0.75rem 0.95rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group textarea {
+      min-height: 90px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--color-brand-wine);
+      box-shadow: 0 0 0 3px rgba(91, 24, 38, 0.12);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 1rem;
+    }
+
+    /* Cartão de Acolhimento e Privacidade */
+    .callout-box {
+      background: var(--bg-surface-tint);
+      border-left: 3.5px solid var(--color-brand-wine);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.15rem 1.35rem;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.55;
+    }
+    .callout-box strong {
+      color: var(--color-brand-wine);
+    }
+    .callout-comfort {
+      background: #F2F7F4;
+      border-left-color: var(--color-ok);
+      color: #1F4A32;
+    }
+
+    /* Repetição Dinâmica de Pessoas/Familiares */
+    .familiar-card {
+      background: var(--bg-surface-tint);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      margin: 1.25rem 0;
+      position: relative;
+    }
+    .familiar-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .familiar-card-title {
+      font-weight: 700;
+      color: var(--color-brand-wine);
+      font-size: 0.95rem;
+    }
+    .btn-remove-familiar {
+      background: transparent;
+      color: var(--color-erro);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-full);
+      border: 1px solid #F5C6C6;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-remove-familiar:hover {
+      background: var(--color-erro-bg);
+    }
+
+    .btn-add-familiar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #FFFFFF;
+      border: 1.5px dashed var(--color-brand-rose);
+      color: var(--color-brand-wine);
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-add-familiar:hover {
+      background: var(--color-brand-rose-light);
+      border-style: solid;
+      transform: translateY(-1px);
+    }
+
+    /* Botões de Ação do Formulário */
+    .raizes-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-soft);
+    }
+    .btn-raizes {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+    .btn-raizes-primary {
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      border: 1.5px solid var(--color-brand-wine);
+      box-shadow: 0 4px 12px rgba(91, 24, 38, 0.15);
+    }
+    .btn-raizes-primary:hover {
+      background: var(--color-brand-wine-dark);
+      border-color: var(--color-brand-wine-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(91, 24, 38, 0.22);
+    }
+    .btn-raizes-secondary {
+      background: var(--bg-surface-tint);
+      color: var(--color-brand-wine);
+      border: 1.5px solid var(--border-soft);
+    }
+    .btn-raizes-secondary:hover {
+      background: #FFFFFF;
+      border-color: var(--color-brand-rose);
+    }
+    .btn-raizes-whatsapp {
+      background: #25D366;
+      color: #FFFFFF;
+      border: 1.5px solid #20BA5A;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+    }
+    .btn-raizes-whatsapp:hover {
+      background: #20BA5A;
+      transform: translateY(-1px);
+    }
+
+    /* Painel Final de Exportação */
+    .export-card-highlight {
+      background: linear-gradient(135deg, #FAF4F2 0%, #FFFFFF 100%);
+      border: 2px solid var(--color-brand-wine);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+    }
+    .copy-success-box {
+      display: none;
+      background: var(--color-ok-bg);
+      border: 1px solid #B8E2C8;
+      color: var(--color-ok);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      animation: fadeInStep 0.25s ease;
+    }
+
+    @media (max-width: 650px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .raizes-panel { padding: 1.25rem; }
+      .raizes-actions { flex-direction: column-reverse; }
+      .raizes-actions .btn-raizes { width: 100%; }
+      .btn-add-familiar { width: 100%; justify-content: center; }
+    }
+
+    /* Estilos para Impressão e PDF Clínico */
+    @media print {
+      body { background: #FFFFFF; color: #111; font-size: 12pt; }
+      .site-header, .raizes-hero, .raizes-actions, .raizes-progress-wrapper, .btn-add-familiar, .btn-remove-familiar, .footer-note, #btnToggleNav {
+        display: none !important;
+      }
+      .raizes-container { margin: 0; padding: 0; max-width: 100%; }
+      .raizes-panel { border: none; box-shadow: none; padding: 0; }
+      .raizes-step { display: block !important; margin-bottom: 2rem; page-break-inside: avoid; }
+      .print-header { display: block !important; margin-bottom: 2rem; border-bottom: 2px solid #5B1826; padding-bottom: 1rem; }
+      .print-field { margin-bottom: 0.75rem; page-break-inside: avoid; }
+      .print-q { font-weight: bold; color: #5B1826; font-size: 11pt; }
+      .print-a { margin-top: 2px; white-space: pre-wrap; font-size: 10.5pt; color: #222; }
+    }
+    .print-header { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO DO SITE PRINCIPAL DE NATALIE THEDIM -->
+  <header class="revista-header" id="header">
+    <div class="container header-row">
+      <a href="index.html" class="logo-box" aria-label="Natalie Thedim — Início">
+        <svg class="logo-heart-bubble" viewBox="-2 -1 36 34" fill="none">
+          <path d="M16 6.2c-2.3 0-4.3 1.4-5.1 3.4C10.1 7.6 8.1 6.2 5.8 6.2 2.7 6.2.2 8.7.2 11.8c0 6.6 9.4 12.3 15.2 16.2.4.3 1 .3 1.4 0 5.8-3.9 15.2-9.6 15.2-16.2 0-3.1-2.5-5.6-5.6-5.6-2.3 0-4.3 1.4-5.1 3.4-.8-2-2.8-3.4-5.3-3.4z" stroke="#5B1826" stroke-width="1.8" fill="#FAF4F2"/>
+          <path d="M10 13h12M10 17h8" stroke="#5B1826" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">Natalie Thedim</span>
+          <span class="logo-sub">Psicóloga Clínica</span>
+        </div>
+      </a>
+
+      <button class="btn-mobile-toggle" id="btnToggleNav" aria-label="Abrir menu de navegação">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav class="header-nav" id="mainNav" aria-label="Menu principal">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-item-link">Início</a></li>
+          <li><a href="historias.html" class="nav-item-link">Histórias e Cartas</a></li>
+          <li><a href="diario.html" class="nav-item-link">Diário</a></li>
+          <li><a href="biblioteca.html" class="nav-item-link">Biblioteca</a></li>
+          <li><a href="exercicios.html" class="nav-item-link">Exercícios</a></li>
+          <li><a href="raizes.html" class="nav-item-link is-active">RAÍZES (Genograma)</a></li>
+          <li><a href="index.html#sobre" class="nav-item-link">Sobre Natalie</a></li>
+          <li><a href="index.html#agendamentos" class="nav-item-link">Agendamentos</a></li>
+        </ul>
+
+        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20o%20levantamento%20RA%C3%8DZES%20e%20atendimentos." 
+           class="header-btn" 
+           target="_blank" 
+           rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+          </svg>
+          <span>Falar com a Natalie</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION DO INSTRUMENTO RAÍZES -->
+  <section class="raizes-hero">
+    <div class="container">
+      <span class="raizes-tag">🌱 Cartografia Transgeracional & Afetiva</span>
+      <h1 class="raizes-title">RAÍZES</h1>
+      <p class="raizes-subtitle">Minha história, meus vínculos e as origens do que sinto hoje.</p>
+      <div class="raizes-cred">Coordenação Clínica: Natalie Rodrigues Thedim Silvado · CRP 05/45482</div>
+    </div>
+  </section>
+
+  <!-- ÁREA DE PREENCHIMENTO -->
+  <main class="raizes-container">
+    <div class="raizes-panel">
+
+      <!-- Barra de Progresso e Notificação de Salvamento -->
+      <div class="raizes-progress-wrapper">
+        <div class="raizes-progress-bar">
+          <div class="raizes-progress-fill" id="progressBar"></div>
+        </div>
+        <div class="raizes-step-meta">
+          <span id="stepCounter" style="font-weight: 600;">Etapa 1 de 9</span>
+          <span class="raizes-save-badge" id="saveBadge">✓ Rascunho salvo no aparelho</span>
+        </div>
+      </div>
+
+      <!-- Cabeçalho Exclusivo para Impressão -->
+      <div class="print-header">
+        <h1 style="color:#5B1826; font-size: 20pt; margin-bottom: 4px;">RAÍZES — Minha História, Meus Vínculos</h1>
+        <p style="color:#555; font-size: 11pt; margin-bottom: 6px;">Levantamento Transgeracional Clínico · Dra. Natalie Rodrigues Thedim Silvado (CRP 05/45482)</p>
+        <p style="color:#777; font-size: 9.5pt;">Documento confidencial para uso exclusivo no processo terapêutico.</p>
+      </div>
+
+      <form id="raizesForm" novalidate>
+
+        <!-- ETAPA 1: Boas-vindas e Identificação -->
+        <section class="raizes-step is-active" data-step="1">
+          <h2 class="step-heading">1. Boas-vindas e Identificação</h2>
+          <p class="step-desc">Este formulário ajudará a mapear a composição da sua família, os vínculos e as lealdades invisíveis que influenciam sua trajetória. Responda com calma. Você pode escrever "não sei" ou deixar em branco qualquer pergunta para conversarmos na sessão.</p>
+
+          <div class="callout-box">
+            <strong>🔒 Privacidade e Segurança Absoluta (Zero-Server):</strong><br>
+            Este aplicativo funciona 100% no seu dispositivo. Nenhuma resposta é enviada automaticamente para a internet ou para servidores externos. O rascunho fica guardado apenas no seu aparelho e só será entregue à psicóloga quando você clicar em compartilhar.
+          </div>
+
+          <div class="form-group">
+            <label for="paciente_nome">Seu nome completo</label>
+            <input type="text" id="paciente_nome" name="paciente_nome" placeholder="Como prefere ser chamado(a)?" autocomplete="name" required />
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="paciente_nascimento">Data de nascimento</label>
+              <input type="date" id="paciente_nascimento" name="paciente_nascimento" />
+            </div>
+            <div class="form-group">
+              <label for="preenchimento_data">Data de preenchimento</label>
+              <input type="date" id="preenchimento_data" name="preenchimento_data" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="objetivo">O que você gostaria de compreender sobre sua história familiar neste momento?</label>
+            <textarea id="objetivo" name="objetivo" placeholder="Ex: padrões de relacionamento que se repetem, ansiedade, peso de responsabilidades, conflitos familiares..."></textarea>
+          </div>
+
+          <div class="form-group" style="margin-top: 1.25rem;">
+            <label style="display:flex; align-items:flex-start; gap:0.65rem; font-weight:normal; cursor:pointer;">
+              <input type="checkbox" name="ciente_privacidade" value="sim" style="width:auto; margin-top:0.25rem; accent-color:var(--color-brand-wine);" checked />
+              <span style="font-size: 0.875rem; color: var(--text-muted);">Estou ciente de que minhas respostas ficam salvas temporariamente na memória deste aparelho para meu preenchimento.</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- ETAPA 2: Linhagem Paterna -->
+        <section class="raizes-step" data-step="2">
+          <h2 class="step-heading">2. Família Paterna (Linhagem do Pai)</h2>
+          <p class="step-desc">Vamos olhar para os pais e irmãos do seu pai. Se você não conheceu ou não tem contato com essa linhagem, preencha apenas o que souber e avance.</p>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Avô paterno: nome completo</label>
+              <input type="text" name="paterna_avo_nome" placeholder="Nome do avô paterno" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="paterna_avo_idade" placeholder="Ex: 78 anos / falecido aos 65" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Avó paterna: nome completo</label>
+              <input type="text" name="paterna_avoa_nome" placeholder="Nome da avó paterna" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="paterna_avoa_idade" placeholder="Ex: 82 anos / falecida aos 70" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Como era a relação entre os seus avós paternos?</label>
+            <span class="field-hint">Havia afeto, frieza, brigas frequentes, autoritarismo ou distanciamento?</span>
+            <textarea name="paterna_avos_relacao"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Houve outras uniões, casamentos anteriores ou outros filhos dos seus avós paternos?</label>
+            <textarea name="paterna_outras_unioes"></textarea>
+          </div>
+
+          <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 1.75rem 0 0.5rem; font-size: 1.15rem;">Irmãos do seu pai (Tios e Tias Paternos)</h3>
+          <p class="step-desc" style="margin-bottom: 1rem;">Adicione os tios e tias por ordem de nascimento, se lembrar.</p>
+          <div id="container_paterna_filhos"></div>
+          <button type="button" class="btn-add-familiar" data-target="container_paterna_filhos" data-tipo="tio_paterno">
+            + Adicionar tio(a) paterno(a)
+          </button>
+        </section>
+
+        <!-- ETAPA 3: Linhagem Materna -->
+        <section class="raizes-step" data-step="3">
+          <h2 class="step-heading">3. Família Materna (Linhagem da Mãe)</h2>
+          <p class="step-desc">Descreva a história e os vínculos da família da sua mãe conforme suas memórias e relatos familiares.</p>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Avô materno: nome completo</label>
+              <input type="text" name="materna_avo_nome" placeholder="Nome do avô materno" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="materna_avo_idade" placeholder="Ex: 80 anos / falecido aos 62" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Avó materna: nome completo</label>
+              <input type="text" name="materna_avoa_nome" placeholder="Nome da avó materna" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="materna_avoa_idade" placeholder="Ex: 75 anos / viva" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Como era a relação entre os seus avós maternos?</label>
+            <span class="field-hint">Como eles se comunicavam e resolviam discordâncias?</span>
+            <textarea name="materna_avos_relacao"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Houve outras uniões, parceiros anteriores ou outros filhos dos seus avós maternos?</label>
+            <textarea name="materna_outras_unioes"></textarea>
+          </div>
+
+          <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 1.75rem 0 0.5rem; font-size: 1.15rem;">Irmãos da sua mãe (Tios e Tias Maternos)</h3>
+          <p class="step-desc" style="margin-bottom: 1rem;">Adicione os tios e tias maternos conforme seu conhecimento.</p>
+          <div id="container_materna_filhos"></div>
+          <button type="button" class="btn-add-familiar" data-target="container_materna_filhos" data-tipo="tio_materno">
+            + Adicionar tio(a) materno(a)
+          </button>
+        </section>
+
+        <!-- ETAPA 4: Pais e Dinâmica Conjugal -->
+        <section class="raizes-step" data-step="4">
+          <h2 class="step-heading">4. Meus Pais e Dinâmica Conjugal</h2>
+          <p class="step-desc">Mapear a história e a dinâmica do casal parental nos ajuda a compreender o ambiente emocional onde você cresceu.</p>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nome do pai / figura paterna</label>
+              <input type="text" name="pai_nome" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="pai_idade" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nome da mãe / figura materna</label>
+              <input type="text" name="mae_nome" />
+            </div>
+            <div class="form-group">
+              <label>Idade atual ou idade ao falecer</label>
+              <input type="text" name="mae_idade" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Situação da união entre eles</label>
+            <select name="pais_situacao_uniao">
+              <option value="">Selecione a situação</option>
+              <option value="Casados / União Estável">Casados / União Estável</option>
+              <option value="Separados">Separados</option>
+              <option value="Divorciados">Divorciados</option>
+              <option value="Viúvo(a)">Viúvo(a)</option>
+              <option value="Nunca formaram casal conjugal">Nunca formaram casal conjugal</option>
+              <option value="Outra situação">Outra situação</option>
+              <option value="Não sei informar">Não sei informar</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Como foi ou é a relação entre eles?</label>
+            <span class="field-hint">Considere: demonstrações de afeto, comunicação, brigas, silêncios e como tomavam decisões.</span>
+            <textarea name="pais_relacao_clima"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>História do casal e acontecimentos marcantes</label>
+            <span class="field-hint">Como se conheceram? Houve crises, reconciliações ou fatos que marcaram a união?</span>
+            <textarea name="pais_historia_casal"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Houve outros relacionamentos, anteriores ou posteriores, de cada um?</label>
+            <span class="field-hint">Indique se houve outros parceiros(as) e outros filhos dessas uniões.</span>
+            <textarea name="pais_outras_relacoes"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Além dos seus pais, quem exerceu papel de cuidado ou criação na sua infância?</label>
+            <textarea name="pais_outros_cuidadores" placeholder="Ex: avó materna, tia, babá, padrasto..."></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 5: Fratria (Irmãos e Meios-Irmãos) -->
+        <section class="raizes-step" data-step="5">
+          <h2 class="step-heading">5. Fratria (Eu, Meus Irmãos e Meios-Irmãos)</h2>
+          <p class="step-desc">Inclua irmãos biológicos, socioafetivos, por adoção e perdas gestacionais que foram comunicadas na família.</p>
+
+          <div id="container_irmaos"></div>
+          <button type="button" class="btn-add-familiar" data-target="container_irmaos" data-tipo="irmao">
+            + Adicionar irmão ou irmã
+          </button>
+
+          <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 2rem 0 0.5rem; font-size: 1.15rem;">Sua posição e papel na família</h3>
+
+          <div class="form-group">
+            <label>Com qual(is) irmão(s) você tem maior proximidade e cumplicidade? Por quê?</label>
+            <textarea name="irmaos_proximidade"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Com qual(is) irmão(s) há distanciamento, ciúmes ou conflito?</label>
+            <textarea name="irmaos_conflito"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Qual papel você costumava assumir na sua família de origem?</label>
+            <span class="field-hint">Ex: o pacificador, o cuidador dos pais, o realizador de orgulho, a criança invisível, o rebelde, o mediador de brigas...</span>
+            <textarea name="meu_papel_familiar"></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 6: Relações Atuais e Descendência -->
+        <section class="raizes-step" data-step="6">
+          <h2 class="step-heading">6. Minhas Relações Atuais e Descendência</h2>
+          <p class="step-desc">Como você vivencia seus vínculos afetivos e familiares hoje?</p>
+
+          <div class="form-group">
+            <label>Relacionamento amoroso atual ou mais marcante</label>
+            <span class="field-hint">Nome do(a) parceiro(a), tempo de união, convivência e como você descreve a qualidade da relação.</span>
+            <textarea name="relacao_amorosa_atual"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Relacionamentos amorosos anteriores relevantes</label>
+            <span class="field-hint">Casamentos ou namoros longos anteriores, motivos de término e como ficaram os vínculos.</span>
+            <textarea name="relacoes_anteriores"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Filhos, enteados ou pessoas que você cria/cuida</label>
+            <span class="field-hint">Nomes, idades e como é o vínculo com cada um.</span>
+            <textarea name="descendentes_filhos"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Quem compõe sua rede de apoio real hoje?</label>
+            <span class="field-hint">Pessoas em quem você confia plenamente para acolhimento e suporte emocional.</span>
+            <textarea name="rede_apoio_atual"></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 7: Mapa de Vínculos e Traumas Nodais -->
+        <section class="raizes-step" data-step="7">
+          <h2 class="step-heading">7. Mapa de Tensões, Alianças e Segredos</h2>
+          <p class="step-desc">Identificar onde estão as linhas de força e os pontos de dor na teia familiar.</p>
+
+          <div class="callout-box callout-comfort">
+            🌿 <strong>Acolhimento:</strong> Se lembrar de algum fato despertar desconforto ou dor, anote apenas o que se sentir seguro(a) para trazer à sessão. Respeite o seu ritmo.
+          </div>
+
+          <div class="form-group">
+            <label>Onde existem conflitos não resolvidos ou afastamentos definitivos (pessoas que pararam de se falar)?</label>
+            <textarea name="vinculos_cortes_conflitos"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Existem triangulações na sua família?</label>
+            <span class="field-hint">Situações em que alguém é colocado no meio da briga de outros dois (ex: mãe desabafar com o filho sobre o pai, ou você ter que mediar conflitos de parentes).</span>
+            <textarea name="vinculos_triangulacoes"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Grandes acontecimentos ou perdas marcantes na história familiar</label>
+            <span class="field-hint">Mortes prematuras, suicídios, falências súbitas, migrações forçadas, separações traumáticas, acidentes ou diagnósticos graves.</span>
+            <textarea name="eventos_marcantes"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Existem segredos de família ou assuntos que ninguém tinha permissão de tocar abertamente?</label>
+            <textarea name="segredos_familiares"></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 8: Raízes Emocionais -->
+        <section class="raizes-step" data-step="8">
+          <h2 class="step-heading">8. Minhas Raízes Emocionais (Diferenciação)</h2>
+          <p class="step-desc">Este é o núcleo da diferenciação do Self: separar quem você é daquilo que foi depositado em você ao longo das gerações.</p>
+
+          <div class="form-group">
+            <label>1. O que é autenticamente MEU?</label>
+            <span class="field-hint">Escolhas, gostos, valores e direções que você reconhece como legítimos seus, e não por expectativa de terceiros.</span>
+            <textarea name="raiz_e_meu"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>2. O que APRENDI com a minha família?</label>
+            <span class="field-hint">Comportamentos, crenças sobre a vida, dinheiro, amor e conflitos que você absorveu observando os mais velhos.</span>
+            <textarea name="raiz_aprendi"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>3. O que sinto que HERDEI ou carrego como lealdade invisível?</label>
+            <span class="field-hint">Medos, culpas, deveres ou crenças que parecem pertencer a quem veio antes de você.</span>
+            <textarea name="raiz_herdei"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>4. Quais padrões repetitivos você deseja interromper e TRANSFORMAR na terapia?</label>
+            <textarea name="raiz_transformar"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>5. Quais forças, afetos e virtudes da sua linhagem você deseja honrar e PRESERVAR?</label>
+            <textarea name="raiz_recursos_positivos"></textarea>
+          </div>
+        </section>
+
+        <!-- ETAPA 9: Revisão e Envio -->
+        <section class="raizes-step" data-step="9">
+          <h2 class="step-heading">9. Revisão e Envio para a Psicóloga</h2>
+          <p class="step-desc">Parabéns por trilhar suas raízes. Suas respostas já estão compiladas. Escolha a forma mais prática para encaminhar o material à Natalie:</p>
+
+          <!-- OPÇÃO 1: WHATSAPP DIRETO -->
+          <div class="export-card-highlight">
+            <span class="raizes-tag" style="background:#25D366; color:#FFFFFF; border:none;">🌟 Envio Recomendado</span>
+            <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 0.5rem 0 0.35rem; font-size: 1.25rem;">
+              Enviar pelo WhatsApp em 2 Toques
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              Clique no botão verde para copiar o relatório completo. Em seguida, clique em "Abrir WhatsApp da Natalie" e apenas cole na conversa.
+            </p>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <button type="button" class="btn-raizes btn-raizes-whatsapp" id="btnCopyReport">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                1. Copiar Relatório Completo
+              </button>
+
+              <button type="button" class="btn-raizes btn-raizes-primary" id="btnOpenWhatsApp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.92-9.91-9.92z"/>
+                </svg>
+                2. Abrir WhatsApp da Natalie
+              </button>
+            </div>
+
+            <div class="copy-success-box" id="copySuccessBox">
+              ✓ Relatório copiado para a área de transferência com sucesso! Agora basta abrir o WhatsApp e colar (Ctrl+V ou segurar e colar).
+            </div>
+          </div>
+
+          <!-- OPÇÃO 2: E-MAIL E PDF -->
+          <div class="familiar-card" style="margin-top: 1.5rem; background: #FFFFFF;">
+            <h4 style="color: var(--color-brand-wine); margin-bottom: 0.65rem; font-size: 1rem;">Outras formas de envio ou arquivamento:</h4>
+            
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+              <button type="button" class="btn-raizes btn-raizes-secondary" id="btnSendEmail">
+                ✉️ Enviar por E-mail
+              </button>
+              <button type="button" class="btn-raizes btn-raizes-secondary" id="btnPrintPdf">
+                🖨️ Salvar em PDF / Imprimir
+              </button>
+            </div>
+
+            <div style="border-top: 1px solid var(--border-soft); padding-top: 1rem;">
+              <label for="exportFormatSelect" style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">
+                Baixar arquivo no aparelho:
+              </label>
+              <div style="display: flex; gap: 0.65rem; align-items: center; max-width: 420px;">
+                <select id="exportFormatSelect" style="font-size: 0.875rem; padding: 0.5rem 0.75rem;">
+                  <option value="txt">Documento de Texto (.TXT)</option>
+                  <option value="json">Arquivo Clínico Estruturado (.JSON)</option>
+                </select>
+                <button type="button" class="btn-raizes btn-raizes-secondary" id="btnDownloadRawFile" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                  Baixar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <a href="index.html" class="nav-item-link" style="font-size: 0.875rem; color: var(--text-muted);">
+              ← Voltar ao site principal de Natalie Thedim
+            </a>
+            <button type="button" id="btnClearDraft" class="btn-remove-familiar" style="border-radius: var(--radius-sm); padding: 0.5rem 0.85rem;">
+              🗑️ Limpar rascunho deste aparelho
+            </button>
+          </div>
+        </section>
+
+      </form>
+
+      <!-- BOTÕES DE NAVEGAÇÃO ENTRE ETAPAS -->
+      <div class="raizes-actions">
+        <button type="button" class="btn-raizes btn-raizes-secondary" id="btnPrevStep">
+          ← Voltar etapa
+        </button>
+        <button type="button" class="btn-raizes btn-raizes-primary" id="btnNextStep">
+          Próxima etapa →
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- RODAPÉ DO SITE -->
+  <footer style="background: var(--bg-surface); border-top: 1px solid var(--border-soft); padding: 3rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.875rem;">
+    <div class="container">
+      <p style="font-weight: 600; color: var(--color-brand-wine); margin-bottom: 0.25rem;">
+        Natalie Rodrigues Thedim Silvado Camardella · CRP 05/45482
+      </p>
+      <p style="margin-bottom: 0.75rem;">
+        Psicóloga Clínica · Formada pela PUC-Rio · Atendimento Online e Presencial no Rio de Janeiro
+      </p>
+      <p style="font-size: 0.8125rem; color: var(--text-subtle);">
+        RAÍZES — Minha história, meus vínculos · Todos os direitos reservados.
+      </p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT DE OPERAÇÃO CLIENT-SIDE -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Dados de contato da psicóloga Natalie Thedim
+      const CLINICA_CONFIG = {
+        whatsapp: '5521995160968', // WhatsApp oficial da Natalie
+        email: 'psicologa.nataliethedim@gmail.com',
+        psicologaNome: 'Natalie Thedim Silvado (CRP 05/45482)',
+        storageKey: 'RAIZES_NATALIE_DRAFT_V3'
+      };
+
+      const form = document.getElementById('raizesForm');
+      const steps = Array.from(document.querySelectorAll('.raizes-step'));
+      const progressBar = document.getElementById('progressBar');
+      const stepCounter = document.getElementById('stepCounter');
+      const saveBadge = document.getElementById('saveBadge');
+      const btnPrev = document.getElementById('btnPrevStep');
+      const btnNext = document.getElementById('btnNextStep');
+
+      let currentStepIndex = 0;
+      const totalSteps = steps.length;
+
+      // Data de preenchimento automática caso vazia
+      const dataField = document.getElementById('preenchimento_data');
+      if (dataField && !dataField.value) {
+        dataField.value = new Date().toISOString().slice(0, 10);
+      }
+
+      // Função de atualização de etapa
+      function updateStepView() {
+        steps.forEach((step, idx) => {
+          step.classList.toggle('is-active', idx === currentStepIndex);
+        });
+
+        const progressPercent = Math.round(((currentStepIndex + 1) / totalSteps) * 100);
+        progressBar.style.width = progressPercent + '%';
+        stepCounter.textContent = `Etapa ${currentStepIndex + 1} de ${totalSteps}`;
+
+        // Controle dos botões
+        btnPrev.style.visibility = currentStepIndex === 0 ? 'hidden' : 'visible';
+        
+        if (currentStepIndex === totalSteps - 1) {
+          btnNext.style.display = 'none';
+        } else {
+          btnNext.style.display = 'inline-flex';
+          btnNext.textContent = 'Próxima etapa →';
+        }
+
+        window.scrollTo({ top: document.querySelector('.raizes-panel').offsetTop - 20, behavior: 'smooth' });
+      }
+
+      btnPrev.addEventListener('click', () => {
+        if (currentStepIndex > 0) {
+          currentStepIndex--;
+          updateStepView();
+        }
+      });
+
+      btnNext.addEventListener('click', () => {
+        if (currentStepIndex < totalSteps - 1) {
+          // Validação suave de campos required na etapa atual
+          const currentStepEl = steps[currentStepIndex];
+          const requiredFields = currentStepEl.querySelectorAll('[required]');
+          for (let f of requiredFields) {
+            if (!f.reportValidity()) return;
+          }
+
+          currentStepIndex++;
+          updateStepView();
+          saveToLocalStorage();
+        }
+      });
+
+      // ADICIONADOR DINÂMICO DE FAMILIARES (TIOS, IRMÃOS)
+      let familiarCounters = {
+        container_paterna_filhos: 0,
+        container_materna_filhos: 0,
+        container_irmaos: 0
+      };
+
+      function createFamiliarCard(containerId, tipo, existingValues = {}) {
+        familiarCounters[containerId] = (familiarCounters[containerId] || 0) + 1;
+        const count = familiarCounters[containerId];
+        const cardId = `${containerId}_card_${count}`;
+
+        const card = document.createElement('div');
+        card.className = 'familiar-card';
+        card.dataset.cardId = cardId;
+        card.dataset.container = containerId;
+
+        let titleText = 'Familiar';
+        let fieldsHtml = '';
+
+        if (tipo === 'irmao') {
+          titleText = `Irmão / Irmã ${count}`;
+          fieldsHtml = `
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" name="${cardId}_nome" value="${existingValues.nome || ''}" />
+              </div>
+              <div class="form-group">
+                <label>Idade ou ano de nascimento</label>
+                <input type="text" name="${cardId}_idade" value="${existingValues.idade || ''}" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Grau de parentesco</label>
+              <select name="${cardId}_parentesco">
+                <option value="Irmão(ã) biológico (mesmo pai e mãe)">Irmão(ã) biológico (mesmo pai e mãe)</option>
+                <option value="Meio-irmão(ã) paterno(a)">Meio-irmão(ã) paterno(a)</option>
+                <option value="Meio-irmão(ã) materno(a)">Meio-irmão(ã) materno(a)</option>
+                <option value="Irmão(ã) por adoção">Irmão(ã) por adoção</option>
+                <option value="Irmão(ã) socioafetivo">Irmão(ã) socioafetivo</option>
+                <option value="Perda gestacional / natimorto">Perda gestacional / natimorto</option>
+                <option value="Outro vínculo">Outro vínculo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Como é ou era o vínculo com esta pessoa?</label>
+              <textarea name="${cardId}_vinculo">${existingValues.vinculo || ''}</textarea>
+            </div>
+          `;
+        } else {
+          const side = tipo === 'tio_paterno' ? 'Tio(a) Paterno(a)' : 'Tio(a) Materno(a)';
+          titleText = `${side} ${count}`;
+          fieldsHtml = `
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" name="${cardId}_nome" value="${existingValues.nome || ''}" />
+              </div>
+              <div class="form-group">
+                <label>Idade ou idade ao falecer</label>
+                <input type="text" name="${cardId}_idade" value="${existingValues.idade || ''}" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Casamentos, parceiros(as) e filhos que teve:</label>
+              <textarea name="${cardId}_familia">${existingValues.familia || ''}</textarea>
+            </div>
+            <div class="form-group">
+              <label>Relação com os pais e fatos marcantes da vida:</label>
+              <textarea name="${cardId}_historico">${existingValues.historico || ''}</textarea>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="familiar-card-header">
+            <span class="familiar-card-title">${titleText}</span>
+            <button type="button" class="btn-remove-familiar" onclick="this.closest('.familiar-card').remove(); window.raizesSave();">
+              Remover
+            </button>
+          </div>
+          ${fieldsHtml}
+        `;
+
+        document.getElementById(containerId).appendChild(card);
+        if (existingValues.parentesco) {
+          const sel = card.querySelector(`select[name="${cardId}_parentesco"]`);
+          if (sel) sel.value = existingValues.parentesco;
+        }
+      }
+
+      // Delegação para botões de adicionar familiar
+      document.querySelectorAll('.btn-add-familiar').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          const tipo = btn.dataset.tipo;
+          createFamiliarCard(target, tipo);
+          saveToLocalStorage();
+        });
+      });
+
+      // SALVAMENTO AUTOMÁTICO EM LOCALSTORAGE
+      let saveTimeout;
+      function saveToLocalStorage() {
+        const formData = new FormData(form);
+        const serialized = {};
+        for (let [key, val] of formData.entries()) {
+          serialized[key] = val;
+        }
+
+        // Salvar também a estrutura dos cards dinâmicos
+        const dynamicCards = [];
+        document.querySelectorAll('.familiar-card').forEach(card => {
+          dynamicCards.push({
+            container: card.dataset.container,
+            cardId: card.dataset.cardId,
+            tipo: card.dataset.container.includes('irmaos') ? 'irmao' : (card.dataset.container.includes('paterna') ? 'tio_paterno' : 'tio_materno')
+          });
+        });
+
+        const fullDraft = {
+          timestamp: new Date().toISOString(),
+          stepIndex: currentStepIndex,
+          dynamicCards,
+          fields: serialized
+        };
+
+        try {
+          localStorage.setItem(CLINICA_CONFIG.storageKey, JSON.stringify(fullDraft));
+          saveBadge.textContent = '✓ Rascunho salvo no aparelho';
+          saveBadge.style.opacity = '1';
+        } catch (e) {
+          console.warn('Não foi possível gravar no localStorage', e);
+        }
+      }
+
+      window.raizesSave = saveToLocalStorage;
+
+      // Evento de digitação com debounce
+      form.addEventListener('input', () => {
+        saveBadge.textContent = 'Gravando...';
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveToLocalStorage, 400);
+      });
+      form.addEventListener('change', saveToLocalStorage);
+
+      // RECUPERAÇÃO DO RASCUNHO SALVO
+      function loadSavedDraft() {
+        const raw = localStorage.getItem(CLINICA_CONFIG.storageKey);
+        if (!raw) {
+          // Criar ao menos 1 card inicial para cada grupo dinâmico
+          createFamiliarCard('container_paterna_filhos', 'tio_paterno');
+          createFamiliarCard('container_materna_filhos', 'tio_materno');
+          createFamiliarCard('container_irmaos', 'irmao');
+          return;
+        }
+
+        try {
+          const draft = JSON.parse(raw);
+          // Recriar cards dinâmicos
+          if (draft.dynamicCards && draft.dynamicCards.length > 0) {
+            draft.dynamicCards.forEach(c => {
+              createFamiliarCard(c.container, c.tipo);
+            });
+          } else {
+            createFamiliarCard('container_paterna_filhos', 'tio_paterno');
+            createFamiliarCard('container_materna_filhos', 'tio_materno');
+            createFamiliarCard('container_irmaos', 'irmao');
+          }
+
+          // Preencher campos
+          setTimeout(() => {
+            if (draft.fields) {
+              Object.entries(draft.fields).forEach(([k, val]) => {
+                const el = form.querySelector(`[name="${k}"]`);
+                if (el) {
+                  if (el.type === 'checkbox') el.checked = !!val;
+                  else el.value = val;
+                }
+              });
+            }
+          }, 60);
+
+        } catch (e) {
+          console.error('Erro ao ler rascunho anterior', e);
+        }
+      }
+
+      // GERADOR DE RELATÓRIO CLÍNICO EM TEXTO ESTRUTURADO
+      function compileClinicalReport() {
+        const paciente = form.querySelector('[name="paciente_nome"]')?.value || 'Paciente';
+        const dataPreench = form.querySelector('[name="preenchimento_data"]')?.value || new Date().toLocaleDateString('pt-BR');
+        const objetivo = form.querySelector('[name="objetivo"]')?.value || '(Não informado)';
+
+        let txt = `======================================================\n`;
+        txt += `   RELATÓRIO CLÍNICO RAÍZES — GENOGRAMA & VÍNCULOS    \n`;
+        txt += `======================================================\n\n`;
+        txt += `PACIENTE: ${paciente}\n`;
+        txt += `DATA DE PREENCHIMENTO: ${dataPreench}\n`;
+        txt += `OBJETIVO DA BUSCA: ${objetivo}\n`;
+        txt += `PSICÓLOGA RESPONSÁVEL: ${CLINICA_CONFIG.psicologaNome}\n\n`;
+
+        steps.forEach((step, index) => {
+          if (index === 0 || index === steps.length - 1) return; // Pula boas-vindas e tela final
+          const title = step.querySelector('.step-heading')?.textContent || `Etapa ${index + 1}`;
+          txt += `------------------------------------------------------\n`;
+          txt += `[${title.toUpperCase()}]\n`;
+          txt += `------------------------------------------------------\n`;
+
+          const inputs = step.querySelectorAll('input:not([type="checkbox"]):not([type="date"]), textarea, select');
+          inputs.forEach(input => {
+            const val = input.value?.trim();
+            if (val) {
+              const label = input.closest('.form-group')?.querySelector('label')?.childNodes[0]?.textContent?.trim() || input.name;
+              txt += `• ${label}\n  R: ${val}\n\n`;
+            }
+          });
+        });
+
+        txt += `======================================================\n`;
+        txt += `Fim do levantamento. Material confidencial protegido.\n`;
+        return txt;
+      }
+
+      // 1. COPIAR RELATÓRIO COMPLETO
+      const btnCopy = document.getElementById('btnCopyReport');
+      const copyBox = document.getElementById('copySuccessBox');
+
+      btnCopy.addEventListener('click', () => {
+        const report = compileClinicalReport();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(report).then(() => {
+            copyBox.style.display = 'block';
+            setTimeout(() => { copyBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+          }).catch(fallbackCopy);
+        } else {
+          fallbackCopy();
+        }
+
+        function fallbackCopy() {
+          const ta = document.createElement('textarea');
+          ta.value = report;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+          copyBox.style.display = 'block';
+        }
+      });
+
+      // 2. ABRIR WHATSAPP DA DRA. NATALIE
+      const btnZap = document.getElementById('btnOpenWhatsApp');
+      btnZap.addEventListener('click', () => {
+        const paciente = form.querySelector('[name="paciente_nome"]')?.value || 'Paciente';
+        const msgIntro = encodeURIComponent(
+          `Olá Natalie, tudo bem? Aqui é ${paciente}.\n\nPreenchi o formulário RAÍZES da minha história familiar e copiei o relatório para te enviar aqui.`
+        );
+        window.open(`https://wa.me/${CLINICA_CONFIG.whatsapp}?text=${msgIntro}`, '_blank');
+      });
+
+      // 3. ENVIAR POR E-MAIL
+      const btnEmail = document.getElementById('btnSendEmail');
+      btnEmail.addEventListener('click', () => {
+        const paciente = form.querySelector('[name="paciente_nome"]')?.value || 'Paciente';
+        const subject = encodeURIComponent(`Relatório RAÍZES — ${paciente}`);
+        const body = encodeURIComponent(compileClinicalReport());
+        window.location.href = `mailto:${CLINICA_CONFIG.email}?subject=${subject}&body=${body}`;
+      });
+
+      // 4. SALVAR EM PDF / IMPRIMIR
+      const btnPdf = document.getElementById('btnPrintPdf');
+      btnPdf.addEventListener('click', () => {
+        window.print();
+      });
+
+      // 5. BAIXAR ARQUIVO TXT OU JSON
+      const btnDownload = document.getElementById('btnDownloadRawFile');
+      btnDownload.addEventListener('click', () => {
+        const format = document.getElementById('exportFormatSelect').value;
+        const paciente = (form.querySelector('[name="paciente_nome"]')?.value || 'Paciente').replace(/\s+/g, '_');
+        const fileName = `RAIZES_${paciente}_${new Date().toISOString().slice(0, 10)}`;
+
+        if (format === 'json') {
+          const raw = localStorage.getItem(CLINICA_CONFIG.storageKey) || '{}';
+          const blob = new Blob([raw], { type: 'application/json' });
+          triggerDownload(blob, `${fileName}.json`);
+        } else {
+          const text = compileClinicalReport();
+          const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+          triggerDownload(blob, `${fileName}.txt`);
+        }
+      });
+
+      function triggerDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      // LIMPAR RASCUNHO
+      const btnClear = document.getElementById('btnClearDraft');
+      btnClear.addEventListener('click', () => {
+        if (confirm('Atenção: isto apagará todas as respostas salvas neste aparelho. Deseja reiniciar?')) {
+          localStorage.removeItem(CLINICA_CONFIG.storageKey);
+          location.reload();
+        }
+      });
+
+      // MENU MOBILE TOGGLE
+      const btnToggleNav = document.getElementById('btnToggleNav');
+      const mainNav = document.getElementById('mainNav');
+      if (btnToggleNav && mainNav) {
+        btnToggleNav.addEventListener('click', () => {
+          mainNav.classList.toggle('is-open');
+        });
+      }
+
+      // INICIALIZAÇÃO
+      loadSavedDraft();
+      updateStepView();
+
+    })();
+  </script>
+</body>
+</html>

@@ -738,3 +738,16 @@ img { max-width: 100%; display: block; }
   color: var(--text-main);
 }
 .termometro-resultado a { color: var(--color-brand-wine); font-weight: 700; text-decoration: underline; }
+
+/* Blindagem V2 Pro: tabular-nums e ocultacao de scrollbars horizontais em abas/filtros */
+table, th, td, .preco, .valor, .numero, .stat-number, .price {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+.tabs, .filter-bar, .nav-tabs, [role='tablist'] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tabs::-webkit-scrollbar, .filter-bar::-webkit-scrollbar, .nav-tabs::-webkit-scrollbar, [role='tablist']::-webkit-scrollbar {
+  display: none;
+}
