@@ -52,13 +52,75 @@ CREATE TABLE IF NOT EXISTS site_content (
 );
 CREATE INDEX IF NOT EXISTS idx_site_content_section ON site_content (section_name);
 
+-- Tabela de Newsletter (Inscrições)
+CREATE TABLE IF NOT EXISTS newsletter_inscritos (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  nome TEXT,
+  origem TEXT DEFAULT 'site_principal',
+  criado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Tabela de Temas da Biblioteca (Personalizáveis no Admin)
+CREATE TABLE IF NOT EXISTS biblioteca_temas (
+  id TEXT PRIMARY KEY,
+  tema_chave TEXT NOT NULL UNIQUE,
+  pilar TEXT NOT NULL,
+  titulo TEXT NOT NULL,
+  texto TEXT NOT NULL,
+  perguntas TEXT NOT NULL,
+  ordem INTEGER DEFAULT 0,
+  atualizado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Tabela de Mensagens e Dúvidas por Tema da Biblioteca
+CREATE TABLE IF NOT EXISTS biblioteca_mensagens (
+  id TEXT PRIMARY KEY,
+  tema_chave TEXT NOT NULL,
+  nome TEXT,
+  email TEXT,
+  whatsapp TEXT,
+  mensagem TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pendente',
+  resposta TEXT,
+  criado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Tabela de Filmes Recomendados (Clube do Filme)
+CREATE TABLE IF NOT EXISTS filmes (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  direcao_ano TEXT NOT NULL,
+  badge TEXT DEFAULT 'Destaque',
+  sinopse TEXT NOT NULL,
+  perguntas TEXT NOT NULL,
+  reflexao TEXT NOT NULL,
+  ordem INTEGER DEFAULT 0,
+  criado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- Tabela de Livros Recomendados (Clube do Livro)
+CREATE TABLE IF NOT EXISTS livros (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  autor_ano TEXT NOT NULL,
+  badge TEXT DEFAULT 'Clássico Sistêmico',
+  sinopse TEXT NOT NULL,
+  licao TEXT NOT NULL,
+  citacao TEXT NOT NULL,
+  ordem INTEGER DEFAULT 0,
+  criado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
 -- Carga inicial (Seed) com valores padrão do projeto da Natalie
 INSERT OR IGNORE INTO site_content (id, section_name, content_text, image_url) VALUES
+  ('sec_nome', 'nome_profissional', 'Natalie Thedim Silvado', NULL),
   ('sec_hero_title', 'hero_title', 'Não se trata de ter razão. Trata-se de compreender relações.', NULL),
   ('sec_hero_sub', 'hero_subtitle', 'Psicoterapia de casal e individual com acolhimento, escuta qualificada e reconstrução do diálogo seguro.', NULL),
   ('sec_sobre_mim', 'sobre_mim', 'Natalie Thedim Silvado Camardella · Psicóloga clínica formada e pós-graduada pela PUC-Rio, com mais de 20 anos de experiência clínica no Rio de Janeiro e atendimento online.', '/clientes/Natalie%20Thedim/foto-natalie-thedim.png'),
   ('sec_crp', 'crp_info', 'CRP 05/45482 (RJ)', NULL),
   ('sec_whatsapp', 'whatsapp_numero', '+5521989020364', NULL),
+  ('sec_email', 'email_contato', 'psicologa@nataliethedim.com.br', NULL),
   ('sec_consultorio', 'endereco_consultorio', 'Consultório no Jardim Botânico, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)', NULL);
 
 -- Atualização garantida do número oficial de atendimento WhatsApp

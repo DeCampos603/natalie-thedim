@@ -367,6 +367,25 @@
         <h4>Perguntas para refletir hoje</h4>
         <ul id="modalBibLista"></ul>
       </div>
+      <!-- Formulário de Dúvida / Mensagem Confidencial por Tema -->
+      <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-soft);">
+        <h4 style="font-family: var(--font-serif); font-size: 1.05rem; color: var(--color-brand-wine); margin-bottom: 0.5rem;">Deixe uma pergunta para Natalie sobre este tema:</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.85rem;">Sua mensagem é 100% confidencial e chega diretamente ao e-mail profissional da psicóloga.</p>
+        
+        <form id="formDuvidaTema" style="display: flex; flex-direction: column; gap: 0.6rem;">
+          <input type="hidden" id="temaIdEnvio" value="" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <input type="text" id="duvidaNome" placeholder="Seu nome" required style="padding: 0.6rem 0.85rem; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); font-size: 0.9rem;" />
+            <input type="email" id="duvidaEmail" placeholder="Seu e-mail" required style="padding: 0.6rem 0.85rem; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); font-size: 0.9rem;" />
+          </div>
+          <textarea id="duvidaTexto" rows="3" placeholder="Qual é a sua dúvida ou situação sobre este tema?" required style="padding: 0.6rem 0.85rem; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); font-size: 0.9rem; resize: vertical;"></textarea>
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <button type="submit" id="btnEnviarDuvida" class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">Enviar Dúvida a Natalie</button>
+            <div id="statusDuvida" style="font-size: 0.85rem; font-weight: 600; display: none;"></div>
+          </div>
+        </form>
+      </div>
+
       <div class="modal-bib-actions">
         <a href="exercicios.html" class="btn-secondary">Fazer exercício prático →</a>
         <a id="modalBibWa" href="https://wa.me/5521989020364" target="_blank" rel="noopener noreferrer" class="btn-primary">Conversar sobre este tema no WhatsApp</a>
@@ -482,6 +501,74 @@
       if (btnFechar) btnFechar.addEventListener('click', fechar);
       modal.addEventListener('click', (e) => { if (e.target === modal) fechar(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fechar(); });
+      // Envio de Dúvida por Tema na Biblioteca
+      const formDuvida = document.getElementById('formDuvidaTema');
+      const statusDuvida = document.getElementById('statusDuvida');
+      const btnEnviarDuvida = document.getElementById('btnEnviarDuvida');
+
+      if (formDuvida) {
+        formDuvida.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const temaId = document.getElementById('temaIdEnvio').value || elTitulo.textContent;
+          const nome = document.getElementById('duvidaNome').value.trim();
+          const email = document.getElementById('duvidaEmail').value.trim();
+          const mensagem = document.getElementById('duvidaTexto').value.trim();
+
+          btnEnviarDuvida.disabled = true;
+          btnEnviarDuvida.textContent = 'Enviando...';
+
+          try {
+            if (window.DB && window.DB.enviarMensagemBiblioteca) {
+              await window.DB.enviarMensagemBiblioteca(temaId, nome, email, mensagem);
+            }
+            statusDuvida.style.display = 'block';
+            statusDuvida.style.color = '#2E7D32';
+            statusDuvida.textContent = '✓ Dúvida enviada com sucesso a Natalie!';
+            formDuvida.reset();
+            setTimeout(() => { statusDuvida.style.display = 'none'; }, 5000);
+          } catch (err) {
+            statusDuvida.style.display = 'block';
+            statusDuvida.style.color = '#C62828';
+            statusDuvida.textContent = 'Erro ao enviar. Tente novamente.';
+          } finally {
+            btnEnviarDuvida.disabled = false;
+            btnEnviarDuvida.textContent = 'Enviar Dúvida a Natalie';
+          }
+        });
+      }
+
+      // Hidratação de Novos Temas cadastrados no Painel Admin
+      if (window.DB && window.DB.obterTemasBiblioteca) {
+        window.DB.obterTemasBiblioteca().then(res => {
+          if (!res || !res.ok || !res.dados || !res.dados.length) return;
+          const gridCasal = document.querySelector('.mock-grid');
+          if (!gridCasal) return;
+
+          res.dados.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'mock-card bib-card';
+            card.setAttribute('data-tema', 'dinamico_' + t.id);
+            card.innerHTML = `
+              <div>
+                <h3>${t.icone || '💬'} ${t.titulo}</h3>
+                <p>${t.resumo || ''}</p>
+              </div>
+              <button type="button" class="bib-btn">Ler síntese clínica →</button>
+            `;
+            card.addEventListener('click', () => {
+              elPilar.textContent = t.categoria || 'Biblioteca Clínica · Natalie Thedim';
+              elTitulo.textContent = t.titulo;
+              elTexto.textContent = t.conteudo || t.resumo;
+              elLista.innerHTML = '<li>Como este tema se manifesta no meu dia a dia?</li><li>O que posso comunicar com mais clareza para transformar esse ciclo?</li>';
+              elWa.href = `https://wa.me/5521989020364?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + t.titulo + '" no site e gostaria de conversar.')}`;
+              document.getElementById('temaIdEnvio').value = t.id;
+              modal.classList.add('is-open');
+              modal.setAttribute('aria-hidden', 'false');
+            });
+            gridCasal.prepend(card);
+          });
+        }).catch(() => {});
+      }
     });
   </script>
 </body>

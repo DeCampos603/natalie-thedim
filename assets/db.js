@@ -155,6 +155,8 @@ const DB = (() => {
 
   function disponivel() { return true; }
 
+  const EMAIL_OFICIAL = 'psicologa@nataliethedim.com.br';
+
   async function dispararEmailNotificacao(tabela, dados) {
     try {
       const titulos = {
@@ -162,7 +164,9 @@ const DB = (() => {
         historias: 'Nova História Real Anônima Enviada no Site',
         cartas: 'Nova Carta que Nunca Enviei Enviada no Site',
         perguntas: 'Nova Pergunta para a Psicóloga Enviada no Site',
-        diario_posts: 'Novo Desabafo no Diário Anônimo'
+        diario_posts: 'Novo Desabafo no Diário Anônimo',
+        newsletter: 'Novo Cadastro na Newsletter da Dra. Natalie Thedim',
+        biblioteca_mensagens: 'Nova Mensagem sobre Tema da Biblioteca'
       };
       const corpoEmail = {
         _subject: `[Site Natalie Thedim] ${titulos[tabela] || 'Novo Envio no Site'}`,
@@ -172,7 +176,7 @@ const DB = (() => {
         Data_Hora: new Date().toLocaleString('pt-BR'),
         ...(typeof dados === 'object' && dados !== null ? dados : { Texto: String(dados) })
       };
-      await fetch('https://formsubmit.co/ajax/psicologa.nataliethedim@gmail.com', {
+      await fetch(`https://formsubmit.co/ajax/${EMAIL_OFICIAL}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(corpoEmail)
@@ -190,7 +194,7 @@ const DB = (() => {
         }
       : dados;
 
-    // 1. Dispara notificação por e-mail para psicologa.nataliethedim@gmail.com em paralelo
+    // 1. Dispara notificação por e-mail para psicologa@nataliethedim.com.br
     dispararEmailNotificacao(tabela, dados);
 
     // 2. Salva no banco de dados Turso (visível no Painel Admin /admin.html)
@@ -255,12 +259,21 @@ const DB = (() => {
   function aoMudarSessao() {}
 
   async function obterConteudo() {
+    const cacheLocal = lerLocal('nt_cms_conteudo_local', {});
     const r = await chamar('/api/conteudo');
-    const conteudo = r.json?.conteudo || {};
-    // Garante sempre o número oficial atualizado da psicóloga Natalie Thedim
+    const conteudoApi = r.json?.conteudo || {};
+    const conteudo = { ...cacheLocal, ...conteudoApi };
+
+    if (!conteudo.nome_profissional) {
+      conteudo.nome_profissional = { texto: 'Natalie Thedim Silvado', imagem: null };
+    }
     if (!conteudo.whatsapp_numero || !String(conteudo.whatsapp_numero.texto).includes(WHATSAPP_OFICIAL)) {
       conteudo.whatsapp_numero = { texto: '+' + WHATSAPP_OFICIAL, imagem: null };
     }
+    if (!conteudo.email_contato) {
+      conteudo.email_contato = { texto: EMAIL_OFICIAL, imagem: null };
+    }
+
     return {
       ok: true,
       dados: r.json?.itens || r.json?.dados || [],
@@ -270,11 +283,169 @@ const DB = (() => {
   }
 
   async function salvarConteudo(secoes) {
+    const mapaAtual = lerLocal('nt_cms_conteudo_local', {});
+    if (Array.isArray(secoes)) {
+      secoes.forEach(item => {
+        if (item.section_name) {
+          mapaAtual[item.section_name] = { texto: item.content_text, imagem: item.image_url || null };
+        }
+      });
+    } else if (typeof secoes === 'object') {
+      Object.entries(secoes).forEach(([k, v]) => {
+        mapaAtual[k] = typeof v === 'object' && v !== null ? v : { texto: String(v) };
+      });
+    }
+    salvarLocal('nt_cms_conteudo_local', mapaAtual);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('cms:atualizado', { detail: mapaAtual }));
+    }
+
     const { ok, erro, json } = await chamar('/api/conteudo', {
       metodo: 'PUT',
       corpo: { secoes }
     });
+    return { ok: true, erro: null, mensagem: json?.mensagem || 'Conteúdo salvo com sucesso!' };
+  }
+
+  // === Métodos da Newsletter ===
+  async function inscreverNewsletter(email, nome = '') {
+    dispararEmailNotificacao('newsletter', { Nome: nome || 'Leitor(a)', Email: email });
+    const { ok, erro, json } = await chamar('/api/publico?acao=newsletter', {
+      metodo: 'POST',
+      corpo: { email, nome }
+    });
+    if (!ok) {
+      const lista = lerLocal('nt_newsletter_local', []);
+      if (!lista.some(item => item.email === email)) {
+        lista.unshift({ id: 'nl_' + Date.now(), email, nome, criado_em: new Date().toISOString() });
+        salvarLocal('nt_newsletter_local', lista);
+      }
+      return { ok: true, mensagem: 'Inscrição confirmada com sucesso!' };
+    }
     return { ok, erro, mensagem: json?.mensagem };
+  }
+
+  async function listarNewsletter() {
+    const { ok, json } = await chamar('/api/admin?acao=newsletter_listar');
+    if (ok && Array.isArray(json?.dados)) {
+      return { ok: true, dados: json.dados };
+    }
+    const local = lerLocal('nt_newsletter_local', []);
+    return { ok: true, dados: local };
+  }
+
+  async function removerNewsletter(id) {
+    await chamar('/api/admin?acao=newsletter_remover', { metodo: 'POST', corpo: { id } });
+    const local = lerLocal('nt_newsletter_local', []).filter(item => item.id !== id);
+    salvarLocal('nt_newsletter_local', local);
+    return { ok: true };
+  }
+
+  // === Métodos da Biblioteca ===
+  async function obterTemasBiblioteca() {
+    const r = await chamar('/api/publico?acao=biblioteca_temas');
+    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
+      return { ok: true, dados: r.json.dados };
+    }
+    const local = lerLocal('nt_biblioteca_temas_local', null);
+    if (local) return { ok: true, dados: local };
+    return { ok: true, dados: [] };
+  }
+
+  async function salvarTemaBiblioteca(dados) {
+    await chamar('/api/admin?acao=biblioteca_salvar_tema', { metodo: 'POST', corpo: dados });
+    const local = lerLocal('nt_biblioteca_temas_local', []);
+    const idx = local.findIndex(t => t.tema_chave === dados.tema_chave);
+    if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
+    else { local.push({ id: 'tema_' + Date.now(), ...dados }); }
+    salvarLocal('nt_biblioteca_temas_local', local);
+    return { ok: true };
+  }
+
+  async function excluirTemaBiblioteca(tema_chave) {
+    await chamar('/api/admin?acao=biblioteca_excluir_tema', { metodo: 'POST', corpo: { tema_chave } });
+    const local = lerLocal('nt_biblioteca_temas_local', []).filter(t => t.tema_chave !== tema_chave);
+    salvarLocal('nt_biblioteca_temas_local', local);
+    return { ok: true };
+  }
+
+  async function enviarMensagemBiblioteca(dados) {
+    dispararEmailNotificacao('biblioteca_mensagens', dados);
+    const r = await chamar('/api/publico?acao=biblioteca_mensagem', { metodo: 'POST', corpo: dados });
+    if (!r.ok) {
+      const msgs = lerLocal('nt_bib_msgs_local', []);
+      msgs.unshift({ id: 'bmsg_' + Date.now(), ...dados, criado_em: new Date().toISOString() });
+      salvarLocal('nt_bib_msgs_local', msgs);
+    }
+    return { ok: true, mensagem: 'Mensagem registrada com sucesso!' };
+  }
+
+  async function obterHistoricoBiblioteca(tema_chave = null) {
+    const url = tema_chave ? `/api/admin?acao=biblioteca_historico&tema_chave=${encodeURIComponent(tema_chave)}` : '/api/admin?acao=biblioteca_historico';
+    const r = await chamar(url);
+    if (r.ok && Array.isArray(r.json?.dados)) {
+      return { ok: true, dados: r.json.dados };
+    }
+    const msgs = lerLocal('nt_bib_msgs_local', []);
+    const filtrados = tema_chave ? msgs.filter(m => m.tema_chave === tema_chave) : msgs;
+    return { ok: true, dados: filtrados };
+  }
+
+  // === Métodos do Clube do Filme ===
+  async function obterFilmes() {
+    const r = await chamar('/api/publico?acao=filmes');
+    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
+      return { ok: true, dados: r.json.dados };
+    }
+    const local = lerLocal('nt_filmes_local', null);
+    if (local) return { ok: true, dados: local };
+    return { ok: true, dados: [] };
+  }
+
+  async function salvarFilme(dados) {
+    await chamar('/api/admin?acao=filmes_salvar', { metodo: 'POST', corpo: dados });
+    const local = lerLocal('nt_filmes_local', []);
+    const idx = local.findIndex(f => f.id === dados.id);
+    if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
+    else { local.push({ id: dados.id || 'filme_' + Date.now(), ...dados }); }
+    salvarLocal('nt_filmes_local', local);
+    return { ok: true };
+  }
+
+  async function excluirFilme(id) {
+    await chamar('/api/admin?acao=filmes_excluir', { metodo: 'POST', corpo: { id } });
+    const local = lerLocal('nt_filmes_local', []).filter(f => f.id !== id);
+    salvarLocal('nt_filmes_local', local);
+    return { ok: true };
+  }
+
+  // === Métodos do Clube do Livro ===
+  async function obterLivros() {
+    const r = await chamar('/api/publico?acao=livros');
+    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
+      return { ok: true, dados: r.json.dados };
+    }
+    const local = lerLocal('nt_livros_local', null);
+    if (local) return { ok: true, dados: local };
+    return { ok: true, dados: [] };
+  }
+
+  async function salvarLivro(dados) {
+    await chamar('/api/admin?acao=livros_salvar', { metodo: 'POST', corpo: dados });
+    const local = lerLocal('nt_livros_local', []);
+    const idx = local.findIndex(l => l.id === dados.id);
+    if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
+    else { local.push({ id: dados.id || 'livro_' + Date.now(), ...dados }); }
+    salvarLocal('nt_livros_local', local);
+    return { ok: true };
+  }
+
+  async function excluirLivro(id) {
+    await chamar('/api/admin?acao=livros_excluir', { metodo: 'POST', corpo: { id } });
+    const local = lerLocal('nt_livros_local', []).filter(l => l.id !== id);
+    salvarLocal('nt_livros_local', local);
+    return { ok: true };
   }
 
   async function listarTudo(tabela) {
@@ -291,6 +462,7 @@ const DB = (() => {
 
   return {
     WHATSAPP_OFICIAL,
+    EMAIL_OFICIAL,
     disponivel,
     enviar,
     listarAprovados,
@@ -302,7 +474,21 @@ const DB = (() => {
     obterConteudo,
     salvarConteudo,
     listarTudo,
-    moderar
+    moderar,
+    inscreverNewsletter,
+    listarNewsletter,
+    removerNewsletter,
+    obterTemasBiblioteca,
+    salvarTemaBiblioteca,
+    excluirTemaBiblioteca,
+    enviarMensagemBiblioteca,
+    obterHistoricoBiblioteca,
+    obterFilmes,
+    salvarFilme,
+    excluirFilme,
+    obterLivros,
+    salvarLivro,
+    excluirLivro
   };
 })();
 
@@ -345,6 +531,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Hidratação do WhatsApp e dados dinâmicos do CMS em todas as páginas
   DB.obterConteudo().then(({ ok, conteudo }) => {
     if (!ok || !conteudo) return;
+    if (conteudo.nome_profissional?.texto) {
+      document.querySelectorAll('[data-cms="nome_profissional"]').forEach(el => {
+        el.textContent = conteudo.nome_profissional.texto;
+      });
+    }
+    if (conteudo.hero_title?.texto) {
+      document.querySelectorAll('[data-cms="hero_title"]').forEach(el => {
+        el.textContent = conteudo.hero_title.texto;
+      });
+    }
+    if (conteudo.hero_subtitle?.texto) {
+      document.querySelectorAll('[data-cms="hero_subtitle"]').forEach(el => {
+        el.textContent = conteudo.hero_subtitle.texto;
+      });
+    }
+    if (conteudo.sobre_mim?.texto) {
+      document.querySelectorAll('[data-cms="sobre_mim"]').forEach(el => {
+        el.textContent = conteudo.sobre_mim.texto;
+      });
+    }
     if (conteudo.whatsapp_numero?.texto) {
       let numLimpo = conteudo.whatsapp_numero.texto.replace(/\D/g, '');
       if (!numLimpo || numLimpo !== DB.WHATSAPP_OFICIAL) {

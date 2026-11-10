@@ -356,21 +356,50 @@
       .btn-add-familiar { width: 100%; justify-content: center; }
     }
 
-    /* Estilos para Impressão e PDF Clínico */
+    /* Estilos para Impressão e PDF Clínico Multi-Página Estruturado */
+    #printReportContainer { display: none; }
     @media print {
-      body { background: #FFFFFF; color: #111; font-size: 12pt; }
-      .site-header, .raizes-hero, .raizes-actions, .raizes-progress-wrapper, .btn-add-familiar, .btn-remove-familiar, .footer-note, #btnToggleNav {
+      body { background: #FFFFFF !important; color: #111111 !important; font-size: 11pt; line-height: 1.5; }
+      .site-header, .revista-header, .raizes-hero, .raizes-actions, .raizes-progress-wrapper, .btn-add-familiar, .btn-remove-familiar, .footer-note, #btnToggleNav, .raizes-container, .revista-footer, footer {
         display: none !important;
       }
-      .raizes-container { margin: 0; padding: 0; max-width: 100%; }
-      .raizes-panel { border: none; box-shadow: none; padding: 0; }
-      .raizes-step { display: block !important; margin-bottom: 2rem; page-break-inside: avoid; }
-      .print-header { display: block !important; margin-bottom: 2rem; border-bottom: 2px solid #5B1826; padding-bottom: 1rem; }
-      .print-field { margin-bottom: 0.75rem; page-break-inside: avoid; }
-      .print-q { font-weight: bold; color: #5B1826; font-size: 11pt; }
-      .print-a { margin-top: 2px; white-space: pre-wrap; font-size: 10.5pt; color: #222; }
+      #printReportContainer {
+        display: block !important;
+        margin: 0 !important;
+        padding: 1.5cm 1.5cm !important;
+        background: #FFFFFF !important;
+      }
+      .print-section {
+        margin-bottom: 1.5rem;
+        page-break-inside: avoid;
+      }
+      .print-section-title {
+        color: #5B1826;
+        font-family: 'Lora', Georgia, serif;
+        font-size: 13pt;
+        border-bottom: 1.5px solid #5B1826;
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .print-item {
+        margin-bottom: 8px;
+        page-break-inside: avoid;
+      }
+      .print-label {
+        font-weight: 700;
+        color: #5B1826;
+        font-size: 10pt;
+      }
+      .print-val {
+        color: #222222;
+        font-size: 10pt;
+        margin-top: 2px;
+        white-space: pre-wrap;
+        padding-left: 8px;
+      }
     }
-    .print-header { display: none; }
   </style>
 </head>
 <body>
@@ -891,7 +920,7 @@
       // Dados de contato da psicóloga Natalie Thedim
       const CLINICA_CONFIG = {
         whatsapp: '5521989020364', // WhatsApp oficial da Natalie
-        email: 'psicologa.nataliethedim@gmail.com',
+        email: 'psicologa@nataliethedim.com.br',
         psicologaNome: 'Natalie Thedim Silvado (CRP 05/45482)',
         storageKey: 'RAIZES_NATALIE_DRAFT_V3'
       };
@@ -1211,14 +1240,34 @@
         }
       });
 
-      // 2. ABRIR WHATSAPP DA DRA. NATALIE
+      // 2. ABRIR WHATSAPP DA DRA. NATALIE COM CONTEÚDO ESTRUTURADO COLADO
       const btnZap = document.getElementById('btnOpenWhatsApp');
       btnZap.addEventListener('click', () => {
         const paciente = form.querySelector('[name="paciente_nome"]')?.value || 'Paciente';
-        const msgIntro = encodeURIComponent(
-          `Olá Natalie, tudo bem? Aqui é ${paciente}.\n\nPreenchi o formulário RAÍZES da minha história familiar e copiei o relatório para te enviar aqui.`
-        );
-        window.open(`https://wa.me/${CLINICA_CONFIG.whatsapp}?text=${msgIntro}`, '_blank');
+        const report = compileClinicalReport();
+        
+        // Copia relatório integral para a área de transferência
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(report).catch(() => {});
+        }
+
+        // Prepara texto para envio no WhatsApp (resumo clínico com os dados principais)
+        const objetivo = form.querySelector('[name="objetivo"]')?.value || 'Terapia de casal / autoconhecimento';
+        const sinteseFamiliar = form.querySelector('[name="infancia_clima"]')?.value || 'Mapa familiar preenchido';
+        
+        let msg = `Olá Natalie, tudo bem? Aqui é ${paciente}.\n\n`;
+        msg += `Acabei de preencher o formulário *RAÍZES — Genograma & Vínculos Familiares* no seu site.\n\n`;
+        msg += `📌 *Objetivo:* ${objetivo}\n`;
+        msg += `🌿 *Resumo do Clima Familiar:* ${sinteseFamiliar}\n\n`;
+        msg += `📋 *Relatório Clínico:*\n${report}\n\n`;
+        msg += `(O relatório completo também foi copiado para a minha área de transferência).`;
+
+        // URL encode com salvaguarda de tamanho máximo para navegadores móveis (~2200 caracteres)
+        if (msg.length > 2100) {
+          msg = msg.slice(0, 2050) + "\n\n[... Relatório integral copiado na área de transferência para colar aqui ...]";
+        }
+
+        window.open(`https://wa.me/${CLINICA_CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
       });
 
       // 3. ENVIAR POR E-MAIL
@@ -1230,9 +1279,61 @@
         window.location.href = `mailto:${CLINICA_CONFIG.email}?subject=${subject}&body=${body}`;
       });
 
-      // 4. SALVAR EM PDF / IMPRIMIR
+      // 4. SALVAR EM PDF / IMPRIMIR (MULTI-PÁGINAS ESTRUTURADO)
       const btnPdf = document.getElementById('btnPrintPdf');
       btnPdf.addEventListener('click', () => {
+        const container = document.getElementById('printReportContainer');
+        const paciente = form.querySelector('[name="paciente_nome"]')?.value || 'Paciente';
+        const dataPreench = form.querySelector('[name="preenchimento_data"]')?.value || new Date().toLocaleDateString('pt-BR');
+        const objetivo = form.querySelector('[name="objetivo"]')?.value || '(Não informado)';
+
+        let htmlReport = `
+          <div style="border-bottom: 2px solid #5B1826; padding-bottom: 12px; margin-bottom: 20px;">
+            <h1 style="color:#5B1826; font-family:'Lora', Georgia, serif; font-size:20pt; margin:0 0 6px;">RAÍZES — Genograma e Vínculos Familiares</h1>
+            <div style="font-size:10pt; color:#666;">Relatório Clínico de Levantamento Transgeracional · Natalie Thedim (CRP 05/45482)</div>
+            <div style="display:flex; justify-content:space-between; margin-top:12px; font-size:10.5pt; font-weight:600; color:#333;">
+              <span><strong>Paciente:</strong> ${paciente}</span>
+              <span><strong>Data:</strong> ${dataPreench}</span>
+            </div>
+            <div style="font-size:10pt; color:#444; margin-top:4px;"><strong>Objetivo Clínico:</strong> ${objetivo}</div>
+          </div>
+        `;
+
+        steps.forEach((step, idx) => {
+          if (idx === 0 || idx === steps.length - 1) return;
+          const title = step.querySelector('.step-heading')?.textContent || `Etapa ${idx + 1}`;
+          const inputs = step.querySelectorAll('input:not([type="checkbox"]):not([type="date"]), textarea, select');
+          
+          let hasContent = false;
+          let stepHtml = `<div class="print-section"><h2 class="print-section-title">${title}</h2>`;
+          
+          inputs.forEach(input => {
+            const val = input.value?.trim();
+            if (val) {
+              hasContent = true;
+              const label = input.closest('.form-group')?.querySelector('label')?.childNodes[0]?.textContent?.trim() || input.name;
+              stepHtml += `
+                <div class="print-item">
+                  <div class="print-label">${label}</div>
+                  <div class="print-val">${val}</div>
+                </div>
+              `;
+            }
+          });
+          stepHtml += `</div>`;
+
+          if (hasContent) {
+            htmlReport += stepHtml;
+          }
+        });
+
+        htmlReport += `
+          <div style="margin-top:30px; border-top:1px solid #CCC; padding-top:10px; font-size:9pt; color:#777; text-align:center;">
+            Material Clínico Confidencial · Natalie Thedim Silvado Camardella · CRP 05/45482 · psicologa@nataliethedim.com.br
+          </div>
+        `;
+
+        container.innerHTML = htmlReport;
         window.print();
       });
 
@@ -1294,5 +1395,6 @@
     })();
   </script>
   <script src="assets/db.js"></script>
+  <div id="printReportContainer"></div>
 </body>
 </html>

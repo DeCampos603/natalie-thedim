@@ -2348,7 +2348,7 @@
           <path d="M10 13h12M10 17h8" stroke="#5B1826" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
         <div class="logo-text">
-          <span class="logo-name">Natalie Thedim</span>
+          <span class="logo-name" data-cms="nome_profissional">Natalie Thedim</span>
           <span class="logo-sub">Psicóloga Clínica</span>
         </div>
       </a>
@@ -3032,6 +3032,73 @@
     <!-- ======================================================================
        BANNER DE CONVERSÃO PRÉ-RODAPÉ
        ====================================================================== -->
+    <!-- ========================================================================
+         SEÇÃO: NEWSLETTER EXCLUSIVA & CARTAS TERAPÊUTICAS
+         ======================================================================== -->
+    <section class="container" id="newsletter" style="margin-bottom: 3.5rem;">
+      <div style="background: linear-gradient(135deg, #FAF4F2 0%, #FFFFFF 100%); border: 1.5px solid #E6D2CE; border-radius: var(--radius-md); padding: clamp(2rem, 5vw, 3.5rem); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+        <div style="max-width: 680px; margin: 0 auto; text-align: center;">
+          <span class="badge-rosa" style="margin-bottom: 0.75rem; display: inline-flex;">Cartas de Natalie Thedim</span>
+          <h2 class="center-h2" style="font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin-bottom: 0.75rem;">Reflexões quinzenais sobre amor, conflito e maturidade</h2>
+          <p style="color: var(--text-color); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.75rem;">
+            Receba diretamente em seu e-mail análises clínicas, recomendações de leituras e filmes para casais, e convites para grupos de estudos e supervisão.
+          </p>
+
+          <form id="formNewsletterHome" style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 520px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <input type="text" id="newsNome" placeholder="Seu nome" required style="padding: 0.85rem 1.15rem; border: 1px solid var(--border-soft); border-radius: var(--radius-full); font-size: 0.95rem; background: #FFF;" />
+              <input type="email" id="newsEmail" placeholder="Seu melhor e-mail" required style="padding: 0.85rem 1.15rem; border: 1px solid var(--border-soft); border-radius: var(--radius-full); font-size: 0.95rem; background: #FFF;" />
+            </div>
+            <button type="submit" id="btnAssinarNews" class="btn-cta-rose" style="width: 100%; border-radius: var(--radius-full); cursor: pointer; padding: 0.85rem 1.5rem; justify-content: center; font-size: 1rem;">
+              <span>Quero receber as reflexões de Natalie →</span>
+            </button>
+            <div id="statusNewsHome" style="font-size: 0.9rem; font-weight: 600; padding: 0.75rem; border-radius: var(--radius-sm); margin-top: 0.5rem; display: none;"></div>
+            <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">Seus dados são 100% confidenciais. Cancele quando quiser com 1 clique.</small>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const formNews = document.getElementById('formNewsletterHome');
+        const statusNews = document.getElementById('statusNewsHome');
+        const btnNews = document.getElementById('btnAssinarNews');
+
+        if (formNews) {
+          formNews.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('newsNome').value.trim();
+            const email = document.getElementById('newsEmail').value.trim();
+
+            btnNews.disabled = true;
+            btnNews.innerHTML = '<span>Inscrevendo...</span>';
+
+            try {
+              if (window.DB && window.DB.inscreverNewsletter) {
+                await window.DB.inscreverNewsletter(email, nome, 'site_home');
+              }
+              statusNews.style.display = 'block';
+              statusNews.style.background = '#E8F5E9';
+              statusNews.style.color = '#2E7D32';
+              statusNews.style.border = '1px solid #A5D6A7';
+              statusNews.textContent = '✓ Inscrição confirmada! Seja muito bem-vindo(a) às nossas cartas e reflexões.';
+              formNews.reset();
+            } catch (err) {
+              statusNews.style.display = 'block';
+              statusNews.style.background = '#FFEBEE';
+              statusNews.style.color = '#C62828';
+              statusNews.style.border = '1px solid #FFCDD2';
+              statusNews.textContent = 'Ocorreu um erro temporário. Por favor, tente novamente.';
+            } finally {
+              btnNews.disabled = false;
+              btnNews.innerHTML = '<span>Quero receber as reflexões de Natalie →</span>';
+            }
+          });
+        }
+      });
+    </script>
+
     <section class="container" id="contato">
       <div class="banner-cta-prefooter reveal" style="position: relative;">
         <div class="cta-inner-grid">
@@ -3076,7 +3143,7 @@
     <div class="container">
       <div class="footer-columns">
         <div class="footer-brand">
-          <h3>Natalie Thedim</h3>
+          <h3 data-cms="nome_profissional">Natalie Thedim</h3>
           <span style="font-size:0.8125rem; text-transform:uppercase; letter-spacing:0.1em; color:#FFFFFF; font-weight:700; display:block; margin-bottom:0.5rem;">Psicóloga Clínica</span>
           <span class="footer-slogan">“Não se trata de ter razão. Trata-se de compreender relações.”</span>
           <svg width="40" height="20" viewBox="0 0 50 20" fill="none">
@@ -3205,6 +3272,9 @@
         .then(data => {
           if (!data || !data.conteudo) return;
           const c = data.conteudo;
+          if (c.nome_profissional?.texto) {
+            document.querySelectorAll('[data-cms="nome_profissional"]').forEach(el => el.textContent = c.nome_profissional.texto);
+          }
           if (c.hero_title?.texto) {
             document.querySelectorAll('[data-cms="hero_title"]').forEach(el => el.textContent = c.hero_title.texto);
           }

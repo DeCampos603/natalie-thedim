@@ -267,5 +267,36 @@
   </p>
 
   <script src="assets/db.js"></script>
+  <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.DB && window.DB.obterLivros) {
+        window.DB.obterLivros().then(res => {
+          if (!res || !res.ok || !res.dados || !res.dados.length) return;
+          const container = document.querySelector('.grid-livros, .livros-grid, .mock-grid');
+          if (!container) return;
+          res.dados.forEach(livro => {
+            const card = document.createElement('article');
+            card.className = 'livro-card mock-card';
+            card.style.borderTop = '3px solid var(--color-brand-wine)';
+            card.innerHTML = `
+              <div style="padding:1.5rem;">
+                <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-brand-wine);">${livro.categoria || 'Biblioterapia'}</span>
+                <h3 style="font-family:var(--font-serif); font-size:1.35rem; color:var(--color-brand-wine); margin:0.4rem 0;">📚 ${livro.titulo}</h3>
+                <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:0.75rem;">Autor(a): ${livro.autor || 'N/A'}</p>
+                ${livro.citacao ? `<blockquote style="font-style:italic; font-size:0.95rem; border-left:3px solid var(--color-brand-wine); padding-left:0.75rem; margin-bottom:1rem; color:var(--color-brand-wine);">"${livro.citacao}"</blockquote>` : ''}
+                <div style="background:var(--bg-surface-tint); padding:1rem; border-radius:6px; margin-bottom:1rem;">
+                  <strong style="color:var(--color-brand-wine); font-size:0.875rem; display:block; margin-bottom:0.35rem;">Análise Clínica de Natalie Thedim:</strong>
+                  <p style="font-size:0.9rem; line-height:1.5; margin:0;">${livro.analise || ''}</p>
+                </div>
+                ${livro.link ? `<a href="${livro.link}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-block; font-size:0.875rem; padding:0.5rem 1rem;">Onde Encontrar →</a>` : ''}
+              </div>
+            `;
+            container.prepend(card);
+          });
+        }).catch(() => {});
+      }
+    });
+  </script>
 </body>
 </html>

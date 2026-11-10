@@ -6,6 +6,11 @@ export const TABELAS = {
   cartas: { min: 10, max: 4000, extra: ['destinatario'] },
   perguntas: { min: 5, max: 1000, extra: [] },
   diario_posts: { min: 3, max: 280, extra: [] },
+  biblioteca_mensagens: { min: 5, max: 2000, extra: ['tema_chave', 'nome', 'email', 'whatsapp'] },
+  newsletter_inscritos: { min: 3, max: 150, extra: ['nome', 'email', 'origem'] },
+  filmes: { min: 2, max: 5000, extra: ['titulo', 'direcao_ano', 'badge', 'sinopse', 'perguntas', 'reflexao', 'ordem'] },
+  livros: { min: 2, max: 5000, extra: ['titulo', 'autor_ano', 'badge', 'sinopse', 'licao', 'citacao', 'ordem'] },
+  biblioteca_temas: { min: 2, max: 5000, extra: ['tema_chave', 'pilar', 'titulo', 'texto', 'perguntas', 'ordem'] }
 };
 export const STATUS = ['pendente', 'aprovado', 'rejeitado'];
 export const COOKIE = 'nt_admin';

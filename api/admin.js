@@ -136,6 +136,117 @@ export default async function handler(req, res) {
       return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0 });
     }
 
+    // === Gestão de Newsletter ===
+    if (acao === 'newsletter_listar' && req.method === 'GET') {
+      const r = await db().execute('SELECT id, email, nome, origem, criado_em FROM newsletter_inscritos ORDER BY criado_em DESC');
+      return responder(res, 200, { ok: true, dados: r.rows });
+    }
+    if (acao === 'newsletter_remover' && req.method === 'POST') {
+      const { id } = lerBody(req);
+      await db().execute({ sql: 'DELETE FROM newsletter_inscritos WHERE id = ?', args: [String(id)] });
+      return responder(res, 200, { ok: true });
+    }
+
+    // === Gestão da Biblioteca (Temas e Histórico de Mensagens) ===
+    if (acao === 'biblioteca_listar_temas' && req.method === 'GET') {
+      const r = await db().execute(`
+        SELECT t.*, 
+          (SELECT COUNT(*) FROM biblioteca_mensagens m WHERE m.tema_chave = t.tema_chave) AS total_mensagens
+        FROM biblioteca_temas t
+        ORDER BY t.ordem ASC, t.titulo ASC
+      `);
+      return responder(res, 200, { ok: true, dados: r.rows });
+    }
+    if (acao === 'biblioteca_salvar_tema' && req.method === 'POST') {
+      const { id, tema_chave, pilar, titulo, texto, perguntas, ordem } = lerBody(req);
+      const temaId = id || `tema_${tema_chave || Date.now()}`;
+      await db().execute({
+        sql: `INSERT INTO biblioteca_temas (id, tema_chave, pilar, titulo, texto, perguntas, ordem, atualizado_em)
+              VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+              ON CONFLICT(tema_chave) DO UPDATE SET
+                pilar = excluded.pilar,
+                titulo = excluded.titulo,
+                texto = excluded.texto,
+                perguntas = excluded.perguntas,
+                ordem = excluded.ordem,
+                atualizado_em = datetime('now')`,
+        args: [temaId, tema_chave, pilar || 'Casamento e Relacionamentos', titulo, texto, perguntas, Number(ordem) || 0]
+      });
+      return responder(res, 200, { ok: true, mensagem: 'Tema da biblioteca salvo com sucesso.' });
+    }
+    if (acao === 'biblioteca_excluir_tema' && req.method === 'POST') {
+      const { tema_chave } = lerBody(req);
+      await db().execute({ sql: 'DELETE FROM biblioteca_temas WHERE tema_chave = ?', args: [String(tema_chave)] });
+      return responder(res, 200, { ok: true });
+    }
+    if (acao === 'biblioteca_historico' && req.method === 'GET') {
+      const tema = req.query.tema_chave;
+      const sql = tema 
+        ? 'SELECT * FROM biblioteca_mensagens WHERE tema_chave = ? ORDER BY criado_em DESC'
+        : 'SELECT * FROM biblioteca_mensagens ORDER BY criado_em DESC';
+      const args = tema ? [tema] : [];
+      const r = await db().execute({ sql, args });
+      return responder(res, 200, { ok: true, dados: r.rows });
+    }
+
+    // === Gestão de Filmes (Clube do Filme) ===
+    if (acao === 'filmes_listar' && req.method === 'GET') {
+      const r = await db().execute('SELECT * FROM filmes ORDER BY ordem ASC, criado_em DESC');
+      return responder(res, 200, { ok: true, dados: r.rows });
+    }
+    if (acao === 'filmes_salvar' && req.method === 'POST') {
+      const { id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem } = lerBody(req);
+      const filmeId = id || `filme_${Date.now()}`;
+      await db().execute({
+        sql: `INSERT INTO filmes (id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              ON CONFLICT(id) DO UPDATE SET
+                titulo = excluded.titulo,
+                direcao_ano = excluded.direcao_ano,
+                badge = excluded.badge,
+                sinopse = excluded.sinopse,
+                perguntas = excluded.perguntas,
+                reflexao = excluded.reflexao,
+                ordem = excluded.ordem`,
+        args: [filmeId, titulo, direcao_ano || '', badge || 'Cinema & Clínica', sinopse, perguntas || '', reflexao || '', Number(ordem) || 0]
+      });
+      return responder(res, 200, { ok: true, mensagem: 'Filme salvo com sucesso.' });
+    }
+    if (acao === 'filmes_excluir' && req.method === 'POST') {
+      const { id } = lerBody(req);
+      await db().execute({ sql: 'DELETE FROM filmes WHERE id = ?', args: [String(id)] });
+      return responder(res, 200, { ok: true });
+    }
+
+    // === Gestão de Livros (Clube do Livro) ===
+    if (acao === 'livros_listar' && req.method === 'GET') {
+      const r = await db().execute('SELECT * FROM livros ORDER BY ordem ASC, criado_em DESC');
+      return responder(res, 200, { ok: true, dados: r.rows });
+    }
+    if (acao === 'livros_salvar' && req.method === 'POST') {
+      const { id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem } = lerBody(req);
+      const livroId = id || `livro_${Date.now()}`;
+      await db().execute({
+        sql: `INSERT INTO livros (id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              ON CONFLICT(id) DO UPDATE SET
+                titulo = excluded.titulo,
+                autor_ano = excluded.autor_ano,
+                badge = excluded.badge,
+                sinopse = excluded.sinopse,
+                licao = excluded.licao,
+                citacao = excluded.citacao,
+                ordem = excluded.ordem`,
+        args: [livroId, titulo, autor_ano || '', badge || 'Leitura Sistêmica', sinopse, licao || '', citacao || '', Number(ordem) || 0]
+      });
+      return responder(res, 200, { ok: true, mensagem: 'Livro salvo com sucesso.' });
+    }
+    if (acao === 'livros_excluir' && req.method === 'POST') {
+      const { id } = lerBody(req);
+      await db().execute({ sql: 'DELETE FROM livros WHERE id = ?', args: [String(id)] });
+      return responder(res, 200, { ok: true });
+    }
+
     return responder(res, 400, { erro: 'ação inválida' });
   } catch (e) {
     console.error('[admin]', e);
