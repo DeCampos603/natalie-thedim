@@ -495,7 +495,13 @@
             Este aplicativo funciona 100% no seu dispositivo. Nenhuma resposta é enviada automaticamente para a internet ou para servidores externos. O rascunho fica guardado apenas no seu aparelho e só será entregue à psicóloga quando você clicar em compartilhar.
           </div>
 
-          <div class="form-group">
+          <div style="background: var(--bg-surface-tint); border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 0.8125rem; color: var(--color-brand-wine); display: flex; align-items: flex-start; gap: 0.6rem; line-height: 1.45;">
+          <input type="checkbox" id="consentimentoRaizes" required checked style="accent-color: var(--color-brand-wine); margin-top: 0.15rem; width: 16px; height: 16px; cursor: pointer;" />
+          <label for="consentimentoRaizes" style="cursor: pointer;">
+            <strong>Termo de Sigilo Clínico e Proteção de Dados:</strong> Compreendo que as informações preenchidas neste formulário são de uso clínico exclusivo para a psicoterapia com Natalie Thedim (CRP 05/45482), protegidas pelo segredo profissional do Código de Ética do Psicólogo e pela LGPD (Lei 13.709/18).
+          </label>
+        </div>
+        <div class="form-group">
             <label for="paciente_nome">Seu nome completo</label>
             <input type="text" id="paciente_nome" name="paciente_nome" placeholder="Como prefere ser chamado(a)?" autocomplete="name" required />
           </div>

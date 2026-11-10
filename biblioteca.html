@@ -380,6 +380,12 @@
           </div>
           <textarea id="duvidaTexto" rows="3" placeholder="Qual é a sua dúvida ou situação sobre este tema?" required style="padding: 0.6rem 0.85rem; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); font-size: 0.9rem; resize: vertical;"></textarea>
           <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <div style="margin: 0.4rem 0 0.6rem; font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 0.5rem; text-align: left;">
+              <input type="checkbox" id="consentimentoDuvida" required checked style="accent-color: var(--color-brand-wine); margin-top: 0.15rem; width: 15px; height: 15px; cursor: pointer;" />
+              <label for="consentimentoDuvida" style="cursor: pointer;">
+                Autorizo o envio sigiloso da minha dúvida a Natalie Thedim sob proteção da LGPD e do Código de Ética do Psicólogo.
+              </label>
+            </div>
             <button type="submit" id="btnEnviarDuvida" class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">Enviar Dúvida a Natalie</button>
             <div id="statusDuvida" style="font-size: 0.85rem; font-weight: 600; display: none;"></div>
           </div>

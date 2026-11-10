@@ -168,6 +168,25 @@ const DB = (() => {
         newsletter: 'Novo Cadastro na Newsletter da Dra. Natalie Thedim',
         biblioteca_mensagens: 'Nova Mensagem sobre Tema da Biblioteca'
       };
+
+      // 1. Tenta enviar prioritariamente via servidor oficial Hostinger SMTP (/api/notificar)
+      const resServidor = await fetch('/api/notificar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo: titulos[tabela] || tabela,
+          remetente: dados?.Nome || dados?.nome || dados?.remetente || 'Leitor(a) do Site',
+          email: dados?.Email || dados?.email || '',
+          mensagem: dados?.Texto || dados?.texto || dados?.mensagem || JSON.stringify(dados),
+          dadosExtras: dados
+        })
+      }).catch(() => null);
+
+      if (resServidor && resServidor.ok) {
+        return; // Sucesso absoluto com SMTP nativo Hostinger!
+      }
+
+      // 2. Fallback secundário FormSubmit caso o servidor local esteja offline ou sem SMTP_PASS
       const corpoEmail = {
         _subject: `[Site Natalie Thedim] ${titulos[tabela] || 'Novo Envio no Site'}`,
         _template: 'table',
@@ -182,7 +201,7 @@ const DB = (() => {
         body: JSON.stringify(corpoEmail)
       });
     } catch (_) {
-      // Silencioso caso bloqueador de anúncios impeça chamada externa
+      // Silencioso para não interromper a experiência do paciente
     }
   }
 

@@ -1,7 +1,78 @@
-// Cliente unificado do Turso / libSQL
-// Suporta a SDK @libsql/client com fallback nativo para Hrana v2 sobre HTTP (zero dependências)
+// Cliente unificado do Banco de Dados · Natalie Thedim
+// Suporta comutação automática entre:
+// 1. MySQL Nativo Hostinger (quando DB_TYPE=mysql ou MYSQL_DATABASE estiver configurado)
+// 2. Turso Cloud / libSQL (padrão atual) com fallback HTTP resiliente
+import mysql from 'mysql2/promise';
 
 let clientInstance = null;
+let mysqlPoolInstance = null;
+
+function traduzirParaMySQL(sql) {
+  let s = sql;
+  // Converte ON CONFLICT(col) DO UPDATE SET ... em ON DUPLICATE KEY UPDATE ...
+  s = s.replace(/ON\s+CONFLICT\([^)]+\)\s+DO\s+UPDATE\s+SET/gi, 'ON DUPLICATE KEY UPDATE');
+  s = s.replace(/excluded\.([a-zA-Z0-9_]+)/gi, 'VALUES($1)');
+  // Converte funções de data SQLite para MySQL
+  s = s.replace(/datetime\('now'\)/gi, 'NOW()');
+  s = s.replace(/strftime\([^)]+\)/gi, 'NOW()');
+  return s;
+}
+
+function criarClienteMySQL() {
+  if (mysqlPoolInstance) return mysqlPoolInstance;
+
+  const pool = mysql.createPool({
+    host: process.env.MYSQL_HOST || 'localhost',
+    port: Number(process.env.MYSQL_PORT) || 3306,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    charset: 'utf8mb4'
+  });
+
+  async function execute(stmt) {
+    const rawSql = typeof stmt === 'string' ? stmt : stmt.sql;
+    const args = typeof stmt === 'string' ? [] : (stmt.args || []);
+    const sql = traduzirParaMySQL(rawSql);
+
+    const [rows, fields] = await pool.query(sql, args);
+    const affected = (rows && typeof rows.affectedRows === 'number') ? rows.affectedRows : (Array.isArray(rows) ? rows.length : 0);
+
+    return {
+      rows: Array.isArray(rows) ? rows : [],
+      rowsAffected: affected,
+      lastInsertRowid: rows?.insertId
+    };
+  }
+
+  async function batch(stmts, mode = 'write') {
+    const conn = await pool.getConnection();
+    try {
+      if (mode === 'write') await conn.beginTransaction();
+      const results = [];
+      for (const s of stmts) {
+        const rawSql = typeof s === 'string' ? s : s.sql;
+        const args = typeof s === 'string' ? [] : (s.args || []);
+        const sql = traduzirParaMySQL(rawSql);
+        const [rows] = await conn.query(sql, args);
+        results.push(rows);
+      }
+      if (mode === 'write') await conn.commit();
+      return results;
+    } catch (err) {
+      if (mode === 'write') await conn.rollback();
+      throw err;
+    } finally {
+      conn.release();
+    }
+  }
+
+  mysqlPoolInstance = { execute, batch, tipo: 'mysql' };
+  return mysqlPoolInstance;
+}
 
 function getEndpoint(rawUrl) {
   let url = rawUrl.trim();
@@ -57,9 +128,6 @@ function buildStmt(stmt) {
   return res;
 }
 
-/**
- * Cliente HTTP nativo para o Turso (compatível com a API da SDK @libsql/client)
- */
 function createHttpFallbackClient(rawUrl, authToken) {
   const endpoint = getEndpoint(rawUrl);
 
@@ -117,38 +185,30 @@ function createHttpFallbackClient(rawUrl, authToken) {
     return data.results;
   }
 
-  async function executeMultiple(sql) {
-    const commands = sql
-      .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
-
-    for (const cmd of commands) {
-      await execute(cmd);
-    }
-  }
-
-  return { execute, batch, executeMultiple };
+  return { execute, batch, tipo: 'turso' };
 }
 
 /**
- * Retorna uma instância singleton do cliente Turso/libSQL.
+ * Retorna uma instância singleton do cliente de banco (MySQL Hostinger ou Turso)
  */
 export function getTursoClient() {
   if (clientInstance) return clientInstance;
 
+  // 1. Prioriza MySQL nativo caso as variáveis da Hostinger estejam configuradas
+  if (process.env.DB_TYPE === 'mysql' || (process.env.MYSQL_DATABASE && process.env.MYSQL_USER)) {
+    console.log('[db] Conectado ao MySQL nativo da Hostinger.');
+    clientInstance = criarClienteMySQL();
+    return clientInstance;
+  }
+
+  // 2. Conexão Turso Cloud (padrão)
   const url = process.env.TURSO_DATABASE_URL;
   const authToken = process.env.TURSO_AUTH_TOKEN;
 
   if (!url) {
-    throw new Error('Configuração ausente: TURSO_DATABASE_URL não definida nas variáveis de ambiente.');
+    throw new Error('Configuração ausente: TURSO_DATABASE_URL ou MYSQL_DATABASE não definidos nas variáveis de ambiente.');
   }
 
-  if (!url.startsWith('file:') && !authToken) {
-    throw new Error('Configuração ausente: TURSO_AUTH_TOKEN não definida para conexão remota.');
-  }
-
-  // Fallback nativo ultra-resiliente via HTTP pipeline
   clientInstance = createHttpFallbackClient(url, authToken);
   return clientInstance;
 }

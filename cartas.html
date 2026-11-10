@@ -112,6 +112,12 @@
               <textarea id="textoCarta" name="texto" rows="6" maxlength="4000" required placeholder="Escreva o que você nunca teve coragem de enviar..."></textarea>
               <span class="contador"><span id="contadorCarta">0</span>/4000</span>
             </div>
+            <div style="margin: 0.85rem 0 1.25rem; font-size: 0.8125rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 0.6rem; line-height: 1.45; text-align: left;">
+              <input type="checkbox" id="consentimento_carta" required checked style="accent-color: var(--color-brand-wine); margin-top: 0.15rem; width: 16px; height: 16px; cursor: pointer;" />
+              <label for="consentimento_carta" style="cursor: pointer;">
+                Concordo com o envio confidencial, ciente do sigilo profissional ético garantido pelo Código de Ética do Psicólogo (CFP) e da proteção de dados conforme a LGPD (Lei 13.709/18).
+              </label>
+            </div>
             <button type="submit" class="btn-enviar" id="btnEnviarCarta">Escrever minha carta</button>
             <div id="statusCarta" class="status-msg" hidden></div>
           </form>
@@ -120,8 +126,8 @@
     </section>
   </main>
 
-  <p class="footer-note">
-    Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
+  <p class="footer-note" style="text-align: center; font-size: 0.8125rem; color: var(--text-muted); margin: 2rem auto 1.5rem; line-height: 1.5; max-width: 600px;">
+    Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · Sigilo profissional ético garantido pelo CFP · Conformidade com a LGPD (Lei 13.709/18) · <a href="index.html">voltar ao início</a>
   </p>
 
   <script src="assets/db.js"></script>

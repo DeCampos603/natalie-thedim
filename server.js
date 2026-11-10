@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import publicoHandler from './api/publico.js';
 import conteudoHandler from './api/conteudo.js';
 import adminHandler from './api/admin.js';
+import notificarHandler from './api/notificar.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,8 +54,8 @@ const server = http.createServer(async (req, res) => {
     const urlObj = new URL(req.url || '/', `http://${host}`);
     const pathname = decodeURIComponent(urlObj.pathname);
 
-    // 1. Rotas de API Serverless (/api/publico, /api/conteudo, /api/admin)
-    if (pathname === '/api/publico' || pathname === '/api/conteudo' || pathname === '/api/admin') {
+    // 1. Rotas de API Serverless (/api/publico, /api/conteudo, /api/admin, /api/notificar)
+    if (pathname === '/api/publico' || pathname === '/api/conteudo' || pathname === '/api/admin' || pathname === '/api/notificar') {
       req.query = Object.fromEntries(urlObj.searchParams.entries());
       if (req.method !== 'GET' && req.method !== 'HEAD') {
         const raw = await readRawBody(req);
@@ -67,6 +68,7 @@ const server = http.createServer(async (req, res) => {
       if (pathname === '/api/publico') return await publicoHandler(req, res);
       if (pathname === '/api/conteudo') return await conteudoHandler(req, res);
       if (pathname === '/api/admin') return await adminHandler(req, res);
+      if (pathname === '/api/notificar') return await notificarHandler(req, res);
     }
 
     // 2. Bloqueio de segurança para arquivos internos, código-fonte e backups
