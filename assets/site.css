@@ -856,3 +856,244 @@ table, th, td, .preco, .valor, .numero, .stat-number, .price {
 .tabs::-webkit-scrollbar, .filter-bar::-webkit-scrollbar, .nav-tabs::-webkit-scrollbar, [role='tablist']::-webkit-scrollbar {
   display: none;
 }
+
+/* ==========================================================================
+   SISTEMA DE MOTION DESIGN 2026 (60FPS GPU · SPOTLIGHT · TILT · SHIMMER)
+   Mesma paleta oficial: Marsala (#5B1826), Rosé (#BD697C) e Linho (#F8F2EE)
+   ========================================================================== */
+:root {
+  --motion-instant: 120ms;
+  --motion-snappy: 220ms;
+  --motion-base: 360ms;
+  --motion-slow: 650ms;
+  --ease-kinetic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Barra global de progresso de leitura no topo */
+.global-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-brand-wine), var(--color-brand-rose), var(--color-brand-wine));
+  z-index: 9999;
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* Efeito Shimmer Diagonal nos botões principais */
+.btn-primary,
+.header-btn,
+.btn-enviar {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-primary::after,
+.header-btn::after,
+.btn-enviar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.24) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left 0.65s var(--ease-kinetic);
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-primary:hover::after,
+.header-btn:hover::after,
+.btn-enviar:hover::after {
+  left: 140%;
+}
+
+/* Spotlight Radial Reativo ao Cursor nos Cartões (Padrão Aceternity / Stripe) */
+.mock-card,
+.envio-box,
+.termometro-card,
+.video-card,
+.podcast-card,
+.artigo-ese-card,
+.carrossel-card,
+.reel-card,
+.servico-card,
+.faq-card {
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 0%;
+}
+.mock-card::before,
+.video-card::before,
+.podcast-card::before,
+.artigo-ese-card::before,
+.carrossel-card::before,
+.reel-card::before,
+.servico-card::before,
+.faq-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    420px circle at var(--mouse-x) var(--mouse-y),
+    rgba(189, 105, 124, 0.13),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity var(--motion-base) var(--ease-kinetic);
+  pointer-events: none;
+  z-index: 0;
+}
+.mock-card:hover::before,
+.video-card:hover::before,
+.podcast-card:hover::before,
+.artigo-ese-card:hover::before,
+.carrossel-card:hover::before,
+.reel-card:hover::before,
+.servico-card:hover::before,
+.faq-card:hover::before {
+  opacity: 1;
+}
+.mock-card > *,
+.video-card > *,
+.podcast-card > *,
+.artigo-ese-card > *,
+.carrossel-card > *,
+.reel-card > *,
+.servico-card > *,
+.faq-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Revelação suave ao scroll nas subpáginas */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s var(--ease-kinetic), transform 0.65s var(--ease-kinetic);
+}
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Orbes luminosos sutis no Page Hero das subpáginas */
+.page-hero {
+  overflow: hidden;
+}
+.page-hero::before,
+.page-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+.page-hero::before {
+  width: 320px;
+  height: 320px;
+  right: -60px;
+  top: -80px;
+  background: radial-gradient(circle, rgba(189, 105, 124, 0.35) 0%, transparent 70%);
+  animation: floatOrbHero 9s ease-in-out infinite alternate;
+}
+.page-hero::after {
+  width: 260px;
+  height: 260px;
+  left: 8%;
+  bottom: -90px;
+  background: radial-gradient(circle, rgba(246, 234, 236, 0.16) 0%, transparent 70%);
+  animation: floatOrbHero 12s ease-in-out infinite alternate-reverse;
+}
+.page-hero > .container {
+  position: relative;
+  z-index: 2;
+}
+@keyframes floatOrbHero {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-24px, 16px) scale(1.08); }
+}
+
+/* Botão Flutuante Global do WhatsApp com Pulso Orgânico */
+.floating-wa-global {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.38);
+  z-index: 900;
+  transition: transform var(--motion-snappy) var(--ease-spring), box-shadow var(--motion-snappy) var(--ease-kinetic);
+}
+.floating-wa-global:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 14px 34px rgba(37, 211, 102, 0.5);
+}
+.floating-wa-global::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.45);
+  animation: waPulseRing 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+@keyframes waPulseRing {
+  0% { transform: scale(0.95); opacity: 0.85; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Banner Editorial com Imagem Real nas Subpáginas */
+.editorial-visual-banner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(1.5rem, 3.5vw, 2.75rem);
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid var(--border-soft);
+  border-left: 4px solid var(--color-brand-wine);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2.5rem;
+}
+.editorial-visual-banner img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+@media (max-width: 768px) {
+  .editorial-visual-banner {
+    grid-template-columns: 1fr;
+  }
+  .editorial-visual-banner img {
+    height: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

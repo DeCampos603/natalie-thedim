@@ -319,9 +319,9 @@
         <h1>YouTube & Aulas Clínicas</h1>
         <p>Vídeos e reflexões aprofundadas agrupadas por dores centrais. Um acervo permanente para entender a dinâmica das suas relações com o olhar da psicologia clínica.</p>
         <div style="margin-top: 1.5rem;">
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="btn-canal-yt">
+          <a href="https://www.youtube.com/@nataliethedimsilvadopsicologa" target="_blank" rel="noopener noreferrer" class="btn-canal-yt">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-            <span>Inscrever-se no Canal Oficial</span>
+            <span>Acessar Canal Oficial (@nataliethedimsilvadopsicologa)</span>
           </a>
         </div>
       </div>
@@ -329,6 +329,13 @@
 
     <section class="proto-section" style="padding-top:0;">
       <div class="container" style="max-width: 900px;">
+        <div class="editorial-visual-banner" style="margin-bottom: 2.5rem;">
+          <img src="assets/podcast-studio-editorial.jpg" alt="Estúdio de vídeo e aulas clínicas da Psicóloga Natalie Thedim" loading="lazy" decoding="async" />
+          <div class="editorial-visual-caption">
+            <span>Canal Oficial · @nataliethedimsilvadopsicologa</span>
+            <h2>Aulas clínicas e reflexões sobre vida a dois, família e saúde emocional.</h2>
+          </div>
+        </div>
 
         <!-- CATEGORIA 1: COMUNICAÇÃO -->
         <div class="video-categoria-section">
@@ -446,6 +453,10 @@
         As aulas clínicas em vídeo da psicóloga Natalie Thedim estão na fase final de produção para o canal oficial. Enquanto os episódios completos são publicados, você pode acompanhar os cortes e análises no Instagram ou conversar diretamente no WhatsApp.
       </p>
       <div class="modal-yt-actions">
+        <a href="https://www.youtube.com/@nataliethedimsilvadopsicologa" target="_blank" rel="noopener noreferrer" class="btn-canal-yt" style="justify-content:center; width:100%;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+          <span>Abrir Canal @nataliethedimsilvadopsicologa →</span>
+        </a>
         <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-modal-ig">
           <span>Ver reflexões no Instagram (@psicologa.nataliethedim)</span>
         </a>
@@ -488,14 +499,6 @@
           modal.setAttribute('aria-hidden', 'false');
         });
       });
-
-      const btnCanal = document.querySelector('.btn-canal-yt');
-      if (btnCanal) {
-        btnCanal.addEventListener('click', (e) => {
-          e.preventDefault();
-          abrirModal('Canal Oficial de Vídeos');
-        });
-      }
 
       if (btnFechar) btnFechar.addEventListener('click', fecharModal);
       modal.addEventListener('click', (e) => {
