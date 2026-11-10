@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "server.js",
   "description": "Revista Digital - Natalie Thedim (site estatico + API serverless + Turso)",
   "scripts": {
+    "start": "node server.js",
     "init-db": "node --env-file=.env.local turso/init.mjs"
   },
   "dependencies": {
