@@ -19,14 +19,21 @@ export default async function handler(req, res) {
       const loginInformado = String(usuario || email || '').trim();
       const senhaInformada = String(senha || '');
 
-      const userConfigurado = process.env.ADMIN_USERNAME || process.env.ADMIN_EMAIL;
+      const userConfigurado = process.env.ADMIN_USERNAME || process.env.ADMIN_EMAIL || 'natalie';
+      const emailConfigurado = process.env.ADMIN_EMAIL || 'natalie@admin.local';
       const senhaConfigurada = process.env.ADMIN_PASSWORD;
 
-      if (!userConfigurado || !senhaConfigurada) {
-        return responder(res, 500, { erro: 'Variáveis ADMIN_USERNAME ou ADMIN_PASSWORD não configuradas no ambiente.' });
+      if (!senhaConfigurada) {
+        return responder(res, 500, { erro: 'Variável ADMIN_PASSWORD não configurada no ambiente.' });
       }
 
-      const okUser = iguais(loginInformado.toLowerCase(), String(userConfigurado).trim().toLowerCase());
+      const loginLower = loginInformado.toLowerCase();
+      const okUser =
+        iguais(loginLower, String(userConfigurado).trim().toLowerCase()) ||
+        iguais(loginLower, String(emailConfigurado).trim().toLowerCase()) ||
+        iguais(loginLower, 'natalie') ||
+        iguais(loginLower, 'natalie@admin.local') ||
+        iguais(loginLower, 'psicologa.nataliethedim@gmail.com');
       const okSenha = iguais(senhaInformada, String(senhaConfigurada));
 
       if (!okUser || !okSenha) {

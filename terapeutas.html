@@ -506,11 +506,29 @@
           console.warn('DB.enviar fallback:', err);
         }
 
-        // Feedback positivo ao usuário
+        // Monta link direto de WhatsApp com todos os dados preenchidos
+        const msgZap = encodeURIComponent(
+          `Olá, Natalie! Tudo bem?\n\nAcabei de preencher o formulário de *Supervisão Clínica* no site:\n` +
+          `• *Nome:* ${payload.nome}\n` +
+          `• *CRP:* ${payload.crp}\n` +
+          `• *Tempo de formação:* ${payload.tempo}\n` +
+          `• *Modalidade:* ${payload.interesse}\n` +
+          `• *E-mail:* ${payload.email}\n` +
+          `• *Demanda:* ${payload.mensagem || '(Não informada)'}`
+        );
+        const urlZapDireto = `https://wa.me/5521989020364?text=${msgZap}`;
+
+        // Feedback positivo ao usuário + botão de envio imediato no WhatsApp
         msgFeedback.style.display = 'block';
         msgFeedback.style.background = 'var(--color-ok-bg)';
         msgFeedback.style.color = 'var(--color-ok)';
-        msgFeedback.innerHTML = `<strong>Solicitação enviada com sucesso!</strong><br>Obrigada pelo interesse, ${payload.nome}. Natalie entrará em contato pelo WhatsApp fornecido com as informações sobre vagas e cronograma.`;
+        msgFeedback.innerHTML = `
+          <strong>Solicitação registrada e enviada para o e-mail e painel da Dra. Natalie!</strong><br>
+          Obrigada pelo interesse, <b>${payload.nome}</b>. Seus dados foram enviados para <code>psicologa.nataliethedim@gmail.com</code> e para o Painel Administrativo.<br>
+          <a href="${urlZapDireto}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.45rem; margin-top:0.75rem; padding:0.6rem 1.25rem; background:#5B1826; color:#FFFFFF; border-radius:999px; font-weight:700; text-decoration:none; font-size:0.85rem;">
+            <span>📲 Confirmar também pelo WhatsApp da Natalie agora →</span>
+          </a>
+        `;
         
         formSup.reset();
         btnSubmit.disabled = false;

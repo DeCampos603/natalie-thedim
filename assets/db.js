@@ -155,14 +155,45 @@ const DB = (() => {
 
   function disponivel() { return true; }
 
+  async function dispararEmailNotificacao(tabela, dados) {
+    try {
+      const titulos = {
+        terapeutas: 'Nova Solicitação de Supervisão Clínica (Área p/ Terapeutas)',
+        historias: 'Nova História Real Anônima Enviada no Site',
+        cartas: 'Nova Carta que Nunca Enviei Enviada no Site',
+        perguntas: 'Nova Pergunta para a Psicóloga Enviada no Site',
+        diario_posts: 'Novo Desabafo no Diário Anônimo'
+      };
+      const corpoEmail = {
+        _subject: `[Site Natalie Thedim] ${titulos[tabela] || 'Novo Envio no Site'}`,
+        _template: 'table',
+        _captcha: 'false',
+        Origem: titulos[tabela] || tabela,
+        Data_Hora: new Date().toLocaleString('pt-BR'),
+        ...(typeof dados === 'object' && dados !== null ? dados : { Texto: String(dados) })
+      };
+      await fetch('https://formsubmit.co/ajax/psicologa.nataliethedim@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(corpoEmail)
+      });
+    } catch (_) {
+      // Silencioso caso bloqueador de anúncios impeça chamada externa
+    }
+  }
+
   async function enviar(tabela, dados) {
     const tabelaReal = tabela === 'terapeutas' ? 'perguntas' : tabela;
     const payload = tabela === 'terapeutas'
       ? {
-          texto: `[Supervisão / Parceria Clínica] Nome: ${dados?.nome || ''} | CRP: ${dados?.crp || ''} | WhatsApp: ${dados?.whatsapp || ''} | Abordagem: ${dados?.abordagem || ''} | Mensagem: ${dados?.mensagem || ''}`.slice(0, 990)
+          texto: `[SUPERVISÃO CLÍNICA] Nome: ${dados?.nome || ''} | CRP: ${dados?.crp || ''} | Formação: ${dados?.tempo || ''} | Modalidade: ${dados?.interesse || dados?.abordagem || ''} | WhatsApp: ${dados?.whatsapp || ''} | E-mail: ${dados?.email || ''} | Demanda: ${dados?.mensagem || ''}`.slice(0, 990)
         }
       : dados;
 
+    // 1. Dispara notificação por e-mail para psicologa.nataliethedim@gmail.com em paralelo
+    dispararEmailNotificacao(tabela, dados);
+
+    // 2. Salva no banco de dados Turso (visível no Painel Admin /admin.html)
     const { ok, erro, status } = await chamar('/api/publico?acao=enviar', {
       metodo: 'POST',
       corpo: { tabela: tabelaReal, dados: payload }
