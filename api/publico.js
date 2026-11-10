@@ -38,22 +38,45 @@ export default async function handler(req, res) {
     const body = lerBody(req);
 
     if (acao === 'newsletter') {
+      const h = ipHash(req);
+      const agora = Math.floor(Date.now() / 1000);
+      const cont = await db().execute({
+        sql: 'SELECT COUNT(*) AS n FROM limite_envios WHERE ip_hash = ? AND criado_em > ?',
+        args: [h, agora - JANELA_S],
+      });
+      if (Number(cont.rows[0].n) >= MAX_ENVIOS) {
+        return responder(res, 429, { erro: 'Muitas tentativas em pouco tempo. Tente novamente em alguns minutos.' });
+      }
+
       const email = String(body.email || '').trim().toLowerCase();
       const nome = String(body.nome || '').trim().slice(0, 100);
       if (!email || !email.includes('@') || email.length < 5) {
         return responder(res, 400, { erro: 'E-mail inválido.' });
       }
       const id = novoId();
-      await db().execute({
-        sql: `INSERT INTO newsletter_inscritos (id, email, nome, origem)
-              VALUES (?, ?, ?, 'site')
-              ON CONFLICT(email) DO UPDATE SET nome = excluded.nome`,
-        args: [id, email, nome || null],
-      });
+      await db().batch([
+        {
+          sql: `INSERT INTO newsletter_inscritos (id, email, nome, origem)
+                VALUES (?, ?, ?, 'site')
+                ON CONFLICT(email) DO UPDATE SET nome = excluded.nome`,
+          args: [id, email, nome || null],
+        },
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
+      ], 'write');
       return responder(res, 201, { ok: true, mensagem: 'Inscrição confirmada com sucesso!' });
     }
 
     if (acao === 'biblioteca_mensagem') {
+      const h = ipHash(req);
+      const agora = Math.floor(Date.now() / 1000);
+      const cont = await db().execute({
+        sql: 'SELECT COUNT(*) AS n FROM limite_envios WHERE ip_hash = ? AND criado_em > ?',
+        args: [h, agora - JANELA_S],
+      });
+      if (Number(cont.rows[0].n) >= MAX_ENVIOS) {
+        return responder(res, 429, { erro: 'Muitas mensagens em pouco tempo. Tente novamente em alguns minutos.' });
+      }
+
       const tema_chave = String(body.tema_chave || '').trim().slice(0, 60);
       const mensagem = String(body.mensagem || '').trim();
       const nome = String(body.nome || '').trim().slice(0, 100);
@@ -65,11 +88,14 @@ export default async function handler(req, res) {
       }
 
       const id = novoId();
-      await db().execute({
-        sql: `INSERT INTO biblioteca_mensagens (id, tema_chave, nome, email, whatsapp, mensagem)
-              VALUES (?, ?, ?, ?, ?, ?)`,
-        args: [id, tema_chave, nome || 'Anônimo', email || null, whatsapp || null, mensagem],
-      });
+      await db().batch([
+        {
+          sql: `INSERT INTO biblioteca_mensagens (id, tema_chave, nome, email, whatsapp, mensagem)
+                VALUES (?, ?, ?, ?, ?, ?)`,
+          args: [id, tema_chave, nome || 'Anônimo', email || null, whatsapp || null, mensagem],
+        },
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
+      ], 'write');
       return responder(res, 201, { ok: true, mensagem: 'Mensagem sobre o tema registrada com sucesso!' });
     }
 

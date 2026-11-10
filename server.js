@@ -29,6 +29,8 @@ const MIME_TYPES = {
 };
 
 const BLOCKED_PREFIXES = ['/api/', '/turso/', '/node_modules/', '/.git', '/.env', '/package'];
+const BLOCKED_FILES = ['/server.js', '/.htaccess', '/.gitignore', '/vercel.json', '/package.json', '/package-lock.json'];
+const BLOCKED_EXTENSIONS = ['.zip', '.tar', '.gz', '.sql', '.env', '.md', '.log', '.bak', '.sh', '.py'];
 
 function readRawBody(req) {
   return new Promise((resolve) => {
@@ -41,6 +43,12 @@ function readRawBody(req) {
 
 const server = http.createServer(async (req, res) => {
   try {
+    // Cabeçalhos Globais de Segurança (OWASP Best Practices)
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
     const host = req.headers.host || 'localhost';
     const urlObj = new URL(req.url || '/', `http://${host}`);
     const pathname = decodeURIComponent(urlObj.pathname);
@@ -61,8 +69,13 @@ const server = http.createServer(async (req, res) => {
       if (pathname === '/api/admin') return await adminHandler(req, res);
     }
 
-    // 2. Bloqueio de segurança para arquivos internos
-    if (BLOCKED_PREFIXES.some((p) => pathname.startsWith(p))) {
+    // 2. Bloqueio de segurança para arquivos internos, código-fonte e backups
+    const extBaixa = path.extname(pathname).toLowerCase();
+    if (
+      BLOCKED_PREFIXES.some((p) => pathname.startsWith(p)) ||
+      BLOCKED_FILES.includes(pathname.toLowerCase()) ||
+      BLOCKED_EXTENSIONS.includes(extBaixa)
+    ) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end('Não encontrado');
     }
