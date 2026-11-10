@@ -409,7 +409,7 @@
           <li><a href="index.html#agendamentos" class="nav-item-link">Agendamentos</a></li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20o%20levantamento%20RA%C3%8DZES%20e%20atendimentos." 
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20o%20levantamento%20RA%C3%8DZES%20e%20atendimentos." 
            class="header-btn" 
            target="_blank" 
            rel="noopener noreferrer">
@@ -890,7 +890,7 @@
 
       // Dados de contato da psicóloga Natalie Thedim
       const CLINICA_CONFIG = {
-        whatsapp: '5521995160968', // WhatsApp oficial da Natalie
+        whatsapp: '5521989020364', // WhatsApp oficial da Natalie
         email: 'psicologa.nataliethedim@gmail.com',
         psicologaNome: 'Natalie Thedim Silvado (CRP 05/45482)',
         storageKey: 'RAIZES_NATALIE_DRAFT_V3'
@@ -1277,9 +1277,13 @@
       // MENU MOBILE TOGGLE
       const btnToggleNav = document.getElementById('btnToggleNav');
       const mainNav = document.getElementById('mainNav');
-      if (btnToggleNav && mainNav) {
-        btnToggleNav.addEventListener('click', () => {
-          mainNav.classList.toggle('is-open');
+      if (btnToggleNav && mainNav && !btnToggleNav.dataset.hasMobileInit) {
+        btnToggleNav.dataset.hasMobileInit = 'true';
+        btnToggleNav.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const aberto = mainNav.classList.toggle('is-aberto');
+          mainNav.classList.toggle('is-open', aberto);
+          btnToggleNav.classList.toggle('is-active', aberto);
         });
       }
 
@@ -1289,5 +1293,6 @@
 
     })();
   </script>
+  <script src="assets/db.js"></script>
 </body>
 </html>

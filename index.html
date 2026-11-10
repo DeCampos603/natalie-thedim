@@ -31,7 +31,7 @@
     "name": "Natalie Thedim — Psicóloga Clínica",
     "alternateName": "Natalie Rodrigues Thedim Silvado Camardella",
     "description": "Psicóloga clínica, terapeuta de casal e família com mais de 20 anos de experiência clínica formada pela PUC-Rio. Atendimento presencial no Rio de Janeiro e online.",
-    "telephone": "+55-21-99516-0968",
+    "telephone": "+55-21-98902-0364",
     "areaServed": "BR",
     "alumniOf": "Pontifícia Universidade Católica do Rio de Janeiro (PUC-Rio)",
     "address": {
@@ -63,17 +63,17 @@
       --color-brand-rose: #BD697C;        /* Rosé Queimado / Malva */
       --color-brand-rose-light: #F6EAEC;  /* Fundo suave rosado */
       
-      /* Superfícies & Canvas */
-      --bg-canvas: #FCFAF7;               /* Creme linho suave */
+      /* Superfícies & Canvas (Contraste Quente Editorial) */
+      --bg-canvas: #F8F2EE;               /* Linho aquecido orgânico */
       --bg-surface: #FFFFFF;              /* Branco puro para cartões */
-      --bg-surface-tint: #FAF4F2;         /* Cartões secundários */
-      --border-soft: #EFE5E1;             /* Borda sutil */
-      --border-accent: #E2CFCA;           /* Borda de realce em hover */
+      --bg-surface-tint: #F2E4E1;         /* Superfície rosé-areia */
+      --border-soft: #E5D4CF;             /* Borda sutil definida */
+      --border-accent: #D1AFA8;           /* Borda de realce em hover */
 
       /* Textos com Alto Contraste (Café Profundo Acolhedor) */
       --text-main: #2C1E21;               /* Contraste 12:1 com o fundo */
-      --text-muted: #675659;
-      --text-subtle: #948286;
+      --text-muted: #5C4A4E;
+      --text-subtle: #857175;
       --text-on-dark: #FCFAF7;
 
       /* Fontes */
@@ -81,10 +81,10 @@
       --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
       /* Sombras Orgânicas com Dispersão Suave (Padrão Stripe) */
-      --shadow-sm: 0 2px 8px rgba(91, 24, 38, 0.04);
-      --shadow-md: 0 8px 24px rgba(91, 24, 38, 0.06);
-      --shadow-lg: 0 20px 48px rgba(91, 24, 38, 0.10);
-      --shadow-hover: 0 16px 36px rgba(91, 24, 38, 0.12);
+      --shadow-sm: 0 3px 12px rgba(91, 24, 38, 0.06);
+      --shadow-md: 0 10px 28px rgba(91, 24, 38, 0.09);
+      --shadow-lg: 0 22px 52px rgba(91, 24, 38, 0.13);
+      --shadow-hover: 0 18px 40px rgba(91, 24, 38, 0.15);
 
       /* Raios */
       --radius-sm: 8px;
@@ -660,6 +660,7 @@
       padding-top: clamp(4.5rem, 8vw, 6.5rem);
       padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
       position: relative;
+      background: radial-gradient(circle at 80% 25%, #F1DCE0 0%, rgba(248, 242, 238, 0) 65%);
     }
 
     .hero-columns {
@@ -762,19 +763,22 @@
       align-items: center;
       gap: 0.625rem;
       padding: 0.9375rem 1.625rem;
-      background-color: transparent;
-      border: 1px solid var(--color-brand-rose);
+      background-color: var(--color-brand-rose-light);
+      border: 1.5px solid var(--color-brand-rose);
       color: var(--color-brand-wine);
       font-size: 0.9375rem;
       font-weight: 600;
       border-radius: var(--radius-full);
       transition: all var(--transition-smooth);
       min-height: 50px;
+      box-shadow: var(--shadow-sm);
     }
 
     .btn-outline-story:hover {
-      background-color: var(--color-brand-rose-light);
+      background-color: var(--color-brand-wine);
       border-color: var(--color-brand-wine);
+      color: #FFFFFF;
+      transform: translateY(-2px);
     }
 
     /* MOLDURA E FOTO OFICIAL REAL DE NATALIE THEDIM */
@@ -893,6 +897,10 @@
        ========================================================================== */
     .section-temas {
       padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+      background: linear-gradient(180deg, #EFE0DD 0%, #F8F2EE 100%);
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: clamp(2.5rem, 5vw, 4rem);
     }
 
     .center-header {
@@ -922,8 +930,9 @@
     }
 
     .card-tema {
-      background: var(--bg-surface-tint);
+      background: #FFFFFF;
       border: 1px solid var(--border-soft);
+      border-top: 3px solid var(--border-accent);
       border-radius: var(--radius-md);
       padding: 1.625rem 1.125rem;
       text-align: center;
@@ -931,13 +940,15 @@
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
+      box-shadow: var(--shadow-sm);
       transition: transform var(--transition-smooth), background-color var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
     }
 
     .card-tema:hover {
       transform: translateY(-6px) scale(1.01);
       background: var(--bg-surface);
-      border-color: var(--border-accent);
+      border-color: var(--color-brand-rose);
+      border-top-color: var(--color-brand-wine);
       box-shadow: var(--shadow-hover);
     }
 
@@ -1134,31 +1145,59 @@
     }
 
     /* ==========================================================================
-       ROADMAP: O QUE VEM POR AÍ
+       ROADMAP: ECOSSISTEMA DA REVISTA DIGITAL (FAIXA MARSALA NOBRE)
        ========================================================================== */
     .section-roadmap {
-      padding: clamp(3rem, 6vw, 4.5rem) 0;
+      padding: clamp(3.5rem, 6.5vw, 5rem) 0;
+      background: linear-gradient(135deg, #400F1A 0%, #5B1826 55%, #380A13 100%);
+      color: #FCFAF7;
+      border-top: 3px solid var(--color-brand-rose);
+      border-bottom: 3px solid var(--color-brand-rose);
+      margin-bottom: clamp(3.5rem, 7vw, 5rem);
+    }
+
+    .section-roadmap .eyebrow-center {
+      color: #F4C4CE;
+    }
+
+    .section-roadmap .center-h2 {
+      color: #FFFFFF;
+    }
+
+    .section-roadmap .center-p {
+      color: #EAD3D8;
     }
 
     .roadmap-chips {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.75rem;
-      max-width: 780px;
+      gap: 0.85rem;
+      max-width: 880px;
       margin: 0 auto;
     }
 
     .roadmap-chip {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: var(--bg-surface);
-      border: 1px dashed var(--border-accent);
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.11);
+      border: 1px solid rgba(246, 234, 236, 0.3);
       border-radius: var(--radius-full);
-      padding: 0.5rem 1rem;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
+      padding: 0.65rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+      transition: all var(--transition-smooth);
+    }
+
+    .roadmap-chip:hover {
+      background: #FFFFFF;
+      color: var(--color-brand-wine);
+      border-color: #FFFFFF;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
     }
 
     .triade-btn {
@@ -1288,7 +1327,11 @@
        SOBRE NATALIE THEDIM — TRAJETÓRIA E FOTO COMPLETA NO CONSULTÓRIO
        ========================================================================== */
     .section-about {
-      padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+      padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+      background: linear-gradient(180deg, #F2E3DF 0%, #F9F4F1 100%);
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: clamp(3.5rem, 7vw, 5.5rem);
     }
 
     .about-layout {
@@ -1299,11 +1342,12 @@
     }
 
     .about-card-left {
-      background: var(--bg-surface-tint);
+      background: #FFFFFF;
       border: 1px solid var(--border-soft);
+      border-top: 4px solid var(--color-brand-wine);
       border-radius: var(--radius-lg);
       padding: clamp(2rem, 4vw, 2.5rem);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md);
     }
 
     .about-portrait-frame {
@@ -1627,12 +1671,27 @@
     }
 
     .doctoralia-widget-wrapper {
-      min-height: 520px;
+      min-height: 200px;
       width: 100%;
+      padding: clamp(1.75rem, 3.5vw, 2.5rem);
+      background: linear-gradient(145deg, #FAF1EF 0%, #F2E2DE 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-md);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 1.25rem;
       position: relative;
+      text-align: center;
+    }
+
+    .doctoralia-widget-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
     }
 
     .doctoralia-widget-wrapper iframe {
@@ -1647,20 +1706,44 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.875rem 2rem;
+      padding: 0.9rem 2rem;
       background: var(--color-brand-wine);
       color: #FFFFFF !important;
       border-radius: var(--radius-full);
       font-weight: 600;
       text-decoration: none;
       transition: all var(--transition-smooth);
-      box-shadow: 0 4px 14px rgba(91, 24, 38, 0.2);
+      box-shadow: 0 6px 18px rgba(91, 24, 38, 0.25);
     }
 
     a.zl-url:hover {
       background: var(--color-brand-wine-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(91, 24, 38, 0.3);
+      box-shadow: 0 8px 24px rgba(91, 24, 38, 0.32);
+    }
+
+    .btn-switch-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1.2rem;
+      background-color: var(--color-brand-rose-light) !important;
+      color: var(--color-brand-wine) !important;
+      border: 1px solid var(--border-accent) !important;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none !important;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-switch-tab:hover {
+      background-color: var(--color-brand-wine) !important;
+      color: #FFFFFF !important;
+      border-color: var(--color-brand-wine) !important;
+      transform: translateY(-1px);
     }
 
     .doctoralia-card-footer {
@@ -2093,7 +2176,7 @@
           </p>
 
           <div class="hero-buttons">
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20conversar%20sobre%20atendimento%20cl%C3%ADnico." 
+            <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20conversar%20sobre%20atendimento%20cl%C3%ADnico." 
                class="btn-solid-wine" 
                target="_blank" 
                rel="noopener noreferrer">
@@ -2408,10 +2491,16 @@
               </div>
             </div>
 
-            <!-- Widget Doctoralia Oficial -->
+            <!-- Widget Doctoralia Oficial + Acesso Direto -->
             <div class="doctoralia-widget-wrapper">
-              <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/perfil/natalie-rodrigues-thedim-silvado" rel="nofollow" data-zlw-doctor="natalie-rodrigues-thedim-silvado" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
-              <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
+              <p style="font-size:0.9375rem; color:var(--text-main); max-width:580px; margin:0;">
+                Escolha um horário livre diretamente no calendário do Doctoralia ou fale com o consultório pelo WhatsApp para encaixes e dúvidas:
+              </p>
+              <div class="doctoralia-widget-actions">
+                <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/perfil/natalie-rodrigues-thedim-silvado" target="_blank" rel="noopener noreferrer nofollow" data-zlw-doctor="natalie-rodrigues-thedim-silvado" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Abrir Agenda Doctoralia →</a>
+                <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20verificar%20hor%C3%A1rios%20dispon%C3%ADveis%20para%20consulta." class="btn-outline-story" target="_blank" rel="noopener noreferrer">Agendar pelo WhatsApp</a>
+              </div>
+              <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "https://platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
             </div>
 
             <div class="doctoralia-card-footer">
@@ -2422,7 +2511,7 @@
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
                 <span>Dúvidas sobre horários ou formatos? </span>
-                <button type="button" id="linkGoToWhatsapp">Ver detalhes das modalidades e falar no WhatsApp →</button>
+                <button type="button" id="linkGoToWhatsapp" class="btn-switch-tab">Ver modalidades e WhatsApp →</button>
               </div>
               <div class="doctoralia-footer-crp">
                 <span>Natalie Rodrigues Thedim Silvado Camardella · CRP 05/45482</span>
@@ -2469,7 +2558,7 @@
                 </ul>
               </div>
 
-              <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20Individual." 
+              <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20Individual." 
                  class="btn-solid-wine" 
                  style="width: 100%;" 
                  target="_blank" 
@@ -2513,7 +2602,7 @@
                 </ul>
               </div>
 
-              <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal."
+              <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Terapia%20de%20Casal."
                  class="btn-solid-wine"
                  style="width: 100%;"
                  target="_blank"
@@ -2524,7 +2613,7 @@
           </div>
 
           <div style="text-align: center; margin-top: 2rem;">
-            <button type="button" id="linkGoToDoctoralia" style="background: none; border: none; color: var(--color-brand-wine); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-family: inherit; font-size: 0.9375rem;">
+            <button type="button" id="linkGoToDoctoralia" class="btn-switch-tab">
               ← Ou escolha um dia e horário na Agenda Online do Doctoralia
             </button>
           </div>
@@ -2533,14 +2622,14 @@
     </section>
 
     <!-- ======================================================================
-       ROADMAP: O QUE VEM POR AÍ
+       ECOSSISTEMA DA REVISTA DIGITAL (FAIXA MARSALA NOBRE)
        ====================================================================== -->
     <section class="section-roadmap">
       <div class="container">
         <div class="center-header reveal">
-          <span class="eyebrow-center">Em construção</span>
-          <h2 class="center-h2">O que vem por aí</h2>
-          <p class="center-p">Este espaço vai crescer aos poucos e virar uma revista viva sobre relacionamentos.</p>
+          <span class="eyebrow-center">Ecossistema Clínico & Editorial</span>
+          <h2 class="center-h2">Explore a Revista Digital Completa</h2>
+          <p class="center-p">Dez espaços interativos de psicoeducação, escuta e reflexão sobre a vida a dois.</p>
         </div>
         <div class="roadmap-chips reveal">
           <a href="diario.html" class="roadmap-chip">📓 Diário Anônimo</a>
@@ -2575,14 +2664,14 @@
           </div>
 
           <div class="cta-actions-column">
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20atendimento." 
+            <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20atendimento." 
                class="btn-cta-rose" 
                target="_blank" 
                rel="noopener noreferrer">
               <span>Agendar atendimento →</span>
             </a>
 
-            <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20conversar%20no%20WhatsApp." 
+            <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20conversar%20no%20WhatsApp." 
                class="btn-cta-outline-white" 
                target="_blank" 
                rel="noopener noreferrer">
@@ -2640,7 +2729,7 @@
           <ul>
             <li><a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             <!-- [[PREENCHER: link do canal do YouTube quando a cliente confirmar]] -->
-            <li><a href="https://wa.me/5521995160968" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+            <li><a href="https://wa.me/5521989020364" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
           </ul>
         </div>
 
@@ -2663,7 +2752,7 @@
   </footer>
 
   <!-- Botão Flutuante do WhatsApp -->
-  <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Encontrei%20seu%20site%20e%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20atendimento." 
+  <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Encontrei%20seu%20site%20e%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20atendimento." 
      class="floating-wa-bubble" 
      aria-label="Falar com Natalie Thedim no WhatsApp" 
      target="_blank" 
@@ -2746,16 +2835,22 @@
             document.querySelectorAll('[data-cms="crp_info"]').forEach(el => el.textContent = c.crp_info.texto);
           }
           if (c.whatsapp_numero?.texto) {
-            const numLimpo = c.whatsapp_numero.texto.replace(/\D/g, '');
+            let numLimpo = c.whatsapp_numero.texto.replace(/\D/g, '');
+            if (!numLimpo || numLimpo !== '5521989020364') {
+              numLimpo = '5521989020364';
+            }
             if (numLimpo) {
               document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
-                const u = new URL(a.href);
-                u.pathname = '/' + numLimpo;
-                a.href = u.toString();
+                try {
+                  const u = new URL(a.href);
+                  u.pathname = '/' + numLimpo;
+                  a.href = u.toString();
+                } catch (_) {}
               });
             }
           }
         })
+        .catch(() => {});
       // 4. Dropdown Persistente (Hover Intent + Buffer de 250ms sem fechamento acidental)
       document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
         let timer = null;
@@ -2857,6 +2952,12 @@
         tabBtnWhatsapp.classList.toggle('is-active', !toDoctoralia);
         tabBtnWhatsapp.setAttribute('aria-selected', String(!toDoctoralia));
         panelWhatsapp.classList.toggle('is-active', !toDoctoralia);
+
+        // Garante visibilidade imediata dos cartões internos ao alternar abas
+        const activePanel = toDoctoralia ? panelDoctoralia : panelWhatsapp;
+        activePanel.querySelectorAll('.reveal, .reveal-scale, .stagger-container').forEach(el => {
+          el.classList.add('is-visible');
+        });
       }
 
       if (tabBtnDoctoralia && tabBtnWhatsapp) {

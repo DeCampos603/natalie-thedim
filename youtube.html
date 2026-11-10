@@ -41,12 +41,109 @@
     .video-card {
       background: #FFFFFF;
       border: 1px solid var(--border-soft);
+      border-top: 3px solid var(--border-accent);
       border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       transition: all var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    /* Modal de Lançamento / Vídeos em Produção */
+    .modal-yt-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(44, 30, 33, 0.72);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-yt-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-yt-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: clamp(1.75rem, 5vw, 2.5rem);
+      max-width: 500px;
+      width: 100%;
+      box-shadow: var(--shadow-hover);
+      text-align: center;
+      position: relative;
+      transform: translateY(16px);
+      transition: transform 0.25s ease;
+    }
+    .modal-yt-backdrop.is-open .modal-yt-box {
+      transform: translateY(0);
+    }
+    .modal-yt-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      background: var(--bg-surface-tint);
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.35rem;
+      color: var(--color-brand-wine);
+      cursor: pointer;
+    }
+    .modal-yt-icon {
+      font-size: 2.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .modal-yt-box h3 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+    }
+    .modal-yt-box p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .modal-yt-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .btn-modal-ig {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%);
+      color: #FFFFFF;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      text-decoration: none;
+    }
+    .btn-modal-wa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #25D366;
+      color: #FFFFFF;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      text-decoration: none;
     }
     .video-card:hover {
       border-color: var(--color-brand-wine);
@@ -201,7 +298,7 @@
           </li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
            class="header-btn" 
            target="_blank" 
            rel="noopener noreferrer">
@@ -241,7 +338,7 @@
           </div>
           <div class="grid-videos">
             <div class="video-card">
-              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+              <div class="video-thumb-wrap btn-abrir-video" data-titulo="Como conversar sem explodir: a regra dos 20 minutos">
                 <div class="video-thumb-placeholder">
                   <div class="play-circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -261,7 +358,7 @@
             </div>
 
             <div class="video-card">
-              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+              <div class="video-thumb-wrap btn-abrir-video" data-titulo="Por que seu parceiro se fecha quando você reclama?">
                 <div class="video-thumb-placeholder">
                   <div class="play-circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -290,7 +387,7 @@
           </div>
           <div class="grid-videos">
             <div class="video-card">
-              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+              <div class="video-thumb-wrap btn-abrir-video" data-titulo="Reconstruir a relação após a traição: é realmente possível?">
                 <div class="video-thumb-placeholder">
                   <div class="play-circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -310,7 +407,7 @@
             </div>
 
             <div class="video-card">
-              <div class="video-thumb-wrap" onclick="alert('Reproduzindo vídeo no YouTube da Natalie Thedim...')">
+              <div class="video-thumb-wrap btn-abrir-video" data-titulo="Como saber se ainda vale a pena insistir no casamento">
                 <div class="video-thumb-placeholder">
                   <div class="play-circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -339,6 +436,75 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
+  <!-- Modal Informativo: Canal em Gravação / Lançamento -->
+  <div class="modal-yt-backdrop" id="modalYt" aria-hidden="true" role="dialog" aria-labelledby="modalYtTitulo">
+    <div class="modal-yt-box">
+      <button class="modal-yt-close" id="btnFecharModalYt" aria-label="Fechar janela">&times;</button>
+      <div class="modal-yt-icon">🎬</div>
+      <h3 id="modalYtTitulo">Aulas em Gravação & Edição</h3>
+      <p id="modalYtDesc">
+        As aulas clínicas em vídeo da psicóloga Natalie Thedim estão na fase final de produção para o canal oficial. Enquanto os episódios completos são publicados, você pode acompanhar os cortes e análises no Instagram ou conversar diretamente no WhatsApp.
+      </p>
+      <div class="modal-yt-actions">
+        <a href="https://www.instagram.com/psicologa.nataliethedim/" target="_blank" rel="noopener noreferrer" class="btn-modal-ig">
+          <span>Ver reflexões no Instagram (@psicologa.nataliethedim)</span>
+        </a>
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Vi%20as%20aulas%20no%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20atendimento." target="_blank" rel="noopener noreferrer" class="btn-modal-wa">
+          <span>Conversar com Natalie no WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('modalYt');
+      const btnFechar = document.getElementById('btnFecharModalYt');
+      const descModal = document.getElementById('modalYtDesc');
+
+      function abrirModal(tituloVideo) {
+        if (tituloVideo) {
+          descModal.innerHTML = `A aula <strong>"${tituloVideo}"</strong> está na fase final de edição e gravação. Acompanhe os principais insights no Instagram ou mande uma mensagem para Natalie.`;
+        }
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      function fecharModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      document.querySelectorAll('.video-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const btn = card.querySelector('.btn-abrir-video');
+          const titulo = (btn && btn.getAttribute('data-titulo')) || card.querySelector('.video-card-title')?.textContent || '';
+          const resumo = card.querySelector('.video-card-desc')?.textContent || '';
+          if (titulo) {
+            descModal.innerHTML = `<strong>"${titulo}"</strong><br><br>${resumo}<br><br><span style="font-size:0.85rem;">Esta aula clínica está em fase final de edição para o canal oficial. Acompanhe os cortes no Instagram ou fale diretamente com Natalie no WhatsApp:</span>`;
+          }
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+        });
+      });
+
+      const btnCanal = document.querySelector('.btn-canal-yt');
+      if (btnCanal) {
+        btnCanal.addEventListener('click', (e) => {
+          e.preventDefault();
+          abrirModal('Canal Oficial de Vídeos');
+        });
+      }
+
+      if (btnFechar) btnFechar.addEventListener('click', fecharModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) fecharModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) fecharModal();
+      });
+    });
+  </script>
 </body>
 </html>

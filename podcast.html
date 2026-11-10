@@ -205,7 +205,7 @@
           </li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
            class="header-btn" 
            target="_blank" 
            rel="noopener noreferrer">
@@ -368,13 +368,15 @@
   <script src="assets/db.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Simulação Interativa do Player Web
+      // Player Web com Narração Clínica Nativa (Web Speech API pt-BR) + Barra de Progresso
       document.querySelectorAll('.podcast-card').forEach(card => {
         const btn = card.querySelector('.btn-play-pause');
         const iconPlay = card.querySelector('.icon-play');
         const iconPause = card.querySelector('.icon-pause');
         const progressFill = card.querySelector('.progress-fill');
         const currentTimeSpan = card.querySelector('.current-time');
+        const titulo = card.querySelector('h2')?.textContent || '';
+        const sinopse = card.querySelector('.podcast-sinopse')?.textContent || '';
         let tocando = false;
         let progresso = 0;
         let timer = null;
@@ -382,6 +384,13 @@
         btn.addEventListener('click', () => {
           tocando = !tocando;
           if (tocando) {
+            if ('speechSynthesis' in window) {
+              window.speechSynthesis.cancel();
+              const utter = new SpeechSynthesisUtterance(`${titulo}. ${sinopse}`);
+              utter.lang = 'pt-BR';
+              utter.rate = 0.98;
+              window.speechSynthesis.speak(utter);
+            }
             // Pausa outros players
             document.querySelectorAll('.podcast-card').forEach(outro => {
               if (outro !== card) {
@@ -404,10 +413,21 @@
               currentTimeSpan.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
             }, 500);
           } else {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             iconPlay.style.display = 'block';
             iconPause.style.display = 'none';
             if (timer) clearInterval(timer);
           }
+        });
+      });
+
+      // Tratamento elegante para os links de Spotify / Apple Podcasts
+      document.querySelectorAll('.plataforma-pill[href*="spotify.com"], .plataforma-pill[href*="apple.com"]').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          e.preventDefault();
+          const card = pill.closest('.podcast-card');
+          const playBtn = card?.querySelector('.btn-play-pause');
+          if (playBtn) playBtn.click();
         });
       });
     });

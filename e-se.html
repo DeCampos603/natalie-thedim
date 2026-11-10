@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -198,7 +198,7 @@
           </li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
            class="header-btn" 
            target="_blank" 
            rel="noopener noreferrer">
@@ -232,7 +232,7 @@
             <p class="ese-sub">A armadilha de casar com um projeto de reforma em vez de escolher a pessoa real que está ao seu lado.</p>
             
             <div class="audio-player-box">
-              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" data-audio-drop="Drop #01 (4 min)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
               </button>
               <div class="audio-info">
@@ -264,7 +264,7 @@
             <p class="ese-sub">A infidelidade costuma ser o terremoto visível, mas a fenda subterrânea foi cavada meses ou anos antes.</p>
             
             <div class="audio-player-box">
-              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 5 min.')">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" data-audio-drop="Drop #02 (5 min)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
               </button>
               <div class="audio-info">
@@ -296,7 +296,7 @@
             <p class="ese-sub">Crianças são sismógrafos emocionais: sentem as placas tectônicas do casal se mexendo muito antes do tremor ser falado em voz alta.</p>
             
             <div class="audio-player-box">
-              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" data-audio-drop="Drop #03 (4 min)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
               </button>
               <div class="audio-info">
@@ -328,7 +328,7 @@
             <p class="ese-sub">A diferença crucial entre desejar estar com o outro e precisar do outro como anestésico contra o próprio vazio.</p>
             
             <div class="audio-player-box">
-              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" onclick="alert('Áudio reflexivo em produção pela Natalie. Duração prevista: 4 min.')">
+              <button class="btn-play-audio" aria-label="Ouvir reflexão em áudio" data-audio-drop="Drop #04 (4 min)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
               </button>
               <div class="audio-info">
@@ -362,6 +362,55 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
+  <div id="toastAudio" style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#2C1E21; color:#FCFAF7; padding:0.85rem 1.5rem; border-radius:9999px; font-size:0.875rem; box-shadow:0 12px 32px rgba(0,0,0,0.25); z-index:1000; opacity:0; transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1); pointer-events:none; display:flex; align-items:center; gap:0.5rem; border:1px solid rgba(255,255,255,0.15);">
+    <span>🎙️</span>
+    <span id="toastAudioTexto">Áudio em fase final de gravação. Disponível em breve!</span>
+  </div>
+
   <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toast = document.getElementById('toastAudio');
+      const texto = document.getElementById('toastAudioTexto');
+      let timer = null;
+
+      document.querySelectorAll('.btn-play-audio').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const drop = btn.getAttribute('data-audio-drop') || 'Drop de Áudio';
+          const artigo = btn.closest('.artigo-ese-card');
+          const titulo = artigo?.querySelector('h2')?.textContent || '';
+          const corpo = artigo?.querySelector('.ese-corpo')?.textContent?.replace(/\s+/g, ' ').trim() || '';
+
+          if ('speechSynthesis' in window) {
+            if (window.speechSynthesis.speaking && btn.dataset.speaking === 'true') {
+              window.speechSynthesis.cancel();
+              btn.dataset.speaking = 'false';
+              texto.textContent = `⏸️ Narração pausada (${drop}).`;
+            } else {
+              window.speechSynthesis.cancel();
+              document.querySelectorAll('.btn-play-audio').forEach(b => b.dataset.speaking = 'false');
+              const utter = new SpeechSynthesisUtterance(`${titulo}. ${corpo}`);
+              utter.lang = 'pt-BR';
+              utter.rate = 0.98;
+              utter.onend = () => { btn.dataset.speaking = 'false'; };
+              window.speechSynthesis.speak(utter);
+              btn.dataset.speaking = 'true';
+              texto.textContent = `🔊 Reproduzindo narração clínica: ${drop} (clique novamente para pausar)`;
+            }
+          } else {
+            texto.textContent = `🎙️ ${drop} — Acompanhe a leitura completa do ensaio abaixo!`;
+          }
+
+          toast.style.opacity = '1';
+          toast.style.transform = 'translateX(-50%) translateY(0)';
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) translateY(100px)';
+          }, 4500);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

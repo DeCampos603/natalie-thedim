@@ -1,16 +1,133 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Biblioteca dos Relacionamentos · Natalie Thedim</title>
-  <meta name="description" content="Temas de comunicação, família, filhos e autoconhecimento — artigos, vídeos e exercícios organizados por assunto." />
+  <meta name="description" content="Temas de comunicação, família, filhos e autoconhecimento — sínteses clínicas, vídeos e exercícios organizados por assunto." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
   <meta name="theme-color" content="#5B1826" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    .bib-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      cursor: pointer;
+    }
+    .bib-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .bib-btn {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-full);
+      background: var(--color-brand-rose-light);
+      color: var(--color-brand-wine);
+      border: 1px solid var(--border-accent);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      transition: all var(--transition-smooth);
+    }
+    .bib-card:hover .bib-btn,
+    .bib-btn:hover {
+      background: var(--color-brand-wine);
+      color: #FFFFFF;
+      border-color: var(--color-brand-wine);
+    }
+    .modal-bib-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 30, 33, 0.72);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-bib-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-bib-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border-top: 5px solid var(--color-brand-wine);
+      padding: clamp(1.75rem, 4vw, 2.5rem);
+      max-width: 580px;
+      width: 100%;
+      box-shadow: var(--shadow-hover);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-bib-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-surface-tint);
+      color: var(--color-brand-wine);
+      font-size: 1.35rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bib-box h3 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--color-brand-wine);
+      margin: 0.35rem 0 0.85rem;
+    }
+    .modal-bib-reflexao {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+    }
+    .modal-bib-perguntas {
+      background: var(--bg-surface-tint);
+      border-left: 3px solid var(--color-brand-wine);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-bib-perguntas h4 {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-brand-wine);
+      margin-bottom: 0.5rem;
+    }
+    .modal-bib-perguntas ul {
+      padding-left: 1.1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .modal-bib-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -60,12 +177,14 @@
               <a href="filme.html" class="nav-dropdown-item">Clube do Filme</a>
               <a href="livro.html" class="nav-dropdown-item">Clube do Livro</a>
               <a href="podcast.html" class="nav-dropdown-item">Podcast</a>
+              <a href="youtube.html" class="nav-dropdown-item">YouTube</a>
+              <a href="instagram.html" class="nav-dropdown-item">Instagram</a>
               <a href="terapeutas.html" class="nav-dropdown-item">Área p/ Terapeutas</a>
             </div>
           </li>
         </ul>
 
-        <a href="https://wa.me/5521995160968?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
+        <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20agendamento%20de%20consulta." 
            class="header-btn" 
            target="_blank" 
            rel="noopener noreferrer">
@@ -82,9 +201,9 @@
     <section class="page-hero">
       <div class="container">
         <span class="breadcrumb"><a href="index.html">Início</a> / Biblioteca dos Relacionamentos</span>
-        <span class="proto-eyebrow">Uma Wikipédia dos relacionamentos</span>
+        <span class="proto-eyebrow">Enciclopédia Clínica das Relações</span>
         <h1>Biblioteca dos Relacionamentos</h1>
-        <p>Cada tema vai reunir artigos, vídeos, perguntas frequentes, histórias relacionadas e exercícios — organizada nos 4 grandes caminhos do site. Os textos ainda estão sendo escritos pela Natalie.</p>
+        <p>Sínteses clínicas, perguntas de auto-observação e caminhos práticos organizados nos 4 grandes pilares da vida afetiva e familiar. Clique em qualquer tema para abrir a leitura.</p>
       </div>
     </section>
 
@@ -92,12 +211,48 @@
       <div class="container">
         <div class="proto-header"><span class="pilar-label">❤️ Casamento e relacionamentos</span></div>
         <div class="mock-grid">
-          <div class="mock-card"><h3>💬 Comunicação</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>💔 Traição</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>😔 Ciúme</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>⚖️ Divórcio</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🌀 Dependência emocional</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>💗 Sexualidade</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
+          <div class="mock-card bib-card" data-tema="comunicacao">
+            <div>
+              <h3>💬 Comunicação</h3>
+              <p>Como sair do ciclo de ataque e defesa para construir conversas onde ambos se sentem ouvidos sem precisar vencer a discussão.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="traicao">
+            <div>
+              <h3>💔 Traição</h3>
+              <p>O impacto da quebra de confiança, a dor do luto relacional e os critérios reais para decidir entre reconstruir o pacto ou encerrar o ciclo.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="ciume">
+            <div>
+              <h3>😔 Ciúme e Insegurança</h3>
+              <p>Quando o medo do abandono se transforma em vigilância exaustiva e como diferenciar intuição real de feridas antigas de apego.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="divorcio">
+            <div>
+              <h3>⚖️ Divórcio e Transição</h3>
+              <p>Como atravessar o fim de um casamento preservando a saúde emocional dos adultos e protegendo os filhos do conflito de lealdade.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="dependencia">
+            <div>
+              <h3>🌀 Dependência Emocional</h3>
+              <p>Quando o medo da solidão faz você aceitar migalhas afetivas e abrir mão dos próprios valores para não desagradar o outro.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="sexualidade">
+            <div>
+              <h3>💗 Sexualidade e Desejo</h3>
+              <p>O impacto da rotina, da sobrecarga mental e das mágoas não ditas sobre a intimidade erótica e a cumplicidade do casal.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
         </div>
       </div>
     </section>
@@ -106,10 +261,34 @@
       <div class="container">
         <div class="proto-header"><span class="pilar-label">👨‍👩‍👧 Família</span></div>
         <div class="mock-grid">
-          <div class="mock-card"><h3>🚧 Limites</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🧩 Famílias recompostas</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>👴 Pais idosos</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🌤️ Menopausa e casamento</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
+          <div class="mock-card bib-card" data-tema="limites-familia">
+            <div>
+              <h3>🚧 Limites com a Família de Origem</h3>
+              <p>Como proteger a privacidade do casal diante de sogros e pais invasivos sem romper os laços de afeto e respeito.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="recompostas">
+            <div>
+              <h3>🧩 Famílias Recompostas</h3>
+              <p>Os desafios do segundo casamento: "os meus, os seus e os nossos", o papel do padrasto/madrasta e a construção gradual de pertencimento.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="pais-idosos">
+            <div>
+              <h3>👴 Cuidado com Pais Idosos</h3>
+              <p>A inversão de papéis na maturidade, a divisão justa entre irmãos e o cuidado para não esgotar o próprio casamento.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="menopausa">
+            <div>
+              <h3>🌤️ Menopausa, Maturidade e Casamento</h3>
+              <p>As transformações do corpo, do humor e do sentido de vida após os 45 anos — e como o casal pode se redescobrir nessa fase.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
         </div>
       </div>
     </section>
@@ -118,9 +297,27 @@
       <div class="container">
         <div class="proto-header"><span class="pilar-label">👦 Filhos e educação</span></div>
         <div class="mock-grid">
-          <div class="mock-card"><h3>🎓 Educação dos filhos</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🌱 Adolescência</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🚧 Limites com filhos</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
+          <div class="mock-card bib-card" data-tema="educacao-filhos">
+            <div>
+              <h3>🎓 Coerência na Educação dos Filhos</h3>
+              <p>O que fazer quando pai e mãe têm visões opostas sobre criação e como evitar que a divergência vire desautorização na frente da criança.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="adolescencia">
+            <div>
+              <h3>🌱 Adolescência e Diálogo</h3>
+              <p>Como sustentar presença, escuta e contorno firme quando o filho se fecha no quarto e testa todas as fronteiras da casa.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="limites-filhos">
+            <div>
+              <h3>🚧 Limites sem Culpa</h3>
+              <p>Por que dizer "não" com serenidade estrutura a segurança emocional da criança muito mais do que a permissividade ansiosa.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
         </div>
       </div>
     </section>
@@ -129,9 +326,27 @@
       <div class="container">
         <div class="proto-header"><span class="pilar-label">🧠 Autoconhecimento</span></div>
         <div class="mock-grid">
-          <div class="mock-card"><h3>🚧 Limites</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🕊️ Luto</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
-          <div class="mock-card"><h3>🌀 Dependência emocional</h3><div class="chip-row"><span class="chip-static">Artigo pendente</span></div></div>
+          <div class="mock-card bib-card" data-tema="limites-pessoais">
+            <div>
+              <h3>🚧 Posicionamento e Limites Pessoais</h3>
+              <p>Como abandonar a síndrome da "boazinha" que engole tudo para manter a paz e aprender a se posicionar sem agressividade.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="luto">
+            <div>
+              <h3>🕊️ Luto e Recomeços</h3>
+              <p>O trabalho psíquico de elaborar perdas — de pessoas amadas, de projetos de vida ou do casamento que não pôde continuar.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
+          <div class="mock-card bib-card" data-tema="autonomia">
+            <div>
+              <h3>🌀 Autonomia Afetiva</h3>
+              <p>Diferenciação do self: como pertencer profundamente a uma relação sem perder a própria voz, os amigos e a identidade.</p>
+            </div>
+            <button type="button" class="bib-btn">Ler síntese clínica →</button>
+          </div>
         </div>
       </div>
     </section>
@@ -141,6 +356,133 @@
     Natalie Thedim — Psicóloga Clínica · CRP 05/45482 · <a href="index.html">voltar ao início</a>
   </p>
 
+  <!-- Modal de Síntese Clínica -->
+  <div class="modal-bib-backdrop" id="modalBib" aria-hidden="true" role="dialog" aria-labelledby="modalBibTitulo">
+    <div class="modal-bib-box">
+      <button type="button" class="modal-bib-close" id="btnFecharBib" aria-label="Fechar síntese">&times;</button>
+      <span class="pilar-label" id="modalBibPilar">Síntese Clínica</span>
+      <h3 id="modalBibTitulo">Tema</h3>
+      <div class="modal-bib-reflexao" id="modalBibTexto"></div>
+      <div class="modal-bib-perguntas">
+        <h4>Perguntas para refletir hoje</h4>
+        <ul id="modalBibLista"></ul>
+      </div>
+      <div class="modal-bib-actions">
+        <a href="exercicios.html" class="btn-secondary">Fazer exercício prático →</a>
+        <a id="modalBibWa" href="https://wa.me/5521989020364" target="_blank" rel="noopener noreferrer" class="btn-primary">Conversar sobre este tema no WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/db.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SINTESES = {
+        'comunicacao': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Comunicação e Diálogo Seguro',
+          texto: 'Na clínica de casal, raramente o problema é a falta de assunto — o desgaste nasce do tom de acusação e defesa. Quando um parceiro começa a frase com "você sempre" ou "você nunca", o cérebro do outro entra imediatamente em estado de alerta e deixa de escutar a dor por trás da queixa.',
+          perguntas: [
+            'Quando estou magoada(o), eu falo da minha vulnerabilidade ou começo apontando o erro do outro?',
+            'Eu escuto para compreender meu parceiro ou apenas espero minha vez de rebater?',
+            'Qual é o pedido de afeto que está escondido atrás da nossa discussão mais frequente?'
+          ]
+        },
+        'traicao': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Traição e Quebra de Confiança',
+          texto: 'A descoberta de uma infidelidade provoca um choque semelhante ao luto: o relacionamento que existia até ontem termina ali. Se o casal decide permanecer junto, não se trata de "voltar ao que era antes", mas de fundar um segundo casamento baseado em transparência ativa, reparação consistente e compreensão das fissuras que antecederam a crise.',
+          perguntas: [
+            'Existe arrependimento genuíno e disposição para responder às perguntas com transparência?',
+            'Consigo diferenciar o perdão como processo gradual da cobrança punitiva eterna?',
+            'O que precisamos reconstruir no nosso pacto de intimidade além da fidelidade formal?'
+          ]
+        },
+        'ciume': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Ciúme, Controle e Segurança no Vínculo',
+          texto: 'O ciúme intenso costuma prometer proteção, mas entrega distância. Quanto mais um parceiro fiscaliza e interroga, mais o outro se sente sufocado e menos espontâneo fica o afeto. Na psicoterapia, investigamos tanto a postura de quem dá margem à insegurança quanto as feridas de rejeição de quem teme ser trocado.',
+          perguntas: [
+            'Minha insegurança nasce de fatos concretos da relação atual ou de dores que trago da minha história?',
+            'O controle tem me trazido paz ou apenas aumentado minha ansiedade?',
+            'Que combinados claros de respeito mútuo deixariam nossa relação mais tranquila?'
+          ]
+        },
+        'divorcio': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Divórcio Consciente e Reconstrução',
+          texto: 'Nem todo casamento que termina é um fracasso; muitas vezes o fracasso é prolongar por anos uma convivência hostil que adoece a casa inteira. Quando a separação se torna o caminho mais honesto, a clínica ajuda a encerrar a conjugalidade com dignidade, preservando a parceria parental.',
+          perguntas: [
+            'Minha permanência hoje é sustentada pelo afeto ou apenas pelo pavor da mudança?',
+            'Como podemos comunicar e conduzir essa transição protegendo nossos filhos de tomarem partido?',
+            'Quem sou eu quando volto a olhar para os meus próprios projetos de vida?'
+          ]
+        },
+        'dependencia': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Dependência Emocional vs. Amor Adulto',
+          texto: 'Amar é escolher estar junto; depender é sentir que não sobrevive sem a aprovação do outro. Quando o medo do abandono governa a relação, você se cala diante do que dói, pede desculpas pelo que não fez e perde o respeito por si mesma.',
+          perguntas: [
+            'Quantas vezes nesta semana eu disse "sim" ao outro dizendo um "não" violento para mim?',
+            'Eu consigo tolerar o desconforto de desagradar alguém quando defendo um limite importante?',
+            'Como cuido da minha vida própria (amizades, trabalho, saúde) fora do relacionamento?'
+          ]
+        },
+        'sexualidade': {
+          pilar: 'Casamento e Relacionamentos',
+          titulo: 'Sexualidade, Rotina e Desejo a Dois',
+          texto: 'O desejo erótico precisa de admiração e de um mínimo de espaço psíquico. Quando o casal se reduz a sócios cansados que só conversam sobre boletos, tarefas domésticas e filhos, ou quando um assume papel de mãe/pai do outro, a libido inevitavelmente se retrai.',
+          perguntas: [
+            'Nossa relação virou uma gestão de casa onde um cobra e o outro obedece?',
+            'Existem mágoas acumuladas na rotina que estão bloqueando a entrega no quarto?',
+            'Que espaço real temos reservado na semana para sermos homem e mulher além de pai e mãe?'
+          ]
+        }
+      };
+
+      const modal = document.getElementById('modalBib');
+      const btnFechar = document.getElementById('btnFecharBib');
+      const elPilar = document.getElementById('modalBibPilar');
+      const elTitulo = document.getElementById('modalBibTitulo');
+      const elTexto = document.getElementById('modalBibTexto');
+      const elLista = document.getElementById('modalBibLista');
+      const elWa = document.getElementById('modalBibWa');
+
+      document.querySelectorAll('.bib-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const chave = card.getAttribute('data-tema');
+          const h3 = card.querySelector('h3')?.textContent || 'Reflexão Clínica';
+          const p = card.querySelector('p')?.textContent || '';
+          const dados = SINTESES[chave] || {
+            pilar: 'Síntese Clínica · Natalie Thedim',
+            titulo: h3,
+            texto: p + ' Na abordagem sistêmica, olhamos para este tema sem buscar culpados isolados: compreendemos como cada movimento na família alimenta o padrão atual e quais pequenos gestos conscientes podem inaugurar uma nova resposta relacional.',
+            perguntas: [
+              'Qual é a parte deste ciclo que está sob minha responsabilidade direta transformar hoje?',
+              'O que eu gostaria de comunicar com clareza se não tivesse medo da reação do outro?',
+              'De que forma a psicoterapia pode oferecer o contorno seguro que falta para essa conversa?'
+            ]
+          };
+
+          elPilar.textContent = dados.pilar;
+          elTitulo.textContent = dados.titulo;
+          elTexto.textContent = dados.texto;
+          elLista.innerHTML = dados.perguntas.map(q => `<li>${q}</li>`).join('');
+          elWa.href = `https://wa.me/5521989020364?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + dados.titulo + '" na Biblioteca do site e gostaria de conversar sobre atendimento.')}`;
+
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+        });
+      });
+
+      function fechar() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (btnFechar) btnFechar.addEventListener('click', fechar);
+      modal.addEventListener('click', (e) => { if (e.target === modal) fechar(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fechar(); });
+    });
+  </script>
 </body>
 </html>
