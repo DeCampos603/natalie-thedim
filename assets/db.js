@@ -302,6 +302,18 @@ const DB = (() => {
   }
 
   async function salvarConteudo(secoes) {
+    const { ok, erro, json } = await chamar('/api/conteudo', {
+      metodo: 'PUT',
+      corpo: { secoes }
+    });
+    if (!ok) {
+      return {
+        ok: false,
+        erro: erro || json?.erro || 'Não foi possível salvar no servidor. Faça login novamente e tente de novo.',
+        mensagem: null
+      };
+    }
+
     const mapaAtual = lerLocal('nt_cms_conteudo_local', {});
     if (Array.isArray(secoes)) {
       secoes.forEach(item => {
@@ -320,10 +332,6 @@ const DB = (() => {
       window.dispatchEvent(new CustomEvent('cms:atualizado', { detail: mapaAtual }));
     }
 
-    const { ok, erro, json } = await chamar('/api/conteudo', {
-      metodo: 'PUT',
-      corpo: { secoes }
-    });
     return { ok: true, erro: null, mensagem: json?.mensagem || 'Conteúdo salvo com sucesso!' };
   }
 
@@ -479,6 +487,13 @@ const DB = (() => {
     return { ok, erro };
   }
 
+  async function publicarItem(tabela, dados = {}) {
+    const { ok, erro, json } = await chamar('/api/admin?acao=publicar_item', {
+      metodo: 'POST', corpo: { tabela, ...dados },
+    });
+    return { ok, erro, id: json?.id || null };
+  }
+
   return {
     WHATSAPP_OFICIAL,
     EMAIL_OFICIAL,
@@ -494,6 +509,7 @@ const DB = (() => {
     salvarConteudo,
     listarTudo,
     moderar,
+    publicarItem,
     inscreverNewsletter,
     listarNewsletter,
     removerNewsletter,
@@ -553,6 +569,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (conteudo.nome_profissional?.texto) {
       document.querySelectorAll('[data-cms="nome_profissional"]').forEach(el => {
         el.textContent = conteudo.nome_profissional.texto;
+      });
+    }
+    if (conteudo.endereco_consultorio?.texto) {
+      document.querySelectorAll('[data-cms="endereco_consultorio"]').forEach(el => {
+        el.textContent = conteudo.endereco_consultorio.texto;
       });
     }
     if (conteudo.hero_title?.texto) {

@@ -2606,7 +2606,7 @@
             </picture>
             <div class="hero-photo-gradient-overlay"></div>
             <div class="hero-card-desc">
-              <b>Natalie Thedim</b>
+              <b data-cms="nome_profissional">Natalie Thedim</b>
               <span class="desc-crp">Psicóloga Clínica · CRP 05/45482</span>
               <span class="desc-spec">Especialista em Casal e Família (PUC-Rio)</span>
             </div>
@@ -2781,7 +2781,7 @@
         </div>
 
         <div class="about-narrative reveal">
-          <span class="badge-welcome" style="margin-bottom: -0.5rem;">Sobre Natalie Thedim</span>
+          <span class="badge-welcome" style="margin-bottom: -0.5rem;">Sobre <span data-cms="nome_profissional">Natalie Thedim</span></span>
           <h2 class="center-h2" style="text-align: left;">Mais de 20 anos ajudando pessoas e famílias a construírem relações mais saudáveis.</h2>
           <p data-cms="sobre_mim">
             Psicóloga clínica especializada em Terapia de Casal e Família. Meu trabalho integra principalmente a <strong>Abordagem Sistêmica</strong> e a <strong>Psicanálise</strong>, buscando compreender não apenas o sintoma isolado, mas toda a história e o sistema no qual o sofrimento se manifesta.
@@ -2837,7 +2837,7 @@
                    loading="lazy"
                    decoding="async" />
             </picture>
-            <span class="consultorio-photo-badge" id="jornadaBadge">📍 Consultório Presencial · Jardim Botânico (RJ) &amp; Online</span>
+            <span class="consultorio-photo-badge" id="jornadaBadge">📍 Consultório Presencial (RJ) &amp; Online</span>
           </div>
 
           <div class="jornada-steps" role="list" aria-label="Etapas do processo terapêutico">
@@ -2959,6 +2959,7 @@
               <p style="font-size:0.9375rem; color:var(--text-main); max-width:580px; margin:0;">
                 Escolha um horário livre diretamente no calendário do Doctoralia ou fale com o consultório pelo WhatsApp para encaixes e dúvidas:
               </p>
+              <p style="font-size:0.875rem; color:var(--text-muted); margin:0;" data-cms="endereco_consultorio">Consultório no Jardim Botânico, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)</p>
               <div class="doctoralia-widget-actions">
                 <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/perfil/natalie-rodrigues-thedim-silvado" target="_blank" rel="noopener noreferrer nofollow" data-zlw-doctor="natalie-rodrigues-thedim-silvado" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Abrir Agenda Doctoralia →</a>
                 <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20verificar%20hor%C3%A1rios%20dispon%C3%ADveis%20para%20consulta." class="btn-outline-story" target="_blank" rel="noopener noreferrer">Agendar pelo WhatsApp</a>
@@ -3076,6 +3077,7 @@
           </div>
 
           <div style="text-align: center; margin-top: 2rem;">
+            <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:0.75rem;" data-cms="endereco_consultorio">Consultório no Jardim Botânico, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)</p>
             <button type="button" id="linkGoToDoctoralia" class="btn-switch-tab">
               ← Ou escolha um dia e horário na Agenda Online do Doctoralia
             </button>
@@ -3333,8 +3335,7 @@
             <li><a href="#agendamentos">Agendamento Online (Doctoralia)</a></li>
             <li><a href="#atendimentos">Terapia Individual</a></li>
             <li><a href="#atendimentos">Terapia de Casal</a></li>
-            <li><span>Presencial: Rio de Janeiro</span></li>
-            <li><span>Online: todo o Brasil e exterior</span></li>
+            <li><span data-cms="endereco_consultorio">Consultório no Jardim Botânico, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)</span></li>
           </ul>
         </div>
 
@@ -3359,7 +3360,7 @@
       </div>
 
       <div class="footer-bottom-bar">
-        <p>© 2026 Natalie Thedim – Psicóloga Clínica · CRP 05/45482. Todos os direitos reservados. · <a href="admin.html" class="link-edicao-discreto" style="opacity: 0.35; font-size: 0.75rem; text-decoration: none; color: inherit; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='0.35'">Edição</a></p>
+        <p>© 2026 <span data-cms="nome_profissional">Natalie Thedim</span> – Psicóloga Clínica · CRP 05/45482. Todos os direitos reservados. · <a href="admin.html" class="link-edicao-discreto" style="opacity: 0.35; font-size: 0.75rem; text-decoration: none; color: inherit; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='0.35'">Edição</a></p>
         <p>Desenvolvido com rigor ético e padrões de neurodesign acessíveis.</p>
       </div>
     </div>
@@ -3439,6 +3440,9 @@
           const c = data.conteudo;
           if (c.nome_profissional?.texto) {
             document.querySelectorAll('[data-cms="nome_profissional"]').forEach(el => el.textContent = c.nome_profissional.texto);
+          }
+          if (c.endereco_consultorio?.texto) {
+            document.querySelectorAll('[data-cms="endereco_consultorio"]').forEach(el => el.textContent = c.endereco_consultorio.texto);
           }
           if (c.hero_title?.texto) {
             document.querySelectorAll('[data-cms="hero_title"]').forEach(el => el.textContent = c.hero_title.texto);

@@ -1,5 +1,5 @@
-// Rotas da Natalie: ?acao=entrar | sair | sessao | listar | moderar
-import { db, TABELAS, STATUS, responder, lerBody, criarSessao, sessaoValida, iguais, cookieSessao, ipHash } from './_lib.js';
+// Rotas da Natalie: ?acao=entrar | sair | sessao | listar | moderar | publicar_item
+import { db, TABELAS, STATUS, responder, lerBody, criarSessao, sessaoValida, iguais, cookieSessao, ipHash, novoId } from './_lib.js';
 
 const falhas = new Map(); // por instância; freio simples contra tentativa em massa
 
@@ -134,6 +134,52 @@ export default async function handler(req, res) {
       args.push(String(id));
       const r = await db().execute({ sql: `UPDATE ${tabela} SET ${sets.join(', ')} WHERE id = ?`, args });
       return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0 });
+    }
+
+    if (acao === 'publicar_item' && req.method === 'POST') {
+      const body = lerBody(req);
+      const tabela = String(body.tabela || '').trim();
+      if (!['historias', 'cartas', 'perguntas', 'diario_posts'].includes(tabela)) {
+        return responder(res, 400, { erro: 'Tabela inválida para publicação.' });
+      }
+      const cfg = TABELAS[tabela];
+      const texto = String(body.texto ?? '').trim();
+      if (texto.length < cfg.min || texto.length > cfg.max) {
+        return responder(res, 400, { erro: `O texto precisa ter entre ${cfg.min} e ${cfg.max} caracteres.` });
+      }
+
+      const statusFinal = body.status === 'pendente' ? 'pendente' : 'aprovado';
+      const agora = new Date().toISOString();
+      const id = novoId();
+      const colunas = ['id', 'texto', 'status', 'criado_em'];
+      const valores = [id, texto, statusFinal, agora];
+
+      if (statusFinal === 'aprovado') {
+        const carimbo = tabela === 'perguntas' ? 'respondida_em' : 'moderado_em';
+        colunas.push(carimbo);
+        valores.push(agora);
+      }
+
+      if (tabela === 'cartas') {
+        const destinatario = String(body.destinatario ?? '').trim().slice(0, 60);
+        if (destinatario) {
+          colunas.push('destinatario');
+          valores.push(destinatario);
+        }
+      }
+
+      const respostaTexto = String(body.resposta_texto ?? '').trim().slice(0, 4000);
+      if (respostaTexto && tabela !== 'diario_posts') {
+        colunas.push('resposta_tipo', 'resposta_texto');
+        valores.push('texto', respostaTexto);
+      }
+
+      await db().execute({
+        sql: `INSERT INTO ${tabela} (${colunas.join(', ')}) VALUES (${colunas.map(() => '?').join(', ')})`,
+        args: valores
+      });
+
+      return responder(res, 201, { ok: true, id, status: statusFinal });
     }
 
     // === Gestão de Newsletter ===

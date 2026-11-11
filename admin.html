@@ -120,7 +120,7 @@
 
   <main>
     <div id="avisoOffline" class="aviso-offline container" style="margin-top:2rem;" hidden>
-      Não foi possível conectar ao servidor agora. Verifique a conexão com o banco Turso.
+      Não foi possível conectar ao servidor agora. Verifique a conexão com o banco de dados do servidor.
     </div>
 
     <!-- TELA DE LOGIN -->
@@ -151,14 +151,14 @@
         <button class="nav-adm-tab" data-alvo="secaoBiblioteca">Biblioteca & Dúvidas</button>
         <button class="nav-adm-tab" data-alvo="secaoFilmes">Clube do Filme</button>
         <button class="nav-adm-tab" data-alvo="secaoLivros">Clube do Livro</button>
-        <button class="nav-adm-tab" data-alvo="secaoModeracao">Moderação da Comunidade</button>
+        <button class="nav-adm-tab" data-alvo="secaoModeracao">Moderação da Comunidade <span class="contagem" id="contModTotal"></span></button>
       </div>
 
       <!-- SEÇÃO 1: MINI-CMS (site_content) -->
       <section id="secaoCMS" class="cms-container">
         <div class="cms-header">
           <h2>Edição de Textos e Conteúdo</h2>
-          <p>Altere as informações dinâmicas do site principal salvas no Turso.</p>
+          <p>Altere as informações dinâmicas do site principal salvas no banco de dados.</p>
         </div>
 
         <form id="formCMS" class="cms-grid">
@@ -425,6 +425,48 @@
 
       <!-- SEÇÃO 6: MODERAÇÃO DE ENVIOS (HISTÓRIAS, CARTAS, PERGUNTAS, DIÁRIO) -->
       <section id="secaoModeracao" hidden>
+        <div class="cms-header" style="margin-bottom: 1.5rem;">
+          <div>
+            <h2>Moderação &amp; Publicações da Comunidade</h2>
+            <p>Envios feitos pelo site chegam em <strong>Pendentes</strong> para você responder e aprovar. Se recebeu uma história por e-mail, use o botão ao lado para publicá-la com sua resposta.</p>
+          </div>
+          <button type="button" class="btn-secundario" id="btnNovoItemComunidade">+ Publicar História / Resposta</button>
+        </div>
+
+        <div id="boxFormComunidade" class="cms-grupo" style="margin-bottom: 2rem;" hidden>
+          <span class="cms-grupo-title">Publicar História, Carta ou Pergunta com Resposta</span>
+          <form id="formComunidadeManual" style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+              <div class="campo">
+                <label for="comunidade_tabela">Onde publicar</label>
+                <select id="comunidade_tabela" style="width:100%; border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:0.75rem 0.875rem; font-family:inherit; font-size:0.9375rem; background:var(--bg-surface-tint); color:var(--text-main);">
+                  <option value="historias">Histórias (Mural de Histórias)</option>
+                  <option value="cartas">Cartas (Cartas Não Enviadas)</option>
+                  <option value="perguntas">Perguntas (Pergunte a Natalie)</option>
+                  <option value="diario_posts">Diário Anônimo</option>
+                </select>
+              </div>
+              <div class="campo" id="comunidadeDestWrap" hidden>
+                <label for="comunidade_destinatario">Destinatário (somente Cartas)</label>
+                <input type="text" id="comunidade_destinatario" maxlength="60" placeholder="Ex: Para o meu eu de cinco anos atrás" />
+              </div>
+            </div>
+            <div class="campo">
+              <label for="comunidade_texto">Texto recebido (história, carta ou pergunta)</label>
+              <textarea id="comunidade_texto" rows="4" required minlength="10" placeholder="Cole ou digite aqui a história, carta ou pergunta enviada..."></textarea>
+            </div>
+            <div class="campo" id="comunidadeRespostaWrap">
+              <label for="comunidade_resposta">Resposta / Reflexão de Natalie (aparece publicada junto ao texto)</label>
+              <textarea id="comunidade_resposta" rows="4" placeholder="Escreva aqui sua resposta acolhedora para publicar no site..."></textarea>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-top:0.25rem;">
+              <button type="submit" class="btn-enviar" id="btnPublicarComunidade">Publicar Agora no Site</button>
+              <button type="button" class="btn-secundario" id="btnCancelarComunidade">Cancelar</button>
+              <div id="statusComunidadeManual" class="status-toast" hidden></div>
+            </div>
+          </form>
+        </div>
+
         <div class="fila-tabs">
           <button class="fila-tab is-active" data-tabela="historias">Histórias <span class="contagem" id="contHistorias"></span></button>
           <button class="fila-tab" data-tabela="cartas">Cartas <span class="contagem" id="contCartas"></span></button>
@@ -501,7 +543,7 @@
         btnSalvarCMS.disabled = false;
 
         if (!ok) {
-          console.warn('[CMS] Não foi possível carregar dados do Turso:', erro);
+          console.warn('[CMS] Não foi possível carregar dados do servidor:', erro);
           return;
         }
 
@@ -528,7 +570,7 @@
         e.preventDefault();
         btnSalvarCMS.disabled = true;
         statusCMS.className = 'status-toast salvando';
-        statusCMS.textContent = 'Salvando alterações no Turso...';
+        statusCMS.textContent = 'Salvando alterações no servidor...';
         statusCMS.hidden = false;
 
         const payload = [
@@ -538,7 +580,7 @@
           { 
             section_name: 'sobre_mim', 
             content_text: document.getElementById('cms_sobre_mim').value,
-            image_url: document.getElementById('cms_image_url').value.trim() || 'assets/foto-natalie-thedim.png'
+            image_url: document.getElementById('cms_image_url').value.trim() || 'assets/foto-natalie-thedim.webp'
           },
           { section_name: 'crp_info', content_text: document.getElementById('cms_crp_info').value },
           { section_name: 'whatsapp_numero', content_text: document.getElementById('cms_whatsapp_numero').value },
@@ -922,13 +964,102 @@
         diario_posts: { nome: 'Diário', respostaTipos: false },
       };
 
+      const boxFormComunidade = document.getElementById('boxFormComunidade');
+      const formComunidadeManual = document.getElementById('formComunidadeManual');
+      const btnNovoItemComunidade = document.getElementById('btnNovoItemComunidade');
+      const btnCancelarComunidade = document.getElementById('btnCancelarComunidade');
+      const selectComunidadeTabela = document.getElementById('comunidade_tabela');
+      const comunidadeDestWrap = document.getElementById('comunidadeDestWrap');
+      const comunidadeRespostaWrap = document.getElementById('comunidadeRespostaWrap');
+      const statusComunidadeManual = document.getElementById('statusComunidadeManual');
+
+      function formatarDataBr(valor) {
+        if (!valor) return 'Data indisponível';
+        const txt = String(valor).trim();
+        let d;
+        if (/^\d{10}$/.test(txt)) {
+          d = new Date(Number(txt) * 1000);
+        } else if (/^\d{13}$/.test(txt)) {
+          d = new Date(Number(txt));
+        } else {
+          d = new Date(txt.includes('T') || txt.includes('Z') ? txt : txt.replace(' ', 'T'));
+        }
+        return Number.isNaN(d.getTime()) ? txt : d.toLocaleString('pt-BR');
+      }
+
+      function atualizarCamposFormComunidade() {
+        const t = selectComunidadeTabela.value;
+        comunidadeDestWrap.hidden = t !== 'cartas';
+        comunidadeRespostaWrap.hidden = t === 'diario_posts';
+      }
+
+      btnNovoItemComunidade.addEventListener('click', () => {
+        formComunidadeManual.reset();
+        selectComunidadeTabela.value = tabelaAtual;
+        atualizarCamposFormComunidade();
+        statusComunidadeManual.hidden = true;
+        boxFormComunidade.hidden = false;
+        boxFormComunidade.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      btnCancelarComunidade.addEventListener('click', () => {
+        boxFormComunidade.hidden = true;
+      });
+
+      selectComunidadeTabela.addEventListener('change', atualizarCamposFormComunidade);
+
+      formComunidadeManual.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnPublicarComunidade');
+        const tabela = selectComunidadeTabela.value;
+        const texto = document.getElementById('comunidade_texto').value.trim();
+        const resposta_texto = document.getElementById('comunidade_resposta').value.trim();
+        const destinatario = document.getElementById('comunidade_destinatario').value.trim();
+
+        btn.disabled = true;
+        statusComunidadeManual.className = 'status-toast salvando';
+        statusComunidadeManual.textContent = 'Publicando no site...';
+        statusComunidadeManual.hidden = false;
+
+        const { ok, erro } = await DB.publicarItem(tabela, {
+          texto,
+          resposta_texto,
+          destinatario,
+          status: 'aprovado'
+        });
+        btn.disabled = false;
+
+        if (!ok) {
+          statusComunidadeManual.className = 'status-toast erro';
+          statusComunidadeManual.textContent = 'Erro ao publicar: ' + (erro || 'tente novamente');
+          return;
+        }
+
+        statusComunidadeManual.className = 'status-toast sucesso';
+        statusComunidadeManual.textContent = '✓ Publicado e visível no site!';
+        tabelaAtual = tabela;
+        statusAtual = 'aprovado';
+        tabsModeracao.forEach((t) => t.classList.toggle('is-active', t.getAttribute('data-tabela') === tabela));
+        filtrosStatus.forEach((c) => (c.style.fontWeight = c.getAttribute('data-status') === 'aprovado' ? '700' : '400'));
+        await atualizarContagens();
+        await carregarFila();
+        setTimeout(() => {
+          boxFormComunidade.hidden = true;
+          statusComunidadeManual.hidden = true;
+        }, 1200);
+      });
+
       async function atualizarContagens() {
+        let totalPendentes = 0;
         for (const tabela of Object.keys(rotulos)) {
           const { dados } = await DB.listarTudo(tabela);
           const pendentes = (dados || []).filter((d) => d.status === 'pendente').length;
+          totalPendentes += pendentes;
           const alvo = document.getElementById('cont' + tabela.replace('_posts', '').replace(/^\w/, (c) => c.toUpperCase()));
           if (alvo) alvo.textContent = pendentes > 0 ? `(${pendentes})` : '';
         }
+        const totalEl = document.getElementById('contModTotal');
+        if (totalEl) totalEl.textContent = totalPendentes > 0 ? `(${totalPendentes})` : '';
       }
 
       async function carregarFila() {
@@ -940,7 +1071,10 @@
         }
         const filtrados = (dados || []).filter((d) => d.status === statusAtual);
         if (filtrados.length === 0) {
-          listaModeracao.innerHTML = `<p class="lista-vazia">Nenhum item em "${statusAtual}" nesta aba.</p>`;
+          const dicaVazia = statusAtual === 'pendente'
+            ? 'Nenhum item pendente nesta aba. Se recebeu uma história por e-mail, clique em "+ Publicar História / Resposta" acima.'
+            : `Nenhum item em "${statusAtual}" nesta aba.`;
+          listaModeracao.innerHTML = `<p class="lista-vazia">${dicaVazia}</p>`;
           return;
         }
 
@@ -948,7 +1082,7 @@
           const rotulo = rotulos[tabelaAtual];
           const campoResposta = rotulo.respostaTipos ? `
             <div class="campo" style="margin-top:0.75rem;">
-              <label>Resposta de Natalie (opcional, aparece com o texto):</label>
+              <label>Resposta de Natalie (aparece publicada junto ao texto):</label>
               <textarea class="resposta-texto" rows="2" placeholder="Escreva a resposta ou comentário terapêutico...">${escapeHtml(item.resposta_texto)}</textarea>
             </div>` : '';
 
@@ -956,13 +1090,13 @@
             <div class="item-moderacao" data-id="${item.id}">
               <div class="meta">
                 <span class="badge-status ${item.status}">${item.status}</span>
-                <time>${new Date(item.criado_em).toLocaleString('pt-BR')}</time>
+                <time>${formatarDataBr(item.criado_em)}</time>
               </div>
               ${item.destinatario ? `<div class="mock-meta" style="margin-bottom:0.5rem;">Para: ${escapeHtml(item.destinatario)}</div>` : ''}
               <div class="texto">${escapeHtml(item.texto)}</div>
               ${campoResposta}
               <div class="acoes">
-                <button class="btn-mod aprovar" data-acao="aprovado">✓ Aprovar</button>
+                <button class="btn-mod aprovar" data-acao="aprovado">✓ Aprovar e Publicar</button>
                 <button class="btn-mod rejeitar" data-acao="rejeitado">✕ Rejeitar</button>
               </div>
             </div>
@@ -979,12 +1113,13 @@
                 ? { resposta_texto: respostaEl.value.trim() }
                 : {};
               btn.disabled = true;
-              const { ok } = await DB.moderar(tabelaAtual, id, acao, extra);
+              const { ok, erro } = await DB.moderar(tabelaAtual, id, acao, extra);
               if (ok) {
                 await atualizarContagens();
                 await carregarFila();
               } else {
                 btn.disabled = false;
+                alert('Erro ao salvar moderação: ' + (erro || 'verifique sua sessão e tente novamente.'));
               }
             });
           });
