@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS historias (
   resposta_tipo VARCHAR(20) NULL,
   resposta_texto TEXT NULL,
   resposta_url VARCHAR(500) NULL,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   moderado_em VARCHAR(32) NULL,
   INDEX idx_hist_status (status),
   INDEX idx_hist_criado (criado_em)
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS cartas (
   resposta_tipo VARCHAR(20) NULL,
   resposta_texto TEXT NULL,
   resposta_url VARCHAR(500) NULL,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   moderado_em VARCHAR(32) NULL,
   INDEX idx_cartas_status (status),
   INDEX idx_cartas_criado (criado_em)
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS perguntas (
   resposta_tipo VARCHAR(20) NULL,
   resposta_texto TEXT NULL,
   resposta_url VARCHAR(500) NULL,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   respondida_em VARCHAR(32) NULL,
   INDEX idx_perg_status (status),
   INDEX idx_perg_criado (criado_em)
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS diario_posts (
   texto VARCHAR(500) NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'pendente',
   reacoes INT NOT NULL DEFAULT 0,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   moderado_em VARCHAR(32) NULL,
   INDEX idx_diario_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS site_content (
   section_name VARCHAR(64) NOT NULL UNIQUE,
   content_text MEDIUMTEXT NOT NULL,
   image_url VARCHAR(500) NULL,
-  updated_at VARCHAR(32) NOT NULL
+  updated_at VARCHAR(32) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS newsletter_inscritos (
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS newsletter_inscritos (
   nome VARCHAR(150) NULL,
   origem VARCHAR(50) DEFAULT 'site_principal',
   consentimento_lgpd TINYINT(1) DEFAULT 1,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   INDEX idx_news_criado (criado_em)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS biblioteca_temas (
   icone VARCHAR(20) DEFAULT '💬',
   resumo TEXT NULL,
   ordem INT DEFAULT 0,
-  atualizado_em VARCHAR(32) NOT NULL
+  atualizado_em VARCHAR(32) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS biblioteca_mensagens (
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS biblioteca_mensagens (
   status VARCHAR(20) NOT NULL DEFAULT 'pendente',
   resposta TEXT NULL,
   consentimento_lgpd TINYINT(1) DEFAULT 1,
-  criado_em VARCHAR(32) NOT NULL,
+  criado_em VARCHAR(32) NOT NULL DEFAULT '',
   INDEX idx_bibmsg_tema (tema_chave),
   INDEX idx_bibmsg_criado (criado_em)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS filmes (
   perguntas TEXT NOT NULL,
   reflexao MEDIUMTEXT NOT NULL,
   ordem INT DEFAULT 0,
-  criado_em VARCHAR(32) NOT NULL
+  criado_em VARCHAR(32) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS livros (
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS livros (
   licao MEDIUMTEXT NOT NULL,
   citacao TEXT NOT NULL,
   ordem INT DEFAULT 0,
-  criado_em VARCHAR(32) NOT NULL
+  criado_em VARCHAR(32) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Seed inicial de conteúdo

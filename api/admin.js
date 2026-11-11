@@ -197,9 +197,10 @@ export default async function handler(req, res) {
     if (acao === 'filmes_salvar' && req.method === 'POST') {
       const { id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem } = lerBody(req);
       const filmeId = id || `filme_${Date.now()}`;
+      const criadoEm = new Date().toISOString().slice(0, 19).replace('T', ' ');
       await db().execute({
-        sql: `INSERT INTO filmes (id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        sql: `INSERT INTO filmes (id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem, criado_em)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
               ON CONFLICT(id) DO UPDATE SET
                 titulo = excluded.titulo,
                 direcao_ano = excluded.direcao_ano,
@@ -208,7 +209,7 @@ export default async function handler(req, res) {
                 perguntas = excluded.perguntas,
                 reflexao = excluded.reflexao,
                 ordem = excluded.ordem`,
-        args: [filmeId, titulo, direcao_ano || '', badge || 'Cinema & Clínica', sinopse, perguntas || '', reflexao || '', Number(ordem) || 0]
+        args: [filmeId, titulo, direcao_ano || '', badge || 'Cinema & Clínica', sinopse, perguntas || '', reflexao || '', Number(ordem) || 0, criadoEm]
       });
       return responder(res, 200, { ok: true, mensagem: 'Filme salvo com sucesso.' });
     }
@@ -226,9 +227,10 @@ export default async function handler(req, res) {
     if (acao === 'livros_salvar' && req.method === 'POST') {
       const { id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem } = lerBody(req);
       const livroId = id || `livro_${Date.now()}`;
+      const criadoEm = new Date().toISOString().slice(0, 19).replace('T', ' ');
       await db().execute({
-        sql: `INSERT INTO livros (id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        sql: `INSERT INTO livros (id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem, criado_em)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
               ON CONFLICT(id) DO UPDATE SET
                 titulo = excluded.titulo,
                 autor_ano = excluded.autor_ano,
@@ -237,7 +239,7 @@ export default async function handler(req, res) {
                 licao = excluded.licao,
                 citacao = excluded.citacao,
                 ordem = excluded.ordem`,
-        args: [livroId, titulo, autor_ano || '', badge || 'Leitura Sistêmica', sinopse, licao || '', citacao || '', Number(ordem) || 0]
+        args: [livroId, titulo, autor_ano || '', badge || 'Leitura Sistêmica', sinopse, licao || '', citacao || '', Number(ordem) || 0, criadoEm]
       });
       return responder(res, 200, { ok: true, mensagem: 'Livro salvo com sucesso.' });
     }

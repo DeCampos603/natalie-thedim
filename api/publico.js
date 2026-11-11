@@ -3,6 +3,7 @@ import { db, TABELAS, novoId, responder, lerBody, ipHash } from './_lib.js';
 
 const JANELA_S = 600;
 const MAX_ENVIOS = 5;
+const agoraSql = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 export default async function handler(req, res) {
   try {
@@ -12,10 +13,7 @@ export default async function handler(req, res) {
       const tabela = req.query.tabela;
       if (!TABELAS[tabela]) return responder(res, 400, { erro: 'tabela inválida' });
       const limite = Math.min(Math.max(parseInt(req.query.limite, 10) || 20, 1), 100);
-      const r = await db().execute({
-        sql: `SELECT * FROM ${tabela} WHERE status = 'aprovado' ORDER BY criado_em DESC LIMIT ?`,
-        args: [limite],
-      });
+      const r = await db().execute(`SELECT * FROM ${tabela} WHERE status = 'aprovado' ORDER BY criado_em DESC LIMIT ${limite}`);
       return responder(res, 200, { dados: r.rows });
     }
 
@@ -56,10 +54,10 @@ export default async function handler(req, res) {
       const id = novoId();
       await db().batch([
         {
-          sql: `INSERT INTO newsletter_inscritos (id, email, nome, origem)
-                VALUES (?, ?, ?, 'site')
+          sql: `INSERT INTO newsletter_inscritos (id, email, nome, origem, criado_em)
+                VALUES (?, ?, ?, 'site', ?)
                 ON CONFLICT(email) DO UPDATE SET nome = excluded.nome`,
-          args: [id, email, nome || null],
+          args: [id, email, nome || null, agoraSql()],
         },
         { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
       ], 'write');
@@ -90,9 +88,9 @@ export default async function handler(req, res) {
       const id = novoId();
       await db().batch([
         {
-          sql: `INSERT INTO biblioteca_mensagens (id, tema_chave, nome, email, whatsapp, mensagem)
-                VALUES (?, ?, ?, ?, ?, ?)`,
-          args: [id, tema_chave, nome || 'Anônimo', email || null, whatsapp || null, mensagem],
+          sql: `INSERT INTO biblioteca_mensagens (id, tema_chave, nome, email, whatsapp, mensagem, criado_em)
+                VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          args: [id, tema_chave, nome || 'Anônimo', email || null, whatsapp || null, mensagem, agoraSql()],
         },
         { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
       ], 'write');
@@ -107,8 +105,8 @@ export default async function handler(req, res) {
       if (texto.length < cfg.min || texto.length > cfg.max) {
         return responder(res, 400, { erro: `O texto precisa ter entre ${cfg.min} e ${cfg.max} caracteres.` });
       }
-      const colunas = ['id', 'texto'];
-      const valores = [novoId(), texto];
+      const colunas = ['id', 'texto', 'criado_em'];
+      const valores = [novoId(), texto, agoraSql()];
       for (const c of cfg.extra) {
         const v = String(dados[c] ?? '').trim().slice(0, 60);
         if (v) { colunas.push(c); valores.push(v); }
