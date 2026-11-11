@@ -3242,7 +3242,10 @@
 
             try {
               if (window.DB && window.DB.inscreverNewsletter) {
-                await window.DB.inscreverNewsletter(email, nome, 'site_home');
+                const resNews = await window.DB.inscreverNewsletter(email, nome, 'site_home');
+                if (resNews && resNews.ok === false) {
+                  throw new Error(resNews.erro || 'Não foi possível concluir a inscrição.');
+                }
               }
               statusNews.style.display = 'block';
               statusNews.style.background = '#E8F5E9';
@@ -3432,48 +3435,7 @@
         revealElements.forEach(el => el.classList.add('is-visible'));
       }
 
-      // 3. Hidratação Dinâmica do Mini-CMS (Turso) em Tempo Real
-      fetch('/api/conteudo')
-        .then(res => res.ok ? res.json() : null)
-        .then(data => {
-          if (!data || !data.conteudo) return;
-          const c = data.conteudo;
-          if (c.nome_profissional?.texto) {
-            document.querySelectorAll('[data-cms="nome_profissional"]').forEach(el => el.textContent = c.nome_profissional.texto);
-          }
-          if (c.endereco_consultorio?.texto) {
-            document.querySelectorAll('[data-cms="endereco_consultorio"]').forEach(el => el.textContent = c.endereco_consultorio.texto);
-          }
-          if (c.hero_title?.texto) {
-            document.querySelectorAll('[data-cms="hero_title"]').forEach(el => el.textContent = c.hero_title.texto);
-          }
-          if (c.hero_subtitle?.texto) {
-            document.querySelectorAll('[data-cms="hero_subtitle"]').forEach(el => el.textContent = c.hero_subtitle.texto);
-          }
-          if (c.sobre_mim?.texto) {
-            document.querySelectorAll('[data-cms="sobre_mim"]').forEach(el => el.textContent = c.sobre_mim.texto);
-          }
-          if (c.crp_info?.texto) {
-            document.querySelectorAll('[data-cms="crp_info"]').forEach(el => el.textContent = c.crp_info.texto);
-          }
-          if (c.whatsapp_numero?.texto) {
-            let numLimpo = c.whatsapp_numero.texto.replace(/\D/g, '');
-            if (!numLimpo || numLimpo !== '5521989020364') {
-              numLimpo = '5521989020364';
-            }
-            if (numLimpo) {
-              document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
-                try {
-                  const u = new URL(a.href);
-                  u.pathname = '/' + numLimpo;
-                  a.href = u.toString();
-                } catch (_) {}
-              });
-            }
-          }
-        })
-        .catch(() => {});
-      // 4. Dropdown Persistente (Hover Intent + Buffer de 250ms sem fechamento acidental)
+      // 3. Dropdown Persistente (Hover Intent + Buffer de 250ms sem fechamento acidental)
       document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
         let timer = null;
         const btn = dropdown.querySelector('.nav-dropdown-btn');

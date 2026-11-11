@@ -354,18 +354,28 @@
           btn.innerHTML = '<span>Enviando...</span>';
 
           try {
-            // Envia para o banco de dados Turso como história/reflexão para moderação
+            // Envia para o banco de dados como história/reflexão para moderação
             const r = await DB.enviar('historias', {
               texto: `[Reflexão Caso #${casoNum}] ${texto}`
             });
+            if (!r || !r.ok) {
+              toast.hidden = false;
+              toast.style.background = 'var(--color-brand-rose-light)';
+              toast.style.color = 'var(--color-brand-wine)';
+              toast.textContent = '⚠️ Não foi possível registrar agora (' + (r?.erro || 'tente novamente em instantes') + ').';
+              return;
+            }
 
             toast.hidden = false;
+            toast.style.background = '';
+            toast.style.color = '';
             toast.textContent = '✨ Sua reflexão foi enviada com sucesso! Muito obrigada pela contribuição anônima.';
             textarea.value = '';
           } catch (_) {
             toast.hidden = false;
-            toast.textContent = '✨ Reflexão registrada com sucesso. Obrigada por compartilhar sua visão.';
-            textarea.value = '';
+            toast.style.background = 'var(--color-brand-rose-light)';
+            toast.style.color = 'var(--color-brand-wine)';
+            toast.textContent = '⚠️ Falha temporária ao enviar. Tente novamente em instantes.';
           } finally {
             btn.disabled = false;
             btn.innerHTML = '<span>Enviar minha reflexão</span>';

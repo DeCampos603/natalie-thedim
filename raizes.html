@@ -523,8 +523,8 @@
           </div>
 
           <div class="form-group" style="margin-top: 1.25rem;">
-            <label style="display:flex; align-items:flex-start; gap:0.65rem; font-weight:normal; cursor:pointer;">
-              <input type="checkbox" name="ciente_privacidade" value="sim" style="width:auto; margin-top:0.25rem; accent-color:var(--color-brand-wine);" checked />
+            <label for="rz_ciente_privacidade" style="display:flex; align-items:flex-start; gap:0.65rem; font-weight:normal; cursor:pointer;">
+              <input type="checkbox" id="rz_ciente_privacidade" name="ciente_privacidade" value="sim" style="width:auto; margin-top:0.25rem; accent-color:var(--color-brand-wine);" checked />
               <span style="font-size: 0.875rem; color: var(--text-muted);">Estou ciente de que minhas respostas ficam salvas temporariamente na memória deste aparelho para meu preenchimento.</span>
             </label>
           </div>
@@ -537,35 +537,35 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Avô paterno: nome completo</label>
-              <input type="text" name="paterna_avo_nome" placeholder="Nome do avô paterno" />
+              <label for="rz_paterna_avo_nome">Avô paterno: nome completo</label>
+              <input id="rz_paterna_avo_nome" type="text" name="paterna_avo_nome" placeholder="Nome do avô paterno" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="paterna_avo_idade" placeholder="Ex: 78 anos / falecido aos 65" />
+              <label for="rz_paterna_avo_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_paterna_avo_idade" type="text" name="paterna_avo_idade" placeholder="Ex: 78 anos / falecido aos 65" /
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Avó paterna: nome completo</label>
-              <input type="text" name="paterna_avoa_nome" placeholder="Nome da avó paterna" />
+              <label for="rz_paterna_avoa_nome">Avó paterna: nome completo</label>
+              <input id="rz_paterna_avoa_nome" type="text" name="paterna_avoa_nome" placeholder="Nome da avó paterna" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="paterna_avoa_idade" placeholder="Ex: 82 anos / falecida aos 70" />
+              <label for="rz_paterna_avoa_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_paterna_avoa_idade" type="text" name="paterna_avoa_idade" placeholder="Ex: 82 anos / falecida aos 70" /
             </div>
           </div>
 
           <div class="form-group">
-            <label>Como era a relação entre os seus avós paternos?</label>
+            <label for="rz_paterna_avos_relacao">Como era a relação entre os seus avós paternos?</label>
             <span class="field-hint">Havia afeto, frieza, brigas frequentes, autoritarismo ou distanciamento?</span>
-            <textarea name="paterna_avos_relacao"></textarea>
+            <textarea id="rz_paterna_avos_relacao" name="paterna_avos_relacao"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Houve outras uniões, casamentos anteriores ou outros filhos dos seus avós paternos?</label>
-            <textarea name="paterna_outras_unioes"></textarea>
+            <label for="rz_paterna_outras_unioes">Houve outras uniões, casamentos anteriores ou outros filhos dos seus avós paternos?</label>
+            <textarea id="rz_paterna_outras_unioes" name="paterna_outras_unioes"</textarea>
           </div>
 
           <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 1.75rem 0 0.5rem; font-size: 1.15rem;">Irmãos do seu pai (Tios e Tias Paternos)</h3>
@@ -583,35 +583,35 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Avô materno: nome completo</label>
-              <input type="text" name="materna_avo_nome" placeholder="Nome do avô materno" />
+              <label for="rz_materna_avo_nome">Avô materno: nome completo</label>
+              <input id="rz_materna_avo_nome" type="text" name="materna_avo_nome" placeholder="Nome do avô materno" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="materna_avo_idade" placeholder="Ex: 80 anos / falecido aos 62" />
+              <label for="rz_materna_avo_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_materna_avo_idade" type="text" name="materna_avo_idade" placeholder="Ex: 80 anos / falecido aos 62" /
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Avó materna: nome completo</label>
-              <input type="text" name="materna_avoa_nome" placeholder="Nome da avó materna" />
+              <label for="rz_materna_avoa_nome">Avó materna: nome completo</label>
+              <input id="rz_materna_avoa_nome" type="text" name="materna_avoa_nome" placeholder="Nome da avó materna" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="materna_avoa_idade" placeholder="Ex: 75 anos / viva" />
+              <label for="rz_materna_avoa_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_materna_avoa_idade" type="text" name="materna_avoa_idade" placeholder="Ex: 75 anos / viva" /
             </div>
           </div>
 
           <div class="form-group">
-            <label>Como era a relação entre os seus avós maternos?</label>
+            <label for="rz_materna_avos_relacao">Como era a relação entre os seus avós maternos?</label>
             <span class="field-hint">Como eles se comunicavam e resolviam discordâncias?</span>
-            <textarea name="materna_avos_relacao"></textarea>
+            <textarea id="rz_materna_avos_relacao" name="materna_avos_relacao"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Houve outras uniões, parceiros anteriores ou outros filhos dos seus avós maternos?</label>
-            <textarea name="materna_outras_unioes"></textarea>
+            <label for="rz_materna_outras_unioes">Houve outras uniões, parceiros anteriores ou outros filhos dos seus avós maternos?</label>
+            <textarea id="rz_materna_outras_unioes" name="materna_outras_unioes"</textarea>
           </div>
 
           <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 1.75rem 0 0.5rem; font-size: 1.15rem;">Irmãos da sua mãe (Tios e Tias Maternos)</h3>
@@ -629,29 +629,29 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Nome do pai / figura paterna</label>
-              <input type="text" name="pai_nome" />
+              <label for="rz_pai_nome">Nome do pai / figura paterna</label>
+              <input id="rz_pai_nome" type="text" name="pai_nome" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="pai_idade" />
+              <label for="rz_pai_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_pai_idade" type="text" name="pai_idade" /
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label>Nome da mãe / figura materna</label>
-              <input type="text" name="mae_nome" />
+              <label for="rz_mae_nome">Nome da mãe / figura materna</label>
+              <input id="rz_mae_nome" type="text" name="mae_nome" /
             </div>
             <div class="form-group">
-              <label>Idade atual ou idade ao falecer</label>
-              <input type="text" name="mae_idade" />
+              <label for="rz_mae_idade">Idade atual ou idade ao falecer</label>
+              <input id="rz_mae_idade" type="text" name="mae_idade" /
             </div>
           </div>
 
           <div class="form-group">
-            <label>Situação da união entre eles</label>
-            <select name="pais_situacao_uniao">
+            <label for="rz_pais_situacao_uniao">Situação da união entre eles</label>
+            <select id="rz_pais_situacao_uniao" name="pais_situacao_uniao"
               <option value="">Selecione a situação</option>
               <option value="Casados / União Estável">Casados / União Estável</option>
               <option value="Separados">Separados</option>
@@ -664,26 +664,26 @@
           </div>
 
           <div class="form-group">
-            <label>Como foi ou é a relação entre eles?</label>
+            <label for="rz_pais_relacao_clima">Como foi ou é a relação entre eles?</label>
             <span class="field-hint">Considere: demonstrações de afeto, comunicação, brigas, silêncios e como tomavam decisões.</span>
-            <textarea name="pais_relacao_clima"></textarea>
+            <textarea id="rz_pais_relacao_clima" name="pais_relacao_clima"</textarea>
           </div>
 
           <div class="form-group">
-            <label>História do casal e acontecimentos marcantes</label>
+            <label for="rz_pais_historia_casal">História do casal e acontecimentos marcantes</label>
             <span class="field-hint">Como se conheceram? Houve crises, reconciliações ou fatos que marcaram a união?</span>
-            <textarea name="pais_historia_casal"></textarea>
+            <textarea id="rz_pais_historia_casal" name="pais_historia_casal"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Houve outros relacionamentos, anteriores ou posteriores, de cada um?</label>
+            <label for="rz_pais_outras_relacoes">Houve outros relacionamentos, anteriores ou posteriores, de cada um?</label>
             <span class="field-hint">Indique se houve outros parceiros(as) e outros filhos dessas uniões.</span>
-            <textarea name="pais_outras_relacoes"></textarea>
+            <textarea id="rz_pais_outras_relacoes" name="pais_outras_relacoes"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Além dos seus pais, quem exerceu papel de cuidado ou criação na sua infância?</label>
-            <textarea name="pais_outros_cuidadores" placeholder="Ex: avó materna, tia, babá, padrasto..."></textarea>
+            <label for="rz_pais_outros_cuidadores">Além dos seus pais, quem exerceu papel de cuidado ou criação na sua infância?</label>
+            <textarea id="rz_pais_outros_cuidadores" name="pais_outros_cuidadores" placeholder="Ex: avó materna, tia, babá, padrasto..."</textarea>
           </div>
         </section>
 
@@ -700,19 +700,19 @@
           <h3 style="font-family: var(--font-serif); color: var(--color-brand-wine); margin: 2rem 0 0.5rem; font-size: 1.15rem;">Sua posição e papel na família</h3>
 
           <div class="form-group">
-            <label>Com qual(is) irmão(s) você tem maior proximidade e cumplicidade? Por quê?</label>
-            <textarea name="irmaos_proximidade"></textarea>
+            <label for="rz_irmaos_proximidade">Com qual(is) irmão(s) você tem maior proximidade e cumplicidade? Por quê?</label>
+            <textarea id="rz_irmaos_proximidade" name="irmaos_proximidade"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Com qual(is) irmão(s) há distanciamento, ciúmes ou conflito?</label>
-            <textarea name="irmaos_conflito"></textarea>
+            <label for="rz_irmaos_conflito">Com qual(is) irmão(s) há distanciamento, ciúmes ou conflito?</label>
+            <textarea id="rz_irmaos_conflito" name="irmaos_conflito"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Qual papel você costumava assumir na sua família de origem?</label>
+            <label for="rz_meu_papel_familiar">Qual papel você costumava assumir na sua família de origem?</label>
             <span class="field-hint">Ex: o pacificador, o cuidador dos pais, o realizador de orgulho, a criança invisível, o rebelde, o mediador de brigas...</span>
-            <textarea name="meu_papel_familiar"></textarea>
+            <textarea id="rz_meu_papel_familiar" name="meu_papel_familiar"</textarea>
           </div>
         </section>
 
@@ -722,27 +722,27 @@
           <p class="step-desc">Como você vivencia seus vínculos afetivos e familiares hoje?</p>
 
           <div class="form-group">
-            <label>Relacionamento amoroso atual ou mais marcante</label>
+            <label for="rz_relacao_amorosa_atual">Relacionamento amoroso atual ou mais marcante</label>
             <span class="field-hint">Nome do(a) parceiro(a), tempo de união, convivência e como você descreve a qualidade da relação.</span>
-            <textarea name="relacao_amorosa_atual"></textarea>
+            <textarea id="rz_relacao_amorosa_atual" name="relacao_amorosa_atual"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Relacionamentos amorosos anteriores relevantes</label>
+            <label for="rz_relacoes_anteriores">Relacionamentos amorosos anteriores relevantes</label>
             <span class="field-hint">Casamentos ou namoros longos anteriores, motivos de término e como ficaram os vínculos.</span>
-            <textarea name="relacoes_anteriores"></textarea>
+            <textarea id="rz_relacoes_anteriores" name="relacoes_anteriores"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Filhos, enteados ou pessoas que você cria/cuida</label>
+            <label for="rz_descendentes_filhos">Filhos, enteados ou pessoas que você cria/cuida</label>
             <span class="field-hint">Nomes, idades e como é o vínculo com cada um.</span>
-            <textarea name="descendentes_filhos"></textarea>
+            <textarea id="rz_descendentes_filhos" name="descendentes_filhos"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Quem compõe sua rede de apoio real hoje?</label>
+            <label for="rz_rede_apoio_atual">Quem compõe sua rede de apoio real hoje?</label>
             <span class="field-hint">Pessoas em quem você confia plenamente para acolhimento e suporte emocional.</span>
-            <textarea name="rede_apoio_atual"></textarea>
+            <textarea id="rz_rede_apoio_atual" name="rede_apoio_atual"</textarea>
           </div>
         </section>
 
@@ -756,25 +756,25 @@
           </div>
 
           <div class="form-group">
-            <label>Onde existem conflitos não resolvidos ou afastamentos definitivos (pessoas que pararam de se falar)?</label>
-            <textarea name="vinculos_cortes_conflitos"></textarea>
+            <label for="rz_vinculos_cortes_conflitos">Onde existem conflitos não resolvidos ou afastamentos definitivos (pessoas que pararam de se falar)?</label>
+            <textarea id="rz_vinculos_cortes_conflitos" name="vinculos_cortes_conflitos"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Existem triangulações na sua família?</label>
+            <label for="rz_vinculos_triangulacoes">Existem triangulações na sua família?</label>
             <span class="field-hint">Situações em que alguém é colocado no meio da briga de outros dois (ex: mãe desabafar com o filho sobre o pai, ou você ter que mediar conflitos de parentes).</span>
-            <textarea name="vinculos_triangulacoes"></textarea>
+            <textarea id="rz_vinculos_triangulacoes" name="vinculos_triangulacoes"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Grandes acontecimentos ou perdas marcantes na história familiar</label>
+            <label for="rz_eventos_marcantes">Grandes acontecimentos ou perdas marcantes na história familiar</label>
             <span class="field-hint">Mortes prematuras, suicídios, falências súbitas, migrações forçadas, separações traumáticas, acidentes ou diagnósticos graves.</span>
-            <textarea name="eventos_marcantes"></textarea>
+            <textarea id="rz_eventos_marcantes" name="eventos_marcantes"</textarea>
           </div>
 
           <div class="form-group">
-            <label>Existem segredos de família ou assuntos que ninguém tinha permissão de tocar abertamente?</label>
-            <textarea name="segredos_familiares"></textarea>
+            <label for="rz_segredos_familiares">Existem segredos de família ou assuntos que ninguém tinha permissão de tocar abertamente?</label>
+            <textarea id="rz_segredos_familiares" name="segredos_familiares"</textarea>
           </div>
         </section>
 
@@ -784,31 +784,31 @@
           <p class="step-desc">Este é o núcleo da diferenciação do Self: separar quem você é daquilo que foi depositado em você ao longo das gerações.</p>
 
           <div class="form-group">
-            <label>1. O que é autenticamente MEU?</label>
+            <label for="rz_raiz_e_meu">1. O que é autenticamente MEU?</label>
             <span class="field-hint">Escolhas, gostos, valores e direções que você reconhece como legítimos seus, e não por expectativa de terceiros.</span>
-            <textarea name="raiz_e_meu"></textarea>
+            <textarea id="rz_raiz_e_meu" name="raiz_e_meu"</textarea>
           </div>
 
           <div class="form-group">
-            <label>2. O que APRENDI com a minha família?</label>
+            <label for="rz_raiz_aprendi">2. O que APRENDI com a minha família?</label>
             <span class="field-hint">Comportamentos, crenças sobre a vida, dinheiro, amor e conflitos que você absorveu observando os mais velhos.</span>
-            <textarea name="raiz_aprendi"></textarea>
+            <textarea id="rz_raiz_aprendi" name="raiz_aprendi"</textarea>
           </div>
 
           <div class="form-group">
-            <label>3. O que sinto que HERDEI ou carrego como lealdade invisível?</label>
+            <label for="rz_raiz_herdei">3. O que sinto que HERDEI ou carrego como lealdade invisível?</label>
             <span class="field-hint">Medos, culpas, deveres ou crenças que parecem pertencer a quem veio antes de você.</span>
-            <textarea name="raiz_herdei"></textarea>
+            <textarea id="rz_raiz_herdei" name="raiz_herdei"</textarea>
           </div>
 
           <div class="form-group">
-            <label>4. Quais padrões repetitivos você deseja interromper e TRANSFORMAR na terapia?</label>
-            <textarea name="raiz_transformar"></textarea>
+            <label for="rz_raiz_transformar">4. Quais padrões repetitivos você deseja interromper e TRANSFORMAR na terapia?</label>
+            <textarea id="rz_raiz_transformar" name="raiz_transformar"</textarea>
           </div>
 
           <div class="form-group">
-            <label>5. Quais forças, afetos e virtudes da sua linhagem você deseja honrar e PRESERVAR?</label>
-            <textarea name="raiz_recursos_positivos"></textarea>
+            <label for="rz_raiz_recursos_positivos">5. Quais forças, afetos e virtudes da sua linhagem você deseja honrar e PRESERVAR?</label>
+            <textarea id="rz_raiz_recursos_positivos" name="raiz_recursos_positivos"</textarea>
           </div>
         </section>
 
@@ -923,7 +923,7 @@
     (function () {
       'use strict';
 
-      // Dados de contato da psicóloga <span data-cms="nome_profissional">Natalie Thedim</span>
+      // Dados de contato da psicóloga Natalie Thedim
       const CLINICA_CONFIG = {
         whatsapp: '5521989020364', // WhatsApp oficial da Natalie
         email: 'psicologa@nataliethedim.com.br',
@@ -1013,22 +1013,23 @@
         let titleText = 'Familiar';
         let fieldsHtml = '';
 
+        const escCard = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         if (tipo === 'irmao') {
           titleText = `Irmão / Irmã ${count}`;
           fieldsHtml = `
             <div class="grid-2">
               <div class="form-group">
-                <label>Nome completo</label>
-                <input type="text" name="${cardId}_nome" value="${existingValues.nome || ''}" />
+                <label for="rz_${cardId}_nome">Nome completo</label>
+                <input type="text" id="rz_${cardId}_nome" name="${cardId}_nome" value="${escCard(existingValues.nome || '')}" />
               </div>
               <div class="form-group">
-                <label>Idade ou ano de nascimento</label>
-                <input type="text" name="${cardId}_idade" value="${existingValues.idade || ''}" />
+                <label for="rz_${cardId}_idade">Idade ou ano de nascimento</label>
+                <input type="text" id="rz_${cardId}_idade" name="${cardId}_idade" value="${escCard(existingValues.idade || '')}" />
               </div>
             </div>
             <div class="form-group">
-              <label>Grau de parentesco</label>
-              <select name="${cardId}_parentesco">
+              <label for="rz_${cardId}_parentesco">Grau de parentesco</label>
+              <select id="rz_${cardId}_parentesco" name="${cardId}_parentesco">
                 <option value="Irmão(ã) biológico (mesmo pai e mãe)">Irmão(ã) biológico (mesmo pai e mãe)</option>
                 <option value="Meio-irmão(ã) paterno(a)">Meio-irmão(ã) paterno(a)</option>
                 <option value="Meio-irmão(ã) materno(a)">Meio-irmão(ã) materno(a)</option>
@@ -1039,8 +1040,8 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Como é ou era o vínculo com esta pessoa?</label>
-              <textarea name="${cardId}_vinculo">${existingValues.vinculo || ''}</textarea>
+              <label for="rz_${cardId}_vinculo">Como é ou era o vínculo com esta pessoa?</label>
+              <textarea id="rz_${cardId}_vinculo" name="${cardId}_vinculo">${escCard(existingValues.vinculo || '')}</textarea>
             </div>
           `;
         } else {
@@ -1049,21 +1050,21 @@
           fieldsHtml = `
             <div class="grid-2">
               <div class="form-group">
-                <label>Nome completo</label>
-                <input type="text" name="${cardId}_nome" value="${existingValues.nome || ''}" />
+                <label for="rz_${cardId}_nome">Nome completo</label>
+                <input type="text" id="rz_${cardId}_nome" name="${cardId}_nome" value="${escCard(existingValues.nome || '')}" />
               </div>
               <div class="form-group">
-                <label>Idade ou idade ao falecer</label>
-                <input type="text" name="${cardId}_idade" value="${existingValues.idade || ''}" />
+                <label for="rz_${cardId}_idade">Idade ou idade ao falecer</label>
+                <input type="text" id="rz_${cardId}_idade" name="${cardId}_idade" value="${escCard(existingValues.idade || '')}" />
               </div>
             </div>
             <div class="form-group">
-              <label>Casamentos, parceiros(as) e filhos que teve:</label>
-              <textarea name="${cardId}_familia">${existingValues.familia || ''}</textarea>
+              <label for="rz_${cardId}_familia">Casamentos, parceiros(as) e filhos que teve:</label>
+              <textarea id="rz_${cardId}_familia" name="${cardId}_familia">${escCard(existingValues.familia || '')}</textarea>
             </div>
             <div class="form-group">
-              <label>Relação com os pais e fatos marcantes da vida:</label>
-              <textarea name="${cardId}_historico">${existingValues.historico || ''}</textarea>
+              <label for="rz_${cardId}_historico">Relação com os pais e fatos marcantes da vida:</label>
+              <textarea id="rz_${cardId}_historico" name="${cardId}_historico">${escCard(existingValues.historico || '')}</textarea>
             </div>
           `;
         }
@@ -1311,7 +1312,8 @@
           const inputs = step.querySelectorAll('input:not([type="checkbox"]):not([type="date"]), textarea, select');
           
           let hasContent = false;
-          let stepHtml = `<div class="print-section"><h2 class="print-section-title">${title}</h2>`;
+          const escPrint = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+          let stepHtml = `<div class="print-section"><h2 class="print-section-title">${escPrint(title)}</h2>`;
           
           inputs.forEach(input => {
             const val = input.value?.trim();
@@ -1320,8 +1322,8 @@
               const label = input.closest('.form-group')?.querySelector('label')?.childNodes[0]?.textContent?.trim() || input.name;
               stepHtml += `
                 <div class="print-item">
-                  <div class="print-label">${label}</div>
-                  <div class="print-val">${val}</div>
+                  <div class="print-label">${escPrint(label)}</div>
+                  <div class="print-val">${escPrint(val)}</div>
                 </div>
               `;
             }

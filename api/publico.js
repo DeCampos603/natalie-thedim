@@ -1,12 +1,17 @@
-// Rotas públicas: ?acao=enviar | aprovados | reagir
-import { db, TABELAS, novoId, responder, lerBody, ipHash } from './_lib.js';
+// Rotas públicas: ?acao=enviar | aprovados | reagir | newsletter | biblioteca_temas | biblioteca_mensagem | filmes | livros | supervisao
+import {
+  db, TABELAS, novoId, responder, lerBody, ipHash, agoraSql, EMAIL_RE,
+  checarLimite, mapTemaBiblioteca, mapFilme, mapLivro, slugify
+} from './_lib.js';
+import { enviarEmailNotificacao } from './notificar.js';
 
 const JANELA_S = 600;
 const MAX_ENVIOS = 5;
-const agoraSql = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
+const reagirThrottle = new Map();
 
 export default async function handler(req, res) {
   try {
+    if (typeof res.setHeader === 'function') res.setHeader('Cache-Control', 'no-store');
     const acao = req.query.acao;
 
     if (acao === 'aprovados' && req.method === 'GET') {
@@ -19,70 +24,78 @@ export default async function handler(req, res) {
 
     if (acao === 'biblioteca_temas' && req.method === 'GET') {
       const r = await db().execute('SELECT * FROM biblioteca_temas ORDER BY ordem ASC, titulo ASC');
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapTemaBiblioteca) });
     }
 
     if (acao === 'filmes' && req.method === 'GET') {
       const r = await db().execute('SELECT * FROM filmes ORDER BY ordem ASC, criado_em DESC');
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapFilme) });
     }
 
     if (acao === 'livros' && req.method === 'GET') {
       const r = await db().execute('SELECT * FROM livros ORDER BY ordem ASC, criado_em DESC');
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapLivro) });
     }
 
     if (req.method !== 'POST') return responder(res, 405, { erro: 'método não permitido' });
     const body = lerBody(req);
 
     if (acao === 'newsletter') {
-      const h = ipHash(req);
-      const agora = Math.floor(Date.now() / 1000);
-      const cont = await db().execute({
-        sql: 'SELECT COUNT(*) AS n FROM limite_envios WHERE ip_hash = ? AND criado_em > ?',
-        args: [h, agora - JANELA_S],
-      });
-      if (Number(cont.rows[0].n) >= MAX_ENVIOS) {
-        return responder(res, 429, { erro: 'Muitas tentativas em pouco tempo. Tente novamente em alguns minutos.' });
+      const lim = await checarLimite(req, JANELA_S, MAX_ENVIOS);
+      if (lim.bloqueado) {
+        return responder(res, 429, { ok: false, erro: 'Muitas tentativas em pouco tempo. Tente novamente em alguns minutos.' });
       }
 
-      const email = String(body.email || '').trim().toLowerCase();
+      const email = String(body.email || '').trim().toLowerCase().slice(0, 190);
       const nome = String(body.nome || '').trim().slice(0, 100);
-      if (!email || !email.includes('@') || email.length < 5) {
-        return responder(res, 400, { erro: 'E-mail inválido.' });
+      const origem = String(body.origem || 'site').trim().slice(0, 50) || 'site';
+      if (!EMAIL_RE.test(email)) {
+        return responder(res, 400, { ok: false, erro: 'E-mail inválido.' });
       }
       const id = novoId();
       await db().batch([
         {
           sql: `INSERT INTO newsletter_inscritos (id, email, nome, origem, criado_em)
-                VALUES (?, ?, ?, 'site', ?)
-                ON CONFLICT(email) DO UPDATE SET nome = excluded.nome`,
-          args: [id, email, nome || null, agoraSql()],
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(email) DO UPDATE SET
+                  nome = COALESCE(NULLIF(excluded.nome, ''), newsletter_inscritos.nome),
+                  origem = excluded.origem`,
+          args: [id, email, nome || null, origem, agoraSql()],
         },
-        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [lim.h, lim.agora] },
+        { sql: 'DELETE FROM limite_envios WHERE criado_em < ?', args: [lim.agora - 86400] },
       ], 'write');
       return responder(res, 201, { ok: true, mensagem: 'Inscrição confirmada com sucesso!' });
     }
 
     if (acao === 'biblioteca_mensagem') {
-      const h = ipHash(req);
-      const agora = Math.floor(Date.now() / 1000);
-      const cont = await db().execute({
-        sql: 'SELECT COUNT(*) AS n FROM limite_envios WHERE ip_hash = ? AND criado_em > ?',
-        args: [h, agora - JANELA_S],
-      });
-      if (Number(cont.rows[0].n) >= MAX_ENVIOS) {
-        return responder(res, 429, { erro: 'Muitas mensagens em pouco tempo. Tente novamente em alguns minutos.' });
+      const lim = await checarLimite(req, JANELA_S, MAX_ENVIOS);
+      if (lim.bloqueado) {
+        return responder(res, 429, { ok: false, erro: 'Muitas mensagens em pouco tempo. Tente novamente em alguns minutos.' });
       }
 
-      const tema_chave = String(body.tema_chave || '').trim().slice(0, 60);
-      const mensagem = String(body.mensagem || '').trim();
+      const rawTema = String(body.tema_chave || body.tema_id || '').trim().slice(0, 100);
+      const mensagem = String(body.mensagem || '').trim().slice(0, 2000);
       const nome = String(body.nome || '').trim().slice(0, 100);
-      const email = String(body.email || '').trim().slice(0, 120);
+      const email = String(body.email || '').trim().toLowerCase().slice(0, 190);
       const whatsapp = String(body.whatsapp || '').trim().slice(0, 30);
 
-      if (!tema_chave || mensagem.length < 5) {
-        return responder(res, 400, { erro: 'Tema e mensagem com pelo menos 5 caracteres são obrigatórios.' });
+      if (!rawTema || mensagem.length < 5) {
+        return responder(res, 400, { ok: false, erro: 'Tema e mensagem com pelo menos 5 caracteres são obrigatórios.' });
+      }
+      if (email && !EMAIL_RE.test(email)) {
+        return responder(res, 400, { ok: false, erro: 'E-mail informado é inválido.' });
+      }
+
+      let tema_chave = rawTema;
+      const buscaTema = await db().execute({
+        sql: 'SELECT tema_chave FROM biblioteca_temas WHERE tema_chave = ? OR id = ? LIMIT 1',
+        args: [rawTema, rawTema]
+      });
+      if (buscaTema.rows?.[0]?.tema_chave) {
+        tema_chave = buscaTema.rows[0].tema_chave;
+      } else if (tema_chave.length > 60) {
+        tema_chave = slugify(tema_chave) || tema_chave.slice(0, 60);
       }
 
       const id = novoId();
@@ -92,9 +105,55 @@ export default async function handler(req, res) {
                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
           args: [id, tema_chave, nome || 'Anônimo', email || null, whatsapp || null, mensagem, agoraSql()],
         },
-        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] }
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [lim.h, lim.agora] },
+        { sql: 'DELETE FROM limite_envios WHERE criado_em < ?', args: [lim.agora - 86400] },
       ], 'write');
       return responder(res, 201, { ok: true, mensagem: 'Mensagem sobre o tema registrada com sucesso!' });
+    }
+
+    if (acao === 'supervisao') {
+      const lim = await checarLimite(req, JANELA_S, MAX_ENVIOS);
+      if (lim.bloqueado) {
+        return responder(res, 429, { ok: false, erro: 'Muitas solicitações em pouco tempo. Tente novamente em alguns minutos.' });
+      }
+
+      const nome = String(body.nome || '').trim().slice(0, 120);
+      const crp = String(body.crp || '').trim().slice(0, 60);
+      const tempo = String(body.tempo || '').trim().slice(0, 60);
+      const whatsapp = String(body.whatsapp || '').trim().slice(0, 40);
+      const email = String(body.email || '').trim().toLowerCase().slice(0, 190);
+      const interesse = String(body.interesse || '').trim().slice(0, 100);
+      const mensagemLivre = String(body.mensagem || '').trim().slice(0, 2000);
+
+      if (nome.length < 2 || crp.length < 2 || !EMAIL_RE.test(email) || whatsapp.length < 6) {
+        return responder(res, 400, { ok: false, erro: 'Preencha nome, CRP, WhatsApp e um e-mail válido.' });
+      }
+
+      const textoRegistro = `[Supervisão · CRP ${crp} | Formação: ${tempo || 'N/I'} | Modalidade: ${interesse || 'N/I'}]\n${mensagemLivre || '(Sem descrição adicional)'}`;
+      await db().batch([
+        {
+          sql: `INSERT INTO biblioteca_mensagens (id, tema_chave, nome, email, whatsapp, mensagem, criado_em)
+                VALUES (?, 'supervisao_terapeutas', ?, ?, ?, ?, ?)`,
+          args: [novoId(), nome, email, whatsapp, textoRegistro, agoraSql()],
+        },
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [lim.h, lim.agora] },
+        { sql: 'DELETE FROM limite_envios WHERE criado_em < ?', args: [lim.agora - 86400] },
+      ], 'write');
+
+      try {
+        await enviarEmailNotificacao({
+          tipo: 'Solicitação de Supervisão Clínica',
+          remetente: nome,
+          email,
+          assunto: `[Supervisão] Solicitação de ${nome} (CRP ${crp})`,
+          mensagem: mensagemLivre || '(Sem descrição adicional)',
+          dadosExtras: { CRP: crp, Formacao: tempo, WhatsApp: whatsapp, Modalidade: interesse }
+        });
+      } catch (mailErr) {
+        console.warn('[publico/supervisao] Aviso SMTP:', mailErr.message);
+      }
+
+      return responder(res, 201, { ok: true, mensagem: 'Solicitação de supervisão registrada com sucesso!' });
     }
 
     if (acao === 'enviar') {
@@ -111,25 +170,39 @@ export default async function handler(req, res) {
         const v = String(dados[c] ?? '').trim().slice(0, 60);
         if (v) { colunas.push(c); valores.push(v); }
       }
-      const h = ipHash(req);
-      const agora = Math.floor(Date.now() / 1000);
-      const cont = await db().execute({
-        sql: 'SELECT COUNT(*) AS n FROM limite_envios WHERE ip_hash = ? AND criado_em > ?',
-        args: [h, agora - JANELA_S],
-      });
-      if (Number(cont.rows[0].n) >= MAX_ENVIOS) {
+      const lim = await checarLimite(req, JANELA_S, MAX_ENVIOS);
+      if (lim.bloqueado) {
         return responder(res, 429, { erro: 'Muitos envios em pouco tempo. Tente novamente em alguns minutos.' });
       }
       await db().batch([
         { sql: `INSERT INTO ${body.tabela} (${colunas.join(',')}) VALUES (${colunas.map(() => '?').join(',')})`, args: valores },
-        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [h, agora] },
-        { sql: 'DELETE FROM limite_envios WHERE criado_em < ?', args: [agora - 86400] },
+        { sql: 'INSERT INTO limite_envios (ip_hash, criado_em) VALUES (?, ?)', args: [lim.h, lim.agora] },
+        { sql: 'DELETE FROM limite_envios WHERE criado_em < ?', args: [lim.agora - 86400] },
       ], 'write');
       return responder(res, 201, { ok: true });
     }
 
     if (acao === 'reagir') {
-      const id = String(body.id || '');
+      const id = String(body.id || '').trim();
+      if (!id) return responder(res, 400, { ok: false, erro: 'ID inválido.' });
+
+      const h = ipHash(req);
+      const agoraMs = Date.now();
+      const bucket = reagirThrottle.get(h);
+      if (bucket && agoraMs < bucket.exp) {
+        if (bucket.n >= 30) {
+          return responder(res, 429, { ok: false, erro: 'Muitas reações em sequência. Aguarde um momento.' });
+        }
+        bucket.n += 1;
+      } else {
+        if (reagirThrottle.size > 500) {
+          for (const [k, v] of reagirThrottle) {
+            if (agoraMs >= v.exp) reagirThrottle.delete(k);
+          }
+        }
+        reagirThrottle.set(h, { n: 1, exp: agoraMs + 60_000 });
+      }
+
       const r = await db().execute({
         sql: "UPDATE diario_posts SET reacoes = reacoes + 1 WHERE id = ? AND status = 'aprovado'",
         args: [id],

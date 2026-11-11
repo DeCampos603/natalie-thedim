@@ -299,9 +299,21 @@
   </p>
 
   <script src="assets/db.js"></script>
-  <script src="assets/db.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s ?? '';
+        return d.innerHTML;
+      }
+      function safeUrl(u) {
+        try {
+          const parsed = new URL(String(u || ''));
+          return (parsed.protocol === 'https:' || parsed.protocol === 'http:') ? parsed.toString() : '';
+        } catch {
+          return '';
+        }
+      }
       if (window.DB && window.DB.obterFilmes) {
         window.DB.obterFilmes().then(res => {
           if (!res || !res.ok || !res.dados || !res.dados.length) return;
@@ -311,17 +323,18 @@
             const card = document.createElement('article');
             card.className = 'filme-card mock-card';
             card.style.borderTop = '3px solid var(--color-brand-wine)';
+            const href = safeUrl(filme.link);
             card.innerHTML = `
               <div style="padding:1.5rem;">
-                <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-brand-wine);">${filme.categoria || 'Curadoria Clínica'}</span>
-                <h3 style="font-family:var(--font-serif); font-size:1.35rem; color:var(--color-brand-wine); margin:0.4rem 0;">🎬 ${filme.titulo} ${filme.ano ? `(${filme.ano})` : ''}</h3>
-                <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:0.75rem;">Direção: ${filme.diretor || 'N/A'}</p>
-                <p style="font-size:0.95rem; line-height:1.5; margin-bottom:1rem;"><strong>Sinopse:</strong> ${filme.sinopse || ''}</p>
+                <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-brand-wine);">${esc(filme.categoria || filme.badge || 'Curadoria Clínica')}</span>
+                <h3 style="font-family:var(--font-serif); font-size:1.35rem; color:var(--color-brand-wine); margin:0.4rem 0;">🎬 ${esc(filme.titulo)} ${filme.ano ? `(${esc(filme.ano)})` : ''}</h3>
+                <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:0.75rem;">Direção: ${esc(filme.diretor || filme.direcao_ano || 'N/A')}</p>
+                <p style="font-size:0.95rem; line-height:1.5; margin-bottom:1rem;"><strong>Sinopse:</strong> ${esc(filme.sinopse || '')}</p>
                 <div style="background:var(--bg-surface-tint); padding:1rem; border-radius:6px; border-left:3px solid var(--color-brand-wine); margin-bottom:1rem;">
                   <strong style="color:var(--color-brand-wine); font-size:0.875rem; display:block; margin-bottom:0.35rem;">Reflexão Terapêutica de Natalie Thedim:</strong>
-                  <p style="font-size:0.9rem; line-height:1.5; margin:0;">${filme.reflexao || ''}</p>
+                  <p style="font-size:0.9rem; line-height:1.5; margin:0;">${esc(filme.reflexao || '')}</p>
                 </div>
-                ${filme.link ? `<a href="${filme.link}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-block; font-size:0.875rem; padding:0.5rem 1rem;">Onde Assistir →</a>` : ''}
+                ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-block; font-size:0.875rem; padding:0.5rem 1rem;">Onde Assistir →</a>` : ''}
               </div>
             `;
             container.prepend(card);

@@ -519,6 +519,22 @@
         return div.innerHTML;
       }
 
+      function formatarDataBr(valor) {
+        if (!valor) return 'Data indisponível';
+        const txt = String(valor).trim();
+        let d;
+        if (/^\d{10}$/.test(txt)) {
+          d = new Date(Number(txt) * 1000);
+        } else if (/^\d{13}$/.test(txt)) {
+          d = new Date(Number(txt));
+        } else if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(txt)) {
+          d = new Date(txt.replace(' ', 'T') + 'Z');
+        } else {
+          d = new Date(txt);
+        }
+        return Number.isNaN(d.getTime()) ? txt : d.toLocaleString('pt-BR');
+      }
+
       function alternarAbas(alvoId) {
         abasAdmin.forEach(a => a.classList.toggle('is-active', a.getAttribute('data-alvo') === alvoId));
         Object.entries(secoesAdmin).forEach(([id, el]) => {
@@ -606,7 +622,7 @@
       async function carregarNewsletter() {
         const wrap = document.getElementById('tabelaNewsletterWrapper');
         wrap.innerHTML = '<p class="lista-vazia">Carregando inscritos...</p>';
-        const { ok, dados, erro } = await DB.listarInscritosNewsletter();
+        const { ok, dados, erro } = await DB.listarNewsletter();
         if (!ok) {
           wrap.innerHTML = `<p class="lista-vazia">Erro ao listar newsletter: ${escapeHtml(erro)}</p>`;
           return;
@@ -637,9 +653,9 @@
                   <td style="padding:0.75rem;"><strong>${escapeHtml(item.nome || 'Leitor(a)')}</strong></td>
                   <td style="padding:0.75rem;">${escapeHtml(item.email)}</td>
                   <td style="padding:0.75rem;"><span class="badge-status aprovado">${escapeHtml(item.origem || 'site')}</span></td>
-                  <td style="padding:0.75rem;">${new Date(item.criado_em).toLocaleDateString('pt-BR')}</td>
+                  <td style="padding:0.75rem;">${escapeHtml(formatarDataBr(item.criado_em))}</td>
                   <td style="padding:0.75rem; text-align:right;">
-                    <button class="btn-del-news" data-id="${item.id}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
+                    <button class="btn-del-news" data-id="${escapeHtml(item.id)}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
                   </td>
                 </tr>
               `).join('')}
@@ -652,7 +668,12 @@
             if (!confirm('Deseja realmente remover este inscrito da newsletter?')) return;
             const id = btn.getAttribute('data-id');
             btn.disabled = true;
-            await DB.removerInscritoNewsletter(id);
+            const res = await DB.removerNewsletter(id);
+            if (!res || !res.ok) {
+              btn.disabled = false;
+              alert('Erro ao remover inscrito: ' + (res?.erro || 'tente novamente.'));
+              return;
+            }
             carregarNewsletter();
           });
         });
@@ -665,15 +686,27 @@
         alert('E-mails copiados para a área de transferência!');
       });
 
+      function csvCelulaSegura(v) {
+        let s = String(v ?? '').replace(/"/g, '""');
+        if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+        return `"${s}"`;
+      }
+
       document.getElementById('btnExportarCsvNewsletter').addEventListener('click', () => {
         if (!listaInscritosMemoria.length) return alert('Nenhum inscrito para exportar.');
-        const csv = 'Nome;Email;Origem;Data\n' + listaInscritosMemoria.map(i => `"${i.nome || ''}";"${i.email}";"${i.origem || ''}";"${i.criado_em}"`).join('\n');
+        const csv = 'Nome;Email;Origem;Data\n' + listaInscritosMemoria.map(i => [
+          csvCelulaSegura(i.nome || ''),
+          csvCelulaSegura(i.email),
+          csvCelulaSegura(i.origem || ''),
+          csvCelulaSegura(i.criado_em)
+        ].join(';')).join('\n');
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `newsletter_natalie_thedim_${new Date().toISOString().slice(0, 10)}.csv`;
         a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
       });
 
       // 3. MÓDULO BIBLIOTECA & DÚVIDAS
@@ -688,6 +721,7 @@
       btnNovoTemaBiblioteca.addEventListener('click', () => {
         formTemaBiblioteca.reset();
         document.getElementById('tema_id').value = '';
+        delete formTemaBiblioteca.dataset.temaChave;
         document.getElementById('tituloFormTema').textContent = 'Criar Novo Tema Clínico';
         boxFormTema.hidden = false;
         boxFormTema.scrollIntoView({ behavior: 'smooth' });
@@ -701,6 +735,7 @@
         e.preventDefault();
         const payload = {
           id: document.getElementById('tema_id').value || undefined,
+          tema_chave: formTemaBiblioteca.dataset.temaChave || undefined,
           titulo: document.getElementById('tema_titulo').value,
           categoria: document.getElementById('tema_categoria').value,
           icone: document.getElementById('tema_icone').value,
@@ -709,6 +744,7 @@
         };
         const { ok, erro } = await DB.salvarTemaBiblioteca(payload);
         if (ok) {
+          delete formTemaBiblioteca.dataset.temaChave;
           boxFormTema.hidden = true;
           carregarBibliotecaAdmin();
         } else {
@@ -718,24 +754,29 @@
 
       async function carregarBibliotecaAdmin() {
         listaTemasBiblioteca.innerHTML = '<p class="lista-vazia">Carregando temas...</p>';
-        const { ok, dados } = await DB.obterTemasBiblioteca();
+        const { ok, dados, erro } = await DB.obterTemasBiblioteca();
+        if (!ok) {
+          listaTemasBiblioteca.innerHTML = `<p class="lista-vazia">Erro ao carregar temas: ${escapeHtml(erro)}</p>`;
+        }
         const temas = dados || [];
 
-        filtroTemaSelect.innerHTML = '<option value="">Todos os temas</option>' + temas.map(t => `<option value="${t.id}">${escapeHtml(t.titulo)}</option>`).join('');
+        filtroTemaSelect.innerHTML = '<option value="">Todos os temas</option>' +
+          temas.map(t => `<option value="${escapeHtml(t.tema_chave || t.id)}">${escapeHtml(t.titulo)}</option>`).join('') +
+          '<option value="supervisao_terapeutas">Supervisão Clínica (Terapeutas)</option>';
 
-        if (temas.length === 0) {
+        if (ok && temas.length === 0) {
           listaTemasBiblioteca.innerHTML = '<p class="lista-vazia">Nenhum tema cadastrado ainda. Clique em "+ Novo Tema Clínico".</p>';
-        } else {
+        } else if (ok) {
           listaTemasBiblioteca.innerHTML = temas.map(t => `
             <div style="background:#FFF; border:1px solid var(--border-soft); border-radius:6px; padding:1.25rem; margin-bottom:1rem;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
                   <h4 style="font-family:var(--font-serif); font-size:1.125rem; color:var(--color-brand-wine); margin:0;">${escapeHtml(t.icone || '💬')} ${escapeHtml(t.titulo)}</h4>
-                  <div style="font-size:0.8125rem; color:var(--text-muted);">Categoria: ${escapeHtml(t.categoria || 'Geral')}</div>
+                  <div style="font-size:0.8125rem; color:var(--text-muted);">Categoria: ${escapeHtml(t.categoria || t.pilar || 'Geral')}</div>
                 </div>
                 <div>
-                  <button class="btn-edit-tema" data-id="${t.id}" style="background:#F0F5FF; color:#1D39C4; border:1px solid #ADC6FF; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer; margin-right:0.35rem;">Editar</button>
-                  <button class="btn-del-tema" data-id="${t.id}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
+                  <button class="btn-edit-tema" data-id="${escapeHtml(t.id)}" style="background:#F0F5FF; color:#1D39C4; border:1px solid #ADC6FF; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer; margin-right:0.35rem;">Editar</button>
+                  <button class="btn-del-tema" data-id="${escapeHtml(t.id)}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
                 </div>
               </div>
               <p style="font-size:0.9rem; margin:0.35rem 0 0;">${escapeHtml(t.resumo || '')}</p>
@@ -745,7 +786,11 @@
           listaTemasBiblioteca.querySelectorAll('.btn-del-tema').forEach(btn => {
             btn.addEventListener('click', async () => {
               if (!confirm('Deseja excluir este tema da biblioteca?')) return;
-              await DB.excluirTemaBiblioteca(btn.getAttribute('data-id'));
+              const res = await DB.excluirTemaBiblioteca(btn.getAttribute('data-id'));
+              if (!res || !res.ok) {
+                alert('Erro ao excluir tema: ' + (res?.erro || 'tente novamente.'));
+                return;
+              }
               carregarBibliotecaAdmin();
             });
           });
@@ -756,11 +801,12 @@
               const t = temas.find(x => String(x.id) === String(id));
               if (!t) return;
               document.getElementById('tema_id').value = t.id;
+              formTemaBiblioteca.dataset.temaChave = t.tema_chave || '';
               document.getElementById('tema_titulo').value = t.titulo || '';
-              document.getElementById('tema_categoria').value = t.categoria || '';
+              document.getElementById('tema_categoria').value = t.categoria || t.pilar || '';
               document.getElementById('tema_icone').value = t.icone || '💬';
               document.getElementById('tema_resumo').value = t.resumo || '';
-              document.getElementById('tema_conteudo').value = t.conteudo || '';
+              document.getElementById('tema_conteudo').value = t.conteudo || t.texto || '';
               document.getElementById('tituloFormTema').textContent = 'Editar Tema Clínico';
               boxFormTema.hidden = false;
               boxFormTema.scrollIntoView({ behavior: 'smooth' });
@@ -791,11 +837,11 @@
           <div style="background:#FFF; border:1px solid var(--border-soft); border-radius:6px; padding:1.25rem; margin-bottom:1rem;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
               <div>
-                <strong>${escapeHtml(m.nome_remetente || 'Anônimo')}</strong> 
-                <span style="color:var(--text-muted); font-size:0.8125rem;">(${escapeHtml(m.email_remetente || 'sem e-mail')})</span>
-                <span class="badge-status aprovado" style="margin-left:0.5rem;">Tema: ${escapeHtml(m.tema_titulo || 'Geral')}</span>
+                <strong>${escapeHtml(m.nome_remetente || m.nome || 'Anônimo')}</strong> 
+                <span style="color:var(--text-muted); font-size:0.8125rem;">(${escapeHtml(m.email_remetente || m.email || 'sem e-mail')})</span>
+                <span class="badge-status aprovado" style="margin-left:0.5rem;">Tema: ${escapeHtml(m.tema_titulo || m.tema_chave || 'Geral')}</span>
               </div>
-              <time style="font-size:0.8125rem; color:var(--text-muted);">${new Date(m.criado_em).toLocaleString('pt-BR')}</time>
+              <time style="font-size:0.8125rem; color:var(--text-muted);">${escapeHtml(formatarDataBr(m.criado_em))}</time>
             </div>
             <p style="font-size:0.9375rem; white-space:pre-wrap; margin:0;">${escapeHtml(m.mensagem)}</p>
           </div>
@@ -826,7 +872,7 @@
         const payload = {
           id: document.getElementById('filme_id').value || undefined,
           titulo: document.getElementById('filme_titulo').value,
-          ano: parseInt(document.getElementById('filme_ano').value) || null,
+          ano: parseInt(document.getElementById('filme_ano').value, 10) || null,
           categoria: document.getElementById('filme_categoria').value,
           diretor: document.getElementById('filme_diretor').value,
           link: document.getElementById('filme_link').value,
@@ -844,7 +890,11 @@
 
       async function carregarFilmesAdmin() {
         listaFilmesWrapper.innerHTML = '<p class="lista-vazia">Carregando filmes...</p>';
-        const { ok, dados } = await DB.obterFilmes();
+        const { ok, dados, erro } = await DB.obterFilmes();
+        if (!ok) {
+          listaFilmesWrapper.innerHTML = `<p class="lista-vazia">Erro ao carregar filmes: ${escapeHtml(erro)}</p>`;
+          return;
+        }
         const filmes = dados || [];
         if (filmes.length === 0) {
           listaFilmesWrapper.innerHTML = '<p class="lista-vazia">Nenhum filme cadastrado. Clique em "+ Novo Filme".</p>';
@@ -855,11 +905,12 @@
           <div style="background:#FFF; border:1px solid var(--border-soft); border-radius:6px; padding:1.25rem; margin-bottom:1rem;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <div>
-                <h4 style="font-family:var(--font-serif); font-size:1.125rem; color:var(--color-brand-wine); margin:0;">🎬 ${escapeHtml(f.titulo)} ${f.ano ? `(${f.ano})` : ''}</h4>
-                <div style="font-size:0.8125rem; color:var(--text-muted);">Direção: ${escapeHtml(f.diretor || 'N/A')} | Foco: ${escapeHtml(f.categoria || 'Psicologia')}</div>
+                <h4 style="font-family:var(--font-serif); font-size:1.125rem; color:var(--color-brand-wine); margin:0;">🎬 ${escapeHtml(f.titulo)} ${f.ano ? `(${escapeHtml(f.ano)})` : ''}</h4>
+                <div style="font-size:0.8125rem; color:var(--text-muted);">Direção: ${escapeHtml(f.diretor || f.direcao_ano || 'N/A')} | Foco: ${escapeHtml(f.categoria || f.badge || 'Psicologia')}</div>
               </div>
               <div>
-                <button class="btn-del-filme" data-id="${f.id}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
+                <button class="btn-edit-filme" data-id="${escapeHtml(f.id)}" style="background:#F0F5FF; color:#1D39C4; border:1px solid #ADC6FF; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer; margin-right:0.35rem;">Editar</button>
+                <button class="btn-del-filme" data-id="${escapeHtml(f.id)}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
               </div>
             </div>
             <p style="font-size:0.9rem; margin:0.35rem 0;"><strong>Sinopse:</strong> ${escapeHtml(f.sinopse || '')}</p>
@@ -867,10 +918,33 @@
           </div>
         `).join('');
 
+        listaFilmesWrapper.querySelectorAll('.btn-edit-filme').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const f = filmes.find(x => String(x.id) === String(id));
+            if (!f) return;
+            document.getElementById('filme_id').value = f.id;
+            document.getElementById('filme_titulo').value = f.titulo || '';
+            document.getElementById('filme_ano').value = f.ano || '';
+            document.getElementById('filme_categoria').value = f.categoria || f.badge || '';
+            document.getElementById('filme_diretor').value = f.diretor || '';
+            document.getElementById('filme_link').value = f.link || '';
+            document.getElementById('filme_sinopse').value = f.sinopse || '';
+            document.getElementById('filme_reflexao').value = f.reflexao || '';
+            document.getElementById('tituloFormFilme').textContent = 'Editar Filme';
+            boxFormFilme.hidden = false;
+            boxFormFilme.scrollIntoView({ behavior: 'smooth' });
+          });
+        });
+
         listaFilmesWrapper.querySelectorAll('.btn-del-filme').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (!confirm('Deseja excluir este filme do catálogo?')) return;
-            await DB.excluirFilme(btn.getAttribute('data-id'));
+            const res = await DB.excluirFilme(btn.getAttribute('data-id'));
+            if (!res || !res.ok) {
+              alert('Erro ao excluir filme: ' + (res?.erro || 'tente novamente.'));
+              return;
+            }
             carregarFilmesAdmin();
           });
         });
@@ -917,7 +991,11 @@
 
       async function carregarLivrosAdmin() {
         listaLivrosWrapper.innerHTML = '<p class="lista-vazia">Carregando livros...</p>';
-        const { ok, dados } = await DB.obterLivros();
+        const { ok, dados, erro } = await DB.obterLivros();
+        if (!ok) {
+          listaLivrosWrapper.innerHTML = `<p class="lista-vazia">Erro ao carregar livros: ${escapeHtml(erro)}</p>`;
+          return;
+        }
         const livros = dados || [];
         if (livros.length === 0) {
           listaLivrosWrapper.innerHTML = '<p class="lista-vazia">Nenhum livro cadastrado. Clique em "+ Novo Livro".</p>';
@@ -929,21 +1007,44 @@
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <div>
                 <h4 style="font-family:var(--font-serif); font-size:1.125rem; color:var(--color-brand-wine); margin:0;">📚 ${escapeHtml(l.titulo)}</h4>
-                <div style="font-size:0.8125rem; color:var(--text-muted);">Autor: ${escapeHtml(l.autor || 'N/A')} | Categoria: ${escapeHtml(l.categoria || 'Geral')}</div>
+                <div style="font-size:0.8125rem; color:var(--text-muted);">Autor: ${escapeHtml(l.autor || l.autor_ano || 'N/A')} | Categoria: ${escapeHtml(l.categoria || l.badge || 'Geral')}</div>
               </div>
               <div>
-                <button class="btn-del-livro" data-id="${l.id}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
+                <button class="btn-edit-livro" data-id="${escapeHtml(l.id)}" style="background:#F0F5FF; color:#1D39C4; border:1px solid #ADC6FF; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer; margin-right:0.35rem;">Editar</button>
+                <button class="btn-del-livro" data-id="${escapeHtml(l.id)}" style="background:#FFF1F0; color:#D32029; border:1px solid #FFCCC7; padding:0.35rem 0.75rem; border-radius:4px; cursor:pointer;">Excluir</button>
               </div>
             </div>
             ${l.citacao ? `<blockquote style="font-style:italic; font-size:0.875rem; border-left:2px solid var(--color-brand-wine); padding-left:0.5rem; margin:0.35rem 0;">"${escapeHtml(l.citacao)}"</blockquote>` : ''}
-            <p style="font-size:0.9rem; color:var(--color-brand-wine); margin:0;"><strong>Análise de Natalie:</strong> ${escapeHtml(l.analise || '')}</p>
+            <p style="font-size:0.9rem; color:var(--color-brand-wine); margin:0;"><strong>Análise de Natalie:</strong> ${escapeHtml(l.analise || l.licao || '')}</p>
           </div>
         `).join('');
+
+        listaLivrosWrapper.querySelectorAll('.btn-edit-livro').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const l = livros.find(x => String(x.id) === String(id));
+            if (!l) return;
+            document.getElementById('livro_id').value = l.id;
+            document.getElementById('livro_titulo').value = l.titulo || '';
+            document.getElementById('livro_autor').value = l.autor || l.autor_ano || '';
+            document.getElementById('livro_categoria').value = l.categoria || l.badge || '';
+            document.getElementById('livro_link').value = l.link || '';
+            document.getElementById('livro_citacao').value = l.citacao || '';
+            document.getElementById('livro_analise').value = l.analise || l.licao || '';
+            document.getElementById('tituloFormLivro').textContent = 'Editar Livro';
+            boxFormLivro.hidden = false;
+            boxFormLivro.scrollIntoView({ behavior: 'smooth' });
+          });
+        });
 
         listaLivrosWrapper.querySelectorAll('.btn-del-livro').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (!confirm('Deseja excluir este livro do catálogo?')) return;
-            await DB.excluirLivro(btn.getAttribute('data-id'));
+            const res = await DB.excluirLivro(btn.getAttribute('data-id'));
+            if (!res || !res.ok) {
+              alert('Erro ao excluir livro: ' + (res?.erro || 'tente novamente.'));
+              return;
+            }
             carregarLivrosAdmin();
           });
         });
@@ -972,20 +1073,6 @@
       const comunidadeDestWrap = document.getElementById('comunidadeDestWrap');
       const comunidadeRespostaWrap = document.getElementById('comunidadeRespostaWrap');
       const statusComunidadeManual = document.getElementById('statusComunidadeManual');
-
-      function formatarDataBr(valor) {
-        if (!valor) return 'Data indisponível';
-        const txt = String(valor).trim();
-        let d;
-        if (/^\d{10}$/.test(txt)) {
-          d = new Date(Number(txt) * 1000);
-        } else if (/^\d{13}$/.test(txt)) {
-          d = new Date(Number(txt));
-        } else {
-          d = new Date(txt.includes('T') || txt.includes('Z') ? txt : txt.replace(' ', 'T'));
-        }
-        return Number.isNaN(d.getTime()) ? txt : d.toLocaleString('pt-BR');
-      }
 
       function atualizarCamposFormComunidade() {
         const t = selectComunidadeTabela.value;

@@ -1,8 +1,8 @@
 // Rota RESTful de Conteúdo: /api/conteudo
-// GET (Pública): Carrega os dados dinâmicos do Turso para hidratar o site principal.
-// PUT / POST (Protegida): Atualiza seções no Turso mediante autenticação de administrador.
+// GET (Pública): Carrega os dados dinâmicos do banco para hidratar o site principal.
+// PUT / POST (Protegida): Atualiza seções mediante autenticação de administrador.
 
-import { db, responder, lerBody, sessaoValida } from './_lib.js';
+import { db, responder, lerBody, sessaoValida, agoraSql } from './_lib.js';
 
 export default async function handler(req, res) {
   try {
@@ -23,8 +23,9 @@ export default async function handler(req, res) {
         };
       }
 
-      // Permite cache de 60 segundos com revalidação em segundo plano na CDN da Vercel
-      res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+      if (typeof res.setHeader === 'function') {
+        res.setHeader('Cache-Control', 'no-store');
+      }
       return responder(res, 200, {
         ok: true,
         conteudo: mapa,
@@ -33,9 +34,12 @@ export default async function handler(req, res) {
     }
 
     // -------------------------------------------------------------
-    // 2. ROTA PUT / POST (PROTEGIDA) — ATUALIZAÇÃO NO TURSO
+    // 2. ROTA PUT / POST (PROTEGIDA) — ATUALIZAÇÃO NO BANCO
     // -------------------------------------------------------------
     if (req.method === 'PUT' || req.method === 'POST') {
+      if (typeof res.setHeader === 'function') {
+        res.setHeader('Cache-Control', 'no-store');
+      }
       const autenticado = await sessaoValida(req);
       if (!autenticado) {
         return responder(res, 401, {
@@ -54,7 +58,7 @@ export default async function handler(req, res) {
         });
       }
 
-      const agora = new Date().toISOString();
+      const agora = agoraSql();
       const statements = [];
 
       if (Array.isArray(secoes)) {
@@ -65,7 +69,7 @@ export default async function handler(req, res) {
                   VALUES (?, ?, ?, ?, ?)
                   ON CONFLICT(section_name) DO UPDATE SET
                     content_text = excluded.content_text,
-                    image_url = excluded.image_url,
+                    image_url = coalesce(excluded.image_url, site_content.image_url),
                     updated_at = excluded.updated_at`,
             args: [
               item.id || `sec_${item.section_name}`,
@@ -110,7 +114,7 @@ export default async function handler(req, res) {
 
       return responder(res, 200, {
         ok: true,
-        mensagem: 'Conteúdo atualizado com sucesso no banco Turso.',
+        mensagem: 'Conteúdo atualizado com sucesso.',
         atualizado_em: agora,
         total_secoes: statements.length,
       });
@@ -121,7 +125,7 @@ export default async function handler(req, res) {
     console.error('[/api/conteudo]', error);
     return responder(res, 500, {
       ok: false,
-      erro: 'Erro interno ao processar requisição no banco Turso: ' + error.message,
+      erro: 'Erro interno ao processar requisição no banco de dados.',
     });
   }
 }

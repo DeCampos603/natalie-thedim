@@ -1,10 +1,15 @@
-// Rotas da Natalie: ?acao=entrar | sair | sessao | listar | moderar | publicar_item
-import { db, TABELAS, STATUS, responder, lerBody, criarSessao, sessaoValida, iguais, cookieSessao, ipHash, novoId } from './_lib.js';
+// Rotas da Natalie: ?acao=entrar | sair | sessao | listar | moderar | publicar_item | ...
+import {
+  db, TABELAS, STATUS, responder, lerBody, criarSessao, sessaoValida, iguais,
+  cookieSessao, ipHash, novoId, agoraSql, slugify, safeHttpUrl,
+  mapTemaBiblioteca, mapFilme, mapLivro
+} from './_lib.js';
 
 const falhas = new Map(); // por instância; freio simples contra tentativa em massa
 
 export default async function handler(req, res) {
   try {
+    if (typeof res.setHeader === 'function') res.setHeader('Cache-Control', 'no-store');
     const urlObj = req.url ? new URL(req.url, 'http://localhost') : null;
     const acao = req.query?.acao || urlObj?.searchParams.get('acao') || req.body?.acao;
 
@@ -43,12 +48,12 @@ export default async function handler(req, res) {
 
       falhas.delete(h);
       const token = await criarSessao({ sub: userConfigurado });
-      res.setHeader('Set-Cookie', cookieSessao(token, 8 * 3600));
+      res.setHeader('Set-Cookie', cookieSessao(token, 8 * 3600, req));
       return responder(res, 200, { ok: true, token });
     }
 
     if (acao === 'sair') {
-      res.setHeader('Set-Cookie', cookieSessao('', 0));
+      res.setHeader('Set-Cookie', cookieSessao('', 0, req));
       return responder(res, 200, { ok: true });
     }
 
@@ -66,7 +71,7 @@ export default async function handler(req, res) {
         return responder(res, 400, { erro: 'Estrutura de dados inválida.' });
       }
 
-      const agora = new Date().toISOString();
+      const agora = agoraSql();
       const statements = [];
 
       // Pode receber array de objetos [{ section_name, content_text, image_url }] ou objeto chave-valor
@@ -78,7 +83,7 @@ export default async function handler(req, res) {
                   VALUES (?, ?, ?, ?, ?)
                   ON CONFLICT(section_name) DO UPDATE SET
                     content_text = excluded.content_text,
-                    image_url = excluded.image_url,
+                    image_url = coalesce(excluded.image_url, site_content.image_url),
                     updated_at = excluded.updated_at`,
             args: [
               item.id || `sec_${item.section_name}`,
@@ -91,8 +96,9 @@ export default async function handler(req, res) {
         }
       } else {
         for (const [chave, valor] of Object.entries(secoes)) {
+          if (['acao', 'token'].includes(chave)) continue;
           const texto = typeof valor === 'object' && valor !== null ? (valor.content_text ?? valor.texto) : valor;
-          const imagem = typeof valor === 'object' && valor !== null ? valor.image_url : null;
+          const imagem = typeof valor === 'object' && valor !== null ? (valor.image_url ?? valor.imagem) : null;
           statements.push({
             sql: `INSERT INTO site_content (id, section_name, content_text, image_url, updated_at)
                   VALUES (?, ?, ?, ?, ?)
@@ -100,7 +106,7 @@ export default async function handler(req, res) {
                     content_text = excluded.content_text,
                     image_url = coalesce(excluded.image_url, site_content.image_url),
                     updated_at = excluded.updated_at`,
-            args: [`sec_${chave}`, chave, String(texto ?? '').trim(), imagem, agora]
+            args: [`sec_${chave}`, chave, String(texto ?? '').trim(), imagem ? String(imagem).trim() : null, agora]
           });
         }
       }
@@ -125,7 +131,7 @@ export default async function handler(req, res) {
       if (!TABELAS[tabela] || !STATUS.includes(status)) return responder(res, 400, { erro: 'parâmetros inválidos' });
       const carimbo = tabela === 'perguntas' ? 'respondida_em' : 'moderado_em';
       const sets = ['status = ?', `${carimbo} = ?`];
-      const args = [status, new Date().toISOString()];
+      const args = [status, agoraSql()];
       for (const c of ['resposta_tipo', 'resposta_texto', 'resposta_url']) {
         if (typeof extra[c] === 'string' && extra[c].trim() && tabela !== 'diario_posts') {
           sets.push(`${c} = ?`); args.push(extra[c].trim().slice(0, 4000));
@@ -149,7 +155,7 @@ export default async function handler(req, res) {
       }
 
       const statusFinal = body.status === 'pendente' ? 'pendente' : 'aprovado';
-      const agora = new Date().toISOString();
+      const agora = agoraSql();
       const id = novoId();
       const colunas = ['id', 'texto', 'status', 'criado_em'];
       const valores = [id, texto, statusFinal, agora];
@@ -189,61 +195,123 @@ export default async function handler(req, res) {
     }
     if (acao === 'newsletter_remover' && req.method === 'POST') {
       const { id } = lerBody(req);
-      await db().execute({ sql: 'DELETE FROM newsletter_inscritos WHERE id = ?', args: [String(id)] });
-      return responder(res, 200, { ok: true });
+      if (!id) return responder(res, 400, { ok: false, erro: 'ID obrigatório.' });
+      const r = await db().execute({ sql: 'DELETE FROM newsletter_inscritos WHERE id = ?', args: [String(id)] });
+      return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0, erro: r.rowsAffected ? undefined : 'Inscrito não encontrado.' });
     }
 
     // === Gestão da Biblioteca (Temas e Histórico de Mensagens) ===
     if (acao === 'biblioteca_listar_temas' && req.method === 'GET') {
       const r = await db().execute(`
         SELECT t.*, 
-          (SELECT COUNT(*) FROM biblioteca_mensagens m WHERE m.tema_chave = t.tema_chave) AS total_mensagens
+          (SELECT COUNT(*) FROM biblioteca_mensagens m WHERE m.tema_chave = t.tema_chave OR m.tema_chave = t.id) AS total_mensagens
         FROM biblioteca_temas t
         ORDER BY t.ordem ASC, t.titulo ASC
       `);
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapTemaBiblioteca) });
     }
     if (acao === 'biblioteca_salvar_tema' && req.method === 'POST') {
-      const { id, tema_chave, pilar, titulo, texto, perguntas, ordem } = lerBody(req);
-      const temaId = id || `tema_${tema_chave || Date.now()}`;
+      const body = lerBody(req);
+      const rawId = String(body.id || '').trim();
+      const titulo = String(body.titulo || '').trim().slice(0, 255);
+      const pilar = String(body.pilar || body.categoria || 'Casamento e Relacionamentos').trim().slice(0, 100);
+      const texto = String(body.texto ?? body.conteudo ?? body.resumo ?? '').trim();
+      const resumo = String(body.resumo ?? '').trim().slice(0, 1000);
+      const icone = String(body.icone ?? '💬').trim().slice(0, 20) || '💬';
+      const perguntas = String(body.perguntas || '[]').trim();
+      const ordem = Number(body.ordem) || 0;
+
+      if (!titulo || !texto) {
+        return responder(res, 400, { ok: false, erro: 'Título e conteúdo do tema são obrigatórios.' });
+      }
+
+      let temaChave = slugify(body.tema_chave || '');
+      if (!temaChave && rawId) {
+        const existe = await db().execute({
+          sql: 'SELECT tema_chave FROM biblioteca_temas WHERE id = ? LIMIT 1',
+          args: [rawId]
+        });
+        temaChave = existe.rows?.[0]?.tema_chave || slugify(rawId) || rawId;
+      }
+      if (!temaChave) {
+        temaChave = slugify(titulo) || `tema_${Date.now()}`;
+      }
+      const temaId = rawId || `tema_${temaChave}`;
+      const atualizadoEm = agoraSql();
+
       await db().execute({
-        sql: `INSERT INTO biblioteca_temas (id, tema_chave, pilar, titulo, texto, perguntas, ordem, atualizado_em)
-              VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+        sql: `INSERT INTO biblioteca_temas (id, tema_chave, pilar, titulo, texto, perguntas, icone, resumo, ordem, atualizado_em)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
               ON CONFLICT(tema_chave) DO UPDATE SET
                 pilar = excluded.pilar,
                 titulo = excluded.titulo,
                 texto = excluded.texto,
                 perguntas = excluded.perguntas,
+                icone = excluded.icone,
+                resumo = excluded.resumo,
                 ordem = excluded.ordem,
-                atualizado_em = datetime('now')`,
-        args: [temaId, tema_chave, pilar || 'Casamento e Relacionamentos', titulo, texto, perguntas, Number(ordem) || 0]
+                atualizado_em = excluded.atualizado_em`,
+        args: [temaId, temaChave, pilar, titulo, texto, perguntas, icone, resumo || null, ordem, atualizadoEm]
       });
-      return responder(res, 200, { ok: true, mensagem: 'Tema da biblioteca salvo com sucesso.' });
+      return responder(res, 200, { ok: true, id: temaId, tema_chave: temaChave, mensagem: 'Tema da biblioteca salvo com sucesso.' });
     }
     if (acao === 'biblioteca_excluir_tema' && req.method === 'POST') {
-      const { tema_chave } = lerBody(req);
-      await db().execute({ sql: 'DELETE FROM biblioteca_temas WHERE tema_chave = ?', args: [String(tema_chave)] });
-      return responder(res, 200, { ok: true });
+      const body = lerBody(req);
+      const chaveOuId = String(body.id || body.tema_chave || '').trim();
+      if (!chaveOuId) return responder(res, 400, { ok: false, erro: 'ID ou chave do tema é obrigatório.' });
+      const r = await db().execute({
+        sql: 'DELETE FROM biblioteca_temas WHERE id = ? OR tema_chave = ?',
+        args: [chaveOuId, chaveOuId]
+      });
+      return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0, erro: r.rowsAffected ? undefined : 'Tema não encontrado.' });
     }
     if (acao === 'biblioteca_historico' && req.method === 'GET') {
-      const tema = req.query.tema_chave;
-      const sql = tema 
-        ? 'SELECT * FROM biblioteca_mensagens WHERE tema_chave = ? ORDER BY criado_em DESC'
-        : 'SELECT * FROM biblioteca_mensagens ORDER BY criado_em DESC';
-      const args = tema ? [tema] : [];
+      const filtro = String(req.query.tema || req.query.tema_chave || '').trim();
+      const baseSql = `
+        SELECT m.*, t.titulo AS tema_titulo_join
+        FROM biblioteca_mensagens m
+        LEFT JOIN biblioteca_temas t ON (m.tema_chave = t.tema_chave OR m.tema_chave = t.id)
+      `;
+      const sql = filtro
+        ? `${baseSql} WHERE m.tema_chave = ? OR t.id = ? OR t.tema_chave = ? ORDER BY m.criado_em DESC`
+        : `${baseSql} ORDER BY m.criado_em DESC`;
+      const args = filtro ? [filtro, filtro, filtro] : [];
       const r = await db().execute({ sql, args });
-      return responder(res, 200, { ok: true, dados: r.rows });
+      const dados = r.rows.map((row) => ({
+        ...row,
+        tema_titulo: row.tema_titulo_join || (row.tema_chave === 'supervisao_terapeutas' ? 'Supervisão Clínica (Terapeutas)' : row.tema_chave),
+        nome_remetente: row.nome || 'Anônimo',
+        email_remetente: row.email || ''
+      }));
+      return responder(res, 200, { ok: true, dados });
     }
 
     // === Gestão de Filmes (Clube do Filme) ===
     if (acao === 'filmes_listar' && req.method === 'GET') {
       const r = await db().execute('SELECT * FROM filmes ORDER BY ordem ASC, criado_em DESC');
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapFilme) });
     }
     if (acao === 'filmes_salvar' && req.method === 'POST') {
-      const { id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem } = lerBody(req);
-      const filmeId = id || `filme_${Date.now()}`;
-      const criadoEm = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const body = lerBody(req);
+      const filmeId = String(body.id || '').trim() || `filme_${Date.now()}`;
+      const titulo = String(body.titulo || '').trim().slice(0, 255);
+      const diretor = String(body.diretor || '').trim().slice(0, 80);
+      const ano = String(body.ano || '').trim().slice(0, 12);
+      const direcaoAno = String(body.direcao_ano || '').trim().slice(0, 100) || [diretor, ano].filter(Boolean).join(' · ');
+      const badge = String(body.badge || body.categoria || 'Curadoria Clínica').trim().slice(0, 100);
+      const sinopse = String(body.sinopse || '').trim();
+      const linkSeguro = safeHttpUrl(body.link);
+      const perguntas = body.perguntas !== undefined
+        ? String(body.perguntas || '').trim()
+        : (linkSeguro ? JSON.stringify({ link: linkSeguro }) : '[]');
+      const reflexao = String(body.reflexao || '').trim();
+      const ordem = Number(body.ordem) || 0;
+
+      if (!titulo || !sinopse) {
+        return responder(res, 400, { ok: false, erro: 'Título e sinopse do filme são obrigatórios.' });
+      }
+
+      const criadoEm = agoraSql();
       await db().execute({
         sql: `INSERT INTO filmes (id, titulo, direcao_ano, badge, sinopse, perguntas, reflexao, ordem, criado_em)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -255,25 +323,42 @@ export default async function handler(req, res) {
                 perguntas = excluded.perguntas,
                 reflexao = excluded.reflexao,
                 ordem = excluded.ordem`,
-        args: [filmeId, titulo, direcao_ano || '', badge || 'Cinema & Clínica', sinopse, perguntas || '', reflexao || '', Number(ordem) || 0, criadoEm]
+        args: [filmeId, titulo, direcaoAno, badge, sinopse, perguntas, reflexao, ordem, criadoEm]
       });
-      return responder(res, 200, { ok: true, mensagem: 'Filme salvo com sucesso.' });
+      return responder(res, 200, { ok: true, id: filmeId, mensagem: 'Filme salvo com sucesso.' });
     }
     if (acao === 'filmes_excluir' && req.method === 'POST') {
       const { id } = lerBody(req);
-      await db().execute({ sql: 'DELETE FROM filmes WHERE id = ?', args: [String(id)] });
-      return responder(res, 200, { ok: true });
+      if (!id) return responder(res, 400, { ok: false, erro: 'ID obrigatório.' });
+      const r = await db().execute({ sql: 'DELETE FROM filmes WHERE id = ?', args: [String(id)] });
+      return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0, erro: r.rowsAffected ? undefined : 'Filme não encontrado.' });
     }
 
     // === Gestão de Livros (Clube do Livro) ===
     if (acao === 'livros_listar' && req.method === 'GET') {
       const r = await db().execute('SELECT * FROM livros ORDER BY ordem ASC, criado_em DESC');
-      return responder(res, 200, { ok: true, dados: r.rows });
+      return responder(res, 200, { ok: true, dados: r.rows.map(mapLivro) });
     }
     if (acao === 'livros_salvar' && req.method === 'POST') {
-      const { id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem } = lerBody(req);
-      const livroId = id || `livro_${Date.now()}`;
-      const criadoEm = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const body = lerBody(req);
+      const livroId = String(body.id || '').trim() || `livro_${Date.now()}`;
+      const titulo = String(body.titulo || '').trim().slice(0, 255);
+      const autorAno = String(body.autor_ano || body.autor || '').trim().slice(0, 100);
+      const badge = String(body.badge || body.categoria || 'Biblioterapia').trim().slice(0, 100);
+      const licao = String(body.licao ?? body.analise ?? '').trim();
+      const citacao = String(body.citacao || '').trim();
+      const linkSeguro = safeHttpUrl(body.link);
+      let sinopse = String(body.sinopse || '').trim();
+      if (!sinopse && linkSeguro) {
+        sinopse = JSON.stringify({ link: linkSeguro });
+      }
+      const ordem = Number(body.ordem) || 0;
+
+      if (!titulo || (!licao && !sinopse && !citacao)) {
+        return responder(res, 400, { ok: false, erro: 'Título e análise ou citação do livro são obrigatórios.' });
+      }
+
+      const criadoEm = agoraSql();
       await db().execute({
         sql: `INSERT INTO livros (id, titulo, autor_ano, badge, sinopse, licao, citacao, ordem, criado_em)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -285,14 +370,15 @@ export default async function handler(req, res) {
                 licao = excluded.licao,
                 citacao = excluded.citacao,
                 ordem = excluded.ordem`,
-        args: [livroId, titulo, autor_ano || '', badge || 'Leitura Sistêmica', sinopse, licao || '', citacao || '', Number(ordem) || 0, criadoEm]
+        args: [livroId, titulo, autorAno, badge, sinopse, licao, citacao, ordem, criadoEm]
       });
-      return responder(res, 200, { ok: true, mensagem: 'Livro salvo com sucesso.' });
+      return responder(res, 200, { ok: true, id: livroId, mensagem: 'Livro salvo com sucesso.' });
     }
     if (acao === 'livros_excluir' && req.method === 'POST') {
       const { id } = lerBody(req);
-      await db().execute({ sql: 'DELETE FROM livros WHERE id = ?', args: [String(id)] });
-      return responder(res, 200, { ok: true });
+      if (!id) return responder(res, 400, { ok: false, erro: 'ID obrigatório.' });
+      const r = await db().execute({ sql: 'DELETE FROM livros WHERE id = ?', args: [String(id)] });
+      return responder(res, r.rowsAffected ? 200 : 404, { ok: r.rowsAffected > 0, erro: r.rowsAffected ? undefined : 'Livro não encontrado.' });
     }
 
     return responder(res, 400, { erro: 'ação inválida' });

@@ -29,16 +29,32 @@ const MIME_TYPES = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
-const BLOCKED_PREFIXES = ['/api/', '/turso/', '/node_modules/', '/.git', '/.env', '/package'];
-const BLOCKED_FILES = ['/server.js', '/.htaccess', '/.gitignore', '/vercel.json', '/package.json', '/package-lock.json'];
-const BLOCKED_EXTENSIONS = ['.zip', '.tar', '.gz', '.sql', '.env', '.md', '.log', '.bak', '.sh', '.py'];
+const MAX_BODY_BYTES = 1024 * 1024; // 1 MB
+const BLOCKED_PREFIXES = ['/api/', '/turso/', '/hostinger/', '/node_modules/', '/.git', '/.env', '/.vercel', '/package'];
+const BLOCKED_FILES = ['/server.js', '/.htaccess', '/.gitignore', '/vercel.json', '/package.json', '/package-lock.json', '/readme.md'];
+const BLOCKED_EXTENSIONS = ['.zip', '.tar', '.gz', '.sql', '.env', '.md', '.log', '.bak', '.sh', '.py', '.mjs'];
 
 function readRawBody(req) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (c) => chunks.push(c));
-    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-    req.on('error', () => resolve(''));
+    let total = 0;
+    let oversized = false;
+    req.on('data', (c) => {
+      if (oversized) return;
+      total += c.length;
+      if (total > MAX_BODY_BYTES) {
+        oversized = true;
+        reject(Object.assign(new Error('Payload too large'), { statusCode: 413 }));
+        return;
+      }
+      chunks.push(c);
+    });
+    req.on('end', () => {
+      if (!oversized) resolve(Buffer.concat(chunks).toString('utf8'));
+    });
+    req.on('error', () => {
+      if (!oversized) resolve('');
+    });
   });
 }
 
@@ -52,13 +68,30 @@ const server = http.createServer(async (req, res) => {
 
     const host = req.headers.host || 'localhost';
     const urlObj = new URL(req.url || '/', `http://${host}`);
-    const pathname = decodeURIComponent(urlObj.pathname);
+    let pathname;
+    try {
+      pathname = decodeURIComponent(urlObj.pathname);
+    } catch {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.end('Bad Request');
+      return;
+    }
 
     // 1. Rotas de API Serverless (/api/publico, /api/conteudo, /api/admin, /api/notificar)
     if (pathname === '/api/publico' || pathname === '/api/conteudo' || pathname === '/api/admin' || pathname === '/api/notificar') {
+      res.setHeader('Cache-Control', 'no-store');
       req.query = Object.fromEntries(urlObj.searchParams.entries());
       if (req.method !== 'GET' && req.method !== 'HEAD') {
-        const raw = await readRawBody(req);
+        let raw = '';
+        try {
+          raw = await readRawBody(req);
+        } catch (bodyErr) {
+          res.statusCode = bodyErr.statusCode || 413;
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(JSON.stringify({ ok: false, erro: 'Requisicao excede o limite permitido (1 MB).' }));
+          return;
+        }
         try {
           req.body = raw ? JSON.parse(raw) : {};
         } catch {
@@ -73,9 +106,12 @@ const server = http.createServer(async (req, res) => {
 
     // 2. Bloqueio de segurança para arquivos internos, código-fonte e backups
     const extBaixa = path.extname(pathname).toLowerCase();
+    const lowerPath = pathname.toLowerCase();
+    const hasDotSegment = lowerPath.split('/').some((seg) => seg.startsWith('.') && seg !== '.well-known' && seg !== '');
     if (
-      BLOCKED_PREFIXES.some((p) => pathname.startsWith(p)) ||
-      BLOCKED_FILES.includes(pathname.toLowerCase()) ||
+      hasDotSegment ||
+      BLOCKED_PREFIXES.some((p) => lowerPath.startsWith(p)) ||
+      BLOCKED_FILES.includes(lowerPath) ||
       BLOCKED_EXTENSIONS.includes(extBaixa)
     ) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -83,27 +119,23 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 3. Resolução de arquivos estáticos (com suporte a URLs limpas sem .html)
-    let relPath = pathname === '/' ? '/index.html' : pathname;
-    let filePath = path.join(__dirname, relPath);
+    const cleanSlug = pathname.replace(/^\/+|\/+$/g, '');
+    let relPath = pathname === '/' ? '/index.html' : (cleanSlug === 'login' ? '/admin.html' : pathname);
+    let filePath = path.resolve(__dirname, '.' + relPath);
 
     // Previne Path Traversal
-    if (!filePath.startsWith(__dirname)) {
+    if (filePath !== __dirname && !filePath.startsWith(__dirname + path.sep)) {
       res.writeHead(403);
       return res.end('Acesso negado');
     }
 
     if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-      const htmlCandidate = `${filePath}.html`;
-      if (fs.existsSync(htmlCandidate) && fs.statSync(htmlCandidate).isFile()) {
-        filePath = htmlCandidate;
+      const cleanHtml = (!extBaixa && cleanSlug) ? path.join(__dirname, `${cleanSlug}.html`) : '';
+      if (cleanHtml && fs.existsSync(cleanHtml) && fs.statSync(cleanHtml).isFile()) {
+        filePath = cleanHtml;
       } else {
-        const indexFallback = path.join(__dirname, 'index.html');
-        if (fs.existsSync(indexFallback)) {
-          filePath = indexFallback;
-        } else {
-          res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-          return res.end('Página não encontrada');
-        }
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('Not Found');
       }
     }
 
@@ -127,6 +159,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor Natalie Thedim ativo na porta ${PORT}`);
-});
+if (process.env.NATALIE_NO_LISTEN !== '1') {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor Natalie Thedim ativo na porta ${PORT}`);
+  });
+}
+
+export { server };

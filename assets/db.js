@@ -2,13 +2,11 @@
 // Acesso a dados — Revista Digital · Natalie Thedim
 //
 // Camada híbrida resiliente:
-// 1. Em ambiente Vercel/Node, comunica-se com as rotas serverless /api (Turso).
-// 2. Em hospedagem estática/compartilhada (Hostinger, GitHub Pages, local),
-//    ativa automaticamente o fallback clínico curado + persistência local,
-//    garantindo zero erros 404 e experiência fluida em todas as abas.
+// 1. Comunica-se com as rotas serverless/Node /api (MySQL Hostinger / libSQL).
+// 2. Em preview local sem servidor (protocolo file:// ou offline), ativa fallback local.
 // =====================================================================
 
-const DB = (() => {
+var DB = (typeof window !== 'undefined' && window.DB) ? window.DB : (() => {
   const WHATSAPP_OFICIAL = '5521989020364';
 
   const API_BASE = (typeof window !== 'undefined' && window.API_BASE_URL)
@@ -206,34 +204,41 @@ const DB = (() => {
   }
 
   async function enviar(tabela, dados) {
-    const tabelaReal = tabela === 'terapeutas' ? 'perguntas' : tabela;
-    const payload = tabela === 'terapeutas'
-      ? {
-          texto: `[SUPERVISÃO CLÍNICA] Nome: ${dados?.nome || ''} | CRP: ${dados?.crp || ''} | Formação: ${dados?.tempo || ''} | Modalidade: ${dados?.interesse || dados?.abordagem || ''} | WhatsApp: ${dados?.whatsapp || ''} | E-mail: ${dados?.email || ''} | Demanda: ${dados?.mensagem || ''}`.slice(0, 990)
-        }
-      : dados;
+    if (tabela === 'terapeutas') {
+      const { ok, erro, status, json } = await chamar('/api/publico?acao=supervisao', {
+        metodo: 'POST',
+        corpo: dados
+      });
+      if (ok) return { ok: true, erro: null, mensagem: json?.mensagem };
+      if (erro === 'offline' || status === 404) {
+        await dispararEmailNotificacao('terapeutas', dados);
+        return { ok: true, erro: null, modoLocal: true };
+      }
+      return { ok: false, erro: erro || json?.erro || 'Não foi possível enviar a solicitação.' };
+    }
 
-    // 1. Dispara notificação por e-mail para psicologa@nataliethedim.com.br
-    dispararEmailNotificacao(tabela, dados);
-
-    // 2. Salva no banco de dados Turso (visível no Painel Admin /admin.html)
+    // 1. Salva no banco de dados (visível no Painel Admin /admin.html)
     const { ok, erro, status } = await chamar('/api/publico?acao=enviar', {
       metodo: 'POST',
-      corpo: { tabela: tabelaReal, dados: payload }
+      corpo: { tabela, dados }
     });
 
-    if (ok) return { ok: true, erro: null };
+    if (ok) {
+      dispararEmailNotificacao(tabela, dados);
+      return { ok: true, erro: null };
+    }
 
-    // Fallback estático resiliente (Hostinger / offline): salva registro local sem quebrar a experiência
-    if (erro === 'offline' || status === 404 || status === 405 || status >= 500) {
-      const lista = lerLocal(`nt_envios_${tabelaReal}`, []);
+    // Fallback offline/estático (somente quando não há servidor API)
+    if (erro === 'offline' || status === 404) {
+      dispararEmailNotificacao(tabela, dados);
+      const lista = lerLocal(`nt_envios_${tabela}`, []);
       lista.unshift({
         id: 'local_' + Date.now(),
-        ...(payload || {}),
+        ...(dados || {}),
         status: 'pendente',
         criado_em: new Date().toISOString()
       });
-      salvarLocal(`nt_envios_${tabelaReal}`, lista.slice(0, 50));
+      salvarLocal(`nt_envios_${tabela}`, lista.slice(0, 50));
       return { ok: true, erro: null, modoLocal: true };
     }
 
@@ -277,28 +282,57 @@ const DB = (() => {
 
   function aoMudarSessao() {}
 
-  async function obterConteudo() {
-    const cacheLocal = lerLocal('nt_cms_conteudo_local', {});
-    const r = await chamar('/api/conteudo');
-    const conteudoApi = r.json?.conteudo || {};
-    const conteudo = { ...cacheLocal, ...conteudoApi };
+  let conteudoEmVoo = null;
+  let conteudoCache = null;
 
-    if (!conteudo.nome_profissional) {
-      conteudo.nome_profissional = { texto: 'Natalie Thedim Silvado', imagem: null };
+  function normalizarWhatsappCMS(valor) {
+    const digits = String(valor || '').replace(/\D/g, '');
+    if (digits.length < 10) return WHATSAPP_OFICIAL;
+    if ((digits.length === 10 || digits.length === 11) && !digits.startsWith('55')) {
+      return '55' + digits;
     }
-    if (!conteudo.whatsapp_numero || !String(conteudo.whatsapp_numero.texto).includes(WHATSAPP_OFICIAL)) {
-      conteudo.whatsapp_numero = { texto: '+' + WHATSAPP_OFICIAL, imagem: null };
-    }
-    if (!conteudo.email_contato) {
-      conteudo.email_contato = { texto: EMAIL_OFICIAL, imagem: null };
-    }
+    return digits;
+  }
 
-    return {
-      ok: true,
-      dados: r.json?.itens || r.json?.dados || [],
-      conteudo,
-      erro: null
-    };
+  async function obterConteudo(forcar = false) {
+    if (!forcar && conteudoCache && (Date.now() - conteudoCache.ts < 5000)) {
+      return conteudoCache.res;
+    }
+    if (!forcar && conteudoEmVoo) return conteudoEmVoo;
+
+    conteudoEmVoo = (async () => {
+      const cacheLocal = lerLocal('nt_cms_conteudo_local', {});
+      const r = await chamar('/api/conteudo');
+      const conteudoApi = r.json?.conteudo || {};
+      const conteudo = (r.ok && r.json?.conteudo) ? { ...cacheLocal, ...conteudoApi } : { ...cacheLocal, ...conteudoApi };
+
+      if (!conteudo.nome_profissional) {
+        conteudo.nome_profissional = { texto: 'Natalie Thedim Silvado', imagem: null };
+      }
+      if (!conteudo.whatsapp_numero || String(conteudo.whatsapp_numero.texto || '').replace(/\D/g, '').length < 10) {
+        conteudo.whatsapp_numero = { texto: '+' + WHATSAPP_OFICIAL, imagem: null };
+      }
+      if (!conteudo.email_contato) {
+        conteudo.email_contato = { texto: EMAIL_OFICIAL, imagem: null };
+      }
+
+      const resultado = {
+        ok: r.ok || Object.keys(conteudo).length > 0,
+        dados: r.json?.itens || r.json?.dados || [],
+        conteudo,
+        erro: r.ok ? null : r.erro
+      };
+      if (r.ok) {
+        conteudoCache = { ts: Date.now(), res: resultado };
+      }
+      return resultado;
+    })();
+
+    try {
+      return await conteudoEmVoo;
+    } finally {
+      conteudoEmVoo = null;
+    }
   }
 
   async function salvarConteudo(secoes) {
@@ -313,6 +347,9 @@ const DB = (() => {
         mensagem: null
       };
     }
+
+    conteudoCache = null;
+    conteudoEmVoo = null;
 
     const mapaAtual = lerLocal('nt_cms_conteudo_local', {});
     if (Array.isArray(secoes)) {
@@ -336,143 +373,200 @@ const DB = (() => {
   }
 
   // === Métodos da Newsletter ===
-  async function inscreverNewsletter(email, nome = '') {
-    dispararEmailNotificacao('newsletter', { Nome: nome || 'Leitor(a)', Email: email });
-    const { ok, erro, json } = await chamar('/api/publico?acao=newsletter', {
+  async function inscreverNewsletter(email, nome = '', origem = 'site') {
+    const { ok, erro, status, json } = await chamar('/api/publico?acao=newsletter', {
       metodo: 'POST',
-      corpo: { email, nome }
+      corpo: { email, nome, origem }
     });
-    if (!ok) {
+    if (ok) {
+      dispararEmailNotificacao('newsletter', { Nome: nome || 'Leitor(a)', Email: email, Origem: origem });
+      return { ok: true, erro: null, mensagem: json?.mensagem || 'Inscrição confirmada com sucesso!' };
+    }
+    if (erro === 'offline' || status === 404) {
+      dispararEmailNotificacao('newsletter', { Nome: nome || 'Leitor(a)', Email: email, Origem: origem });
       const lista = lerLocal('nt_newsletter_local', []);
       if (!lista.some(item => item.email === email)) {
-        lista.unshift({ id: 'nl_' + Date.now(), email, nome, criado_em: new Date().toISOString() });
+        lista.unshift({ id: 'nl_' + Date.now(), email, nome, origem, criado_em: new Date().toISOString() });
         salvarLocal('nt_newsletter_local', lista);
       }
       return { ok: true, mensagem: 'Inscrição confirmada com sucesso!' };
     }
-    return { ok, erro, mensagem: json?.mensagem };
+    return { ok: false, erro: erro || json?.erro || 'Erro ao inscrever na newsletter.', mensagem: null };
   }
 
   async function listarNewsletter() {
-    const { ok, json } = await chamar('/api/admin?acao=newsletter_listar');
+    const { ok, erro, json } = await chamar('/api/admin?acao=newsletter_listar');
     if (ok && Array.isArray(json?.dados)) {
-      return { ok: true, dados: json.dados };
+      return { ok: true, dados: json.dados, erro: null };
     }
-    const local = lerLocal('nt_newsletter_local', []);
-    return { ok: true, dados: local };
+    if (erro === 'offline') {
+      return { ok: true, dados: lerLocal('nt_newsletter_local', []), erro: null };
+    }
+    return { ok: false, dados: [], erro: erro || json?.erro || 'Não autorizado ou falha ao carregar newsletter.' };
   }
 
   async function removerNewsletter(id) {
-    await chamar('/api/admin?acao=newsletter_remover', { metodo: 'POST', corpo: { id } });
-    const local = lerLocal('nt_newsletter_local', []).filter(item => item.id !== id);
-    salvarLocal('nt_newsletter_local', local);
-    return { ok: true };
+    const { ok, erro, json } = await chamar('/api/admin?acao=newsletter_remover', { metodo: 'POST', corpo: { id } });
+    if (ok || erro === 'offline') {
+      const local = lerLocal('nt_newsletter_local', []).filter(item => item.id !== id);
+      salvarLocal('nt_newsletter_local', local);
+      return { ok: true, erro: null };
+    }
+    return { ok: false, erro: erro || json?.erro || 'Não foi possível excluir o inscrito.' };
   }
 
   // === Métodos da Biblioteca ===
   async function obterTemasBiblioteca() {
     const r = await chamar('/api/publico?acao=biblioteca_temas');
-    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
-      return { ok: true, dados: r.json.dados };
+    if (r.ok && Array.isArray(r.json?.dados)) {
+      return { ok: true, dados: r.json.dados, erro: null };
     }
-    const local = lerLocal('nt_biblioteca_temas_local', null);
-    if (local) return { ok: true, dados: local };
-    return { ok: true, dados: [] };
+    if (r.erro === 'offline' || r.status === 404) {
+      const local = lerLocal('nt_biblioteca_temas_local', []);
+      return { ok: true, dados: local || [], erro: null };
+    }
+    return { ok: false, dados: [], erro: r.erro || 'Erro ao carregar temas da biblioteca.' };
   }
 
   async function salvarTemaBiblioteca(dados) {
-    await chamar('/api/admin?acao=biblioteca_salvar_tema', { metodo: 'POST', corpo: dados });
-    const local = lerLocal('nt_biblioteca_temas_local', []);
-    const idx = local.findIndex(t => t.tema_chave === dados.tema_chave);
-    if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
-    else { local.push({ id: 'tema_' + Date.now(), ...dados }); }
-    salvarLocal('nt_biblioteca_temas_local', local);
-    return { ok: true };
-  }
-
-  async function excluirTemaBiblioteca(tema_chave) {
-    await chamar('/api/admin?acao=biblioteca_excluir_tema', { metodo: 'POST', corpo: { tema_chave } });
-    const local = lerLocal('nt_biblioteca_temas_local', []).filter(t => t.tema_chave !== tema_chave);
-    salvarLocal('nt_biblioteca_temas_local', local);
-    return { ok: true };
-  }
-
-  async function enviarMensagemBiblioteca(dados) {
-    dispararEmailNotificacao('biblioteca_mensagens', dados);
-    const r = await chamar('/api/publico?acao=biblioteca_mensagem', { metodo: 'POST', corpo: dados });
-    if (!r.ok) {
-      const msgs = lerLocal('nt_bib_msgs_local', []);
-      msgs.unshift({ id: 'bmsg_' + Date.now(), ...dados, criado_em: new Date().toISOString() });
-      salvarLocal('nt_bib_msgs_local', msgs);
+    const r = await chamar('/api/admin?acao=biblioteca_salvar_tema', { metodo: 'POST', corpo: dados });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível salvar o tema.' };
     }
-    return { ok: true, mensagem: 'Mensagem registrada com sucesso!' };
+    const local = lerLocal('nt_biblioteca_temas_local', []);
+    const idx = local.findIndex(t => (dados.id && t.id === dados.id) || (dados.tema_chave && t.tema_chave === dados.tema_chave));
+    if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
+    else { local.push({ id: r.json?.id || 'tema_' + Date.now(), ...dados }); }
+    salvarLocal('nt_biblioteca_temas_local', local);
+    return { ok: true, erro: null };
+  }
+
+  async function excluirTemaBiblioteca(idOuChave) {
+    const r = await chamar('/api/admin?acao=biblioteca_excluir_tema', {
+      metodo: 'POST',
+      corpo: { id: idOuChave, tema_chave: idOuChave }
+    });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível excluir o tema.' };
+    }
+    const local = lerLocal('nt_biblioteca_temas_local', []).filter(
+      t => String(t.id) !== String(idOuChave) && String(t.tema_chave) !== String(idOuChave)
+    );
+    salvarLocal('nt_biblioteca_temas_local', local);
+    return { ok: true, erro: null };
+  }
+
+  async function enviarMensagemBiblioteca(temaOuDados, nomeArg, emailArg, mensagemArg) {
+    const payload = (temaOuDados && typeof temaOuDados === 'object' && !Array.isArray(temaOuDados))
+      ? temaOuDados
+      : {
+          tema_chave: String(temaOuDados || '').trim(),
+          nome: String(nomeArg || '').trim(),
+          email: String(emailArg || '').trim(),
+          mensagem: String(mensagemArg || '').trim()
+        };
+
+    const r = await chamar('/api/publico?acao=biblioteca_mensagem', { metodo: 'POST', corpo: payload });
+    if (r.ok) {
+      dispararEmailNotificacao('biblioteca_mensagens', payload);
+      return { ok: true, erro: null, mensagem: r.json?.mensagem || 'Mensagem registrada com sucesso!' };
+    }
+    if (r.erro === 'offline' || r.status === 404) {
+      dispararEmailNotificacao('biblioteca_mensagens', payload);
+      const msgs = lerLocal('nt_bib_msgs_local', []);
+      msgs.unshift({ id: 'bmsg_' + Date.now(), ...payload, criado_em: new Date().toISOString() });
+      salvarLocal('nt_bib_msgs_local', msgs);
+      return { ok: true, erro: null, mensagem: 'Mensagem registrada com sucesso!' };
+    }
+    return { ok: false, erro: r.erro || r.json?.erro || 'Erro ao enviar dúvida.' };
   }
 
   async function obterHistoricoBiblioteca(tema_chave = null) {
-    const url = tema_chave ? `/api/admin?acao=biblioteca_historico&tema_chave=${encodeURIComponent(tema_chave)}` : '/api/admin?acao=biblioteca_historico';
+    const url = tema_chave
+      ? `/api/admin?acao=biblioteca_historico&tema_chave=${encodeURIComponent(tema_chave)}`
+      : '/api/admin?acao=biblioteca_historico';
     const r = await chamar(url);
     if (r.ok && Array.isArray(r.json?.dados)) {
-      return { ok: true, dados: r.json.dados };
+      return { ok: true, dados: r.json.dados, erro: null };
     }
-    const msgs = lerLocal('nt_bib_msgs_local', []);
-    const filtrados = tema_chave ? msgs.filter(m => m.tema_chave === tema_chave) : msgs;
-    return { ok: true, dados: filtrados };
+    if (r.erro === 'offline') {
+      const msgs = lerLocal('nt_bib_msgs_local', []);
+      const filtrados = tema_chave ? msgs.filter(m => m.tema_chave === tema_chave) : msgs;
+      return { ok: true, dados: filtrados, erro: null };
+    }
+    return { ok: false, dados: [], erro: r.erro || r.json?.erro || 'Erro ao carregar mensagens da biblioteca.' };
   }
 
   // === Métodos do Clube do Filme ===
   async function obterFilmes() {
     const r = await chamar('/api/publico?acao=filmes');
-    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
-      return { ok: true, dados: r.json.dados };
+    if (r.ok && Array.isArray(r.json?.dados)) {
+      return { ok: true, dados: r.json.dados, erro: null };
     }
-    const local = lerLocal('nt_filmes_local', null);
-    if (local) return { ok: true, dados: local };
-    return { ok: true, dados: [] };
+    if (r.erro === 'offline' || r.status === 404) {
+      const local = lerLocal('nt_filmes_local', []);
+      return { ok: true, dados: local || [], erro: null };
+    }
+    return { ok: false, dados: [], erro: r.erro || 'Erro ao carregar filmes.' };
   }
 
   async function salvarFilme(dados) {
-    await chamar('/api/admin?acao=filmes_salvar', { metodo: 'POST', corpo: dados });
+    const r = await chamar('/api/admin?acao=filmes_salvar', { metodo: 'POST', corpo: dados });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível salvar o filme.' };
+    }
     const local = lerLocal('nt_filmes_local', []);
-    const idx = local.findIndex(f => f.id === dados.id);
+    const idx = local.findIndex(f => dados.id && f.id === dados.id);
     if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
-    else { local.push({ id: dados.id || 'filme_' + Date.now(), ...dados }); }
+    else { local.push({ id: r.json?.id || dados.id || 'filme_' + Date.now(), ...dados }); }
     salvarLocal('nt_filmes_local', local);
-    return { ok: true };
+    return { ok: true, erro: null };
   }
 
   async function excluirFilme(id) {
-    await chamar('/api/admin?acao=filmes_excluir', { metodo: 'POST', corpo: { id } });
-    const local = lerLocal('nt_filmes_local', []).filter(f => f.id !== id);
+    const r = await chamar('/api/admin?acao=filmes_excluir', { metodo: 'POST', corpo: { id } });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível excluir o filme.' };
+    }
+    const local = lerLocal('nt_filmes_local', []).filter(f => String(f.id) !== String(id));
     salvarLocal('nt_filmes_local', local);
-    return { ok: true };
+    return { ok: true, erro: null };
   }
 
   // === Métodos do Clube do Livro ===
   async function obterLivros() {
     const r = await chamar('/api/publico?acao=livros');
-    if (r.ok && Array.isArray(r.json?.dados) && r.json.dados.length > 0) {
-      return { ok: true, dados: r.json.dados };
+    if (r.ok && Array.isArray(r.json?.dados)) {
+      return { ok: true, dados: r.json.dados, erro: null };
     }
-    const local = lerLocal('nt_livros_local', null);
-    if (local) return { ok: true, dados: local };
-    return { ok: true, dados: [] };
+    if (r.erro === 'offline' || r.status === 404) {
+      const local = lerLocal('nt_livros_local', []);
+      return { ok: true, dados: local || [], erro: null };
+    }
+    return { ok: false, dados: [], erro: r.erro || 'Erro ao carregar livros.' };
   }
 
   async function salvarLivro(dados) {
-    await chamar('/api/admin?acao=livros_salvar', { metodo: 'POST', corpo: dados });
+    const r = await chamar('/api/admin?acao=livros_salvar', { metodo: 'POST', corpo: dados });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível salvar o livro.' };
+    }
     const local = lerLocal('nt_livros_local', []);
-    const idx = local.findIndex(l => l.id === dados.id);
+    const idx = local.findIndex(l => dados.id && l.id === dados.id);
     if (idx >= 0) { local[idx] = { ...local[idx], ...dados }; }
-    else { local.push({ id: dados.id || 'livro_' + Date.now(), ...dados }); }
+    else { local.push({ id: r.json?.id || dados.id || 'livro_' + Date.now(), ...dados }); }
     salvarLocal('nt_livros_local', local);
-    return { ok: true };
+    return { ok: true, erro: null };
   }
 
   async function excluirLivro(id) {
-    await chamar('/api/admin?acao=livros_excluir', { metodo: 'POST', corpo: { id } });
-    const local = lerLocal('nt_livros_local', []).filter(l => l.id !== id);
+    const r = await chamar('/api/admin?acao=livros_excluir', { metodo: 'POST', corpo: { id } });
+    if (!r.ok && r.erro !== 'offline') {
+      return { ok: false, erro: r.erro || r.json?.erro || 'Não foi possível excluir o livro.' };
+    }
+    const local = lerLocal('nt_livros_local', []).filter(l => String(l.id) !== String(id));
     salvarLocal('nt_livros_local', local);
-    return { ok: true };
+    return { ok: true, erro: null };
   }
 
   async function listarTudo(tabela) {
@@ -513,6 +607,9 @@ const DB = (() => {
     inscreverNewsletter,
     listarNewsletter,
     removerNewsletter,
+    listarInscritosNewsletter: listarNewsletter,
+    removerInscritoNewsletter: removerNewsletter,
+    normalizarWhatsappCMS,
     obterTemasBiblioteca,
     salvarTemaBiblioteca,
     excluirTemaBiblioteca,
@@ -531,8 +628,12 @@ if (typeof window !== 'undefined') {
   window.DB = DB;
 }
 
-// Inicialização Global: Menu Mobile + Hidratação Dinâmica do WhatsApp via Turso
+// Inicialização Global: Menu Mobile + Hidratação Dinâmica de CMS/WhatsApp
 document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window !== 'undefined') {
+    if (window.__natalieDbDomInit) return;
+    window.__natalieDbDomInit = true;
+  }
   // 1. Menu Mobile Toggle (suporta tanto is-aberto quanto is-open)
   const btnToggle = document.getElementById('btnToggleNav');
   const mainNav = document.getElementById('mainNav');
@@ -592,17 +693,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     if (conteudo.whatsapp_numero?.texto) {
-      let numLimpo = conteudo.whatsapp_numero.texto.replace(/\D/g, '');
-      if (!numLimpo || numLimpo !== DB.WHATSAPP_OFICIAL) {
-        numLimpo = DB.WHATSAPP_OFICIAL;
+      const numLimpo = DB.normalizarWhatsappCMS ? DB.normalizarWhatsappCMS(conteudo.whatsapp_numero.texto) : conteudo.whatsapp_numero.texto.replace(/\D/g, '');
+      if (numLimpo && numLimpo.length >= 10) {
+        document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+          try {
+            const u = new URL(a.href);
+            u.pathname = '/' + numLimpo;
+            a.href = u.toString();
+          } catch (_) {}
+        });
       }
-      document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
-        try {
-          const u = new URL(a.href);
-          u.pathname = '/' + numLimpo;
-          a.href = u.toString();
-        } catch (_) {}
-      });
     }
     if (conteudo.crp_info?.texto) {
       document.querySelectorAll('[data-cms="crp_info"]').forEach(el => {

@@ -473,6 +473,9 @@
       const elLista = document.getElementById('modalBibLista');
       const elWa = document.getElementById('modalBibWa');
 
+      const escBib = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      const waBibNum = () => (document.querySelector('a[href*="wa.me/"]')?.href.match(/wa\.me\/(\d+)/)?.[1]) || '5521989020364';
+
       document.querySelectorAll('.bib-card').forEach(card => {
         card.addEventListener('click', () => {
           const chave = card.getAttribute('data-tema');
@@ -492,8 +495,10 @@
           elPilar.textContent = dados.pilar;
           elTitulo.textContent = dados.titulo;
           elTexto.textContent = dados.texto;
-          elLista.innerHTML = dados.perguntas.map(q => `<li>${q}</li>`).join('');
-          elWa.href = `https://wa.me/5521989020364?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + dados.titulo + '" na Biblioteca do site e gostaria de conversar sobre atendimento.')}`;
+          elLista.innerHTML = (dados.perguntas || []).map(q => `<li>${escBib(q)}</li>`).join('');
+          elWa.href = `https://wa.me/${waBibNum()}?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + dados.titulo + '" na Biblioteca do site e gostaria de conversar sobre atendimento.')}`;
+          const elTemaInput = document.getElementById('temaIdEnvio');
+          if (elTemaInput) elTemaInput.value = chave || dados.titulo;
 
           modal.classList.add('is-open');
           modal.setAttribute('aria-hidden', 'false');
@@ -525,7 +530,10 @@
 
           try {
             if (window.DB && window.DB.enviarMensagemBiblioteca) {
-              await window.DB.enviarMensagemBiblioteca(temaId, nome, email, mensagem);
+              const resEnvio = await window.DB.enviarMensagemBiblioteca(temaId, nome, email, mensagem);
+              if (resEnvio && resEnvio.ok === false) {
+                throw new Error(resEnvio.erro || 'Não foi possível enviar sua dúvida.');
+              }
             }
             statusDuvida.style.display = 'block';
             statusDuvida.style.color = '#2E7D32';
@@ -556,17 +564,29 @@
             card.setAttribute('data-tema', 'dinamico_' + t.id);
             card.innerHTML = `
               <div>
-                <h3>${t.icone || '💬'} ${t.titulo}</h3>
-                <p>${t.resumo || ''}</p>
+                <h3>${escBib(t.icone || '💬')} ${escBib(t.titulo)}</h3>
+                <p>${escBib(t.resumo || '')}</p>
               </div>
               <button type="button" class="bib-btn">Ler síntese clínica →</button>
             `;
             card.addEventListener('click', () => {
               elPilar.textContent = t.categoria || 'Biblioteca Clínica · Natalie Thedim';
-              elTitulo.textContent = t.titulo;
-              elTexto.textContent = t.conteudo || t.resumo;
-              elLista.innerHTML = '<li>Como este tema se manifesta no meu dia a dia?</li><li>O que posso comunicar com mais clareza para transformar esse ciclo?</li>';
-              elWa.href = `https://wa.me/5521989020364?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + t.titulo + '" no site e gostaria de conversar.')}`;
+              elTitulo.textContent = t.titulo || '';
+              elTexto.textContent = t.conteudo || t.resumo || '';
+              let perguntasArr = [];
+              if (Array.isArray(t.perguntas)) {
+                perguntasArr = t.perguntas;
+              } else if (typeof t.perguntas === 'string' && t.perguntas.trim().startsWith('[')) {
+                try { perguntasArr = JSON.parse(t.perguntas); } catch (_) { perguntasArr = []; }
+              }
+              if (!Array.isArray(perguntasArr) || !perguntasArr.length) {
+                perguntasArr = [
+                  'Como este tema se manifesta no meu dia a dia?',
+                  'O que posso comunicar com mais clareza para transformar esse ciclo?'
+                ];
+              }
+              elLista.innerHTML = perguntasArr.map(q => `<li>${escBib(q)}</li>`).join('');
+              elWa.href = `https://wa.me/${waBibNum()}?text=${encodeURIComponent('Olá, Natalie! Li a síntese sobre "' + (t.titulo || '') + '" no site e gostaria de conversar.')}`;
               document.getElementById('temaIdEnvio').value = t.id;
               modal.classList.add('is-open');
               modal.setAttribute('aria-hidden', 'false');

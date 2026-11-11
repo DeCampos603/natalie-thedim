@@ -69,6 +69,8 @@ CREATE TABLE IF NOT EXISTS biblioteca_temas (
   titulo TEXT NOT NULL,
   texto TEXT NOT NULL,
   perguntas TEXT NOT NULL,
+  icone TEXT DEFAULT '💬',
+  resumo TEXT,
   ordem INTEGER DEFAULT 0,
   atualizado_em TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );

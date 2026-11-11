@@ -35,10 +35,11 @@ function criarClienteMySQL() {
 
   async function execute(stmt) {
     const rawSql = typeof stmt === 'string' ? stmt : stmt.sql;
-    const args = typeof stmt === 'string' ? [] : (stmt.args || []);
+    const rawArgs = typeof stmt === 'string' ? [] : (stmt.args || []);
+    const args = rawArgs.map((a) => (a === undefined ? null : a));
     const sql = traduzirParaMySQL(rawSql);
 
-    const [rows, fields] = await pool.query(sql, args);
+    const [rows] = await pool.query(sql, args);
     const affected = (rows && typeof rows.affectedRows === 'number') ? rows.affectedRows : (Array.isArray(rows) ? rows.length : 0);
 
     return {
@@ -55,7 +56,8 @@ function criarClienteMySQL() {
       const results = [];
       for (const s of stmts) {
         const rawSql = typeof s === 'string' ? s : s.sql;
-        const args = typeof s === 'string' ? [] : (s.args || []);
+        const rawArgs = typeof s === 'string' ? [] : (s.args || []);
+        const args = rawArgs.map((a) => (a === undefined ? null : a));
         const sql = traduzirParaMySQL(rawSql);
         const [rows] = await conn.query(sql, args);
         results.push(rows);

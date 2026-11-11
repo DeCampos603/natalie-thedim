@@ -369,7 +369,7 @@
         <form id="formSupervisao" class="form-grid" style="display:flex; flex-direction:column; gap:1.15rem;">
           <div>
             <label for="supNome" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">Nome Completo</label>
-            <input type="text" id="supNome" name="nome" required placeholder="Seu nome" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+            <input type="text" id="supNome" name="nome" autocomplete="name" required placeholder="Seu nome" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
@@ -392,11 +392,11 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
             <div>
               <label for="supWhats" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">WhatsApp com DDD</label>
-              <input type="tel" id="supWhats" name="whatsapp" required placeholder="(XX) 99999-9999" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+              <input type="tel" id="supWhats" name="whatsapp" autocomplete="tel" required placeholder="(XX) 99999-9999" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
             </div>
             <div>
               <label for="supEmail" style="display:block; font-size:0.8125rem; font-weight:600; color:var(--color-brand-wine); margin-bottom:0.35rem;">E-mail Profissional</label>
-              <input type="email" id="supEmail" name="email" required placeholder="seu@email.com" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
+              <input type="email" id="supEmail" name="email" autocomplete="email" required placeholder="seu@email.com" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border-soft); border-radius:var(--radius-md); font-family:inherit; font-size:0.9375rem;" />
             </div>
           </div>
 
@@ -497,13 +497,20 @@
           data: new Date().toISOString()
         };
 
+        let envioOk = false;
+        let erroEnvio = '';
         try {
-          // Tentar enviar via DB.enviar caso o endpoint exista, com fallback gracioso
           if (window.DB && typeof window.DB.enviar === 'function') {
-            await window.DB.enviar('terapeutas', payload);
+            const resSup = await window.DB.enviar('terapeutas', payload);
+            if (resSup && resSup.ok !== false) {
+              envioOk = true;
+            } else {
+              erroEnvio = (resSup && resSup.erro) ? resSup.erro : 'Falha ao registrar no servidor.';
+            }
           }
         } catch (err) {
           console.warn('DB.enviar fallback:', err);
+          erroEnvio = err?.message || 'Erro de conexão.';
         }
 
         // Monta link direto de WhatsApp com todos os dados preenchidos
@@ -519,16 +526,29 @@
         const urlZapDireto = `https://wa.me/5521989020364?text=${msgZap}`;
 
         // Feedback positivo ao usuário + botão de envio imediato no WhatsApp
+        const escSup = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         msgFeedback.style.display = 'block';
-        msgFeedback.style.background = 'var(--color-ok-bg)';
-        msgFeedback.style.color = 'var(--color-ok)';
-        msgFeedback.innerHTML = `
-          <strong>Solicitação registrada e enviada para o e-mail e painel da Dra. Natalie!</strong><br>
-          Obrigada pelo interesse, <b>${payload.nome}</b>. Seus dados foram enviados para <code>psicologa.nataliethedim@gmail.com</code> e para o Painel Administrativo.<br>
-          <a href="${urlZapDireto}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.45rem; margin-top:0.75rem; padding:0.6rem 1.25rem; background:#5B1826; color:#FFFFFF; border-radius:999px; font-weight:700; text-decoration:none; font-size:0.85rem;">
-            <span>📲 Confirmar também pelo WhatsApp da Natalie agora →</span>
-          </a>
-        `;
+        if (envioOk) {
+          msgFeedback.style.background = 'var(--color-ok-bg)';
+          msgFeedback.style.color = 'var(--color-ok)';
+          msgFeedback.innerHTML = `
+            <strong>Solicitação registrada e enviada para o painel e notificação da Dra. Natalie!</strong><br>
+            Obrigada pelo interesse, <b>${escSup(payload.nome)}</b>. Seus dados foram registrados no Painel Administrativo (<code>psicologa@nataliethedim.com.br</code>).<br>
+            <a href="${escSup(urlZapDireto)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.45rem; margin-top:0.75rem; padding:0.6rem 1.25rem; background:#5B1826; color:#FFFFFF; border-radius:999px; font-weight:700; text-decoration:none; font-size:0.85rem;">
+              <span>📲 Confirmar também pelo WhatsApp da Natalie agora →</span>
+            </a>
+          `;
+        } else {
+          msgFeedback.style.background = '#FDECEA';
+          msgFeedback.style.color = '#9B1C1C';
+          msgFeedback.innerHTML = `
+            <strong>Não foi possível concluir o envio automático (${escSup(erroEnvio || 'tente novamente')}).</strong><br>
+            Você pode enviar sua solicitação diretamente pelo WhatsApp clicando abaixo:<br>
+            <a href="${escSup(urlZapDireto)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.45rem; margin-top:0.75rem; padding:0.6rem 1.25rem; background:#5B1826; color:#FFFFFF; border-radius:999px; font-weight:700; text-decoration:none; font-size:0.85rem;">
+              <span>📲 Enviar solicitação pelo WhatsApp da Natalie →</span>
+            </a>
+          `;
+        }
         
         formSup.reset();
         btnSubmit.disabled = false;
