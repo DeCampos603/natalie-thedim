@@ -111,7 +111,7 @@ const server = http.createServer(async (req, res) => {
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
     const cacheHeader = ext === '.html'
       ? 'no-cache'
-      : 'public, max-age=604800, immutable';
+      : 'public, max-age=31536000, immutable';
 
     res.writeHead(200, {
       'Content-Type': contentType,

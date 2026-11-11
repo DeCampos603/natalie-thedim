@@ -10,14 +10,14 @@
   <meta name="keywords" content="natalie thedim, psicologa natalie thedim, terapia de casal rj, psicologa clinica botafogo, terapia de casal jardim botanico, psicoterapia online, terapia do esquema, crp 05/45482" />
   <meta name="author" content="Natalie Thedim Silvado Camardella" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://decampos603.github.io/natalie-thedim/" />
+  <link rel="canonical" href="https://nataliethedim.com.br/" />
 
   <!-- Open Graph / Redes Sociais -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://decampos603.github.io/natalie-thedim/" />
+  <meta property="og:url" content="https://nataliethedim.com.br/" />
   <meta property="og:title" content="Natalie Thedim · Psicóloga Clínica — Terapia de Casal e Família" />
   <meta property="og:description" content="Não se trata de ter razão. Trata-se de compreender relações. Um espaço seguro para compreender conflitos e transformar vínculos." />
-  <meta property="og:image" content="./assets/foto-natalie-thedim.png" />
+  <meta property="og:image" content="https://nataliethedim.com.br/assets/foto-natalie-thedim.png" />
 
   <!-- Favicon SVG: Balão em formato de coração -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 6c-2.4 0-4.5 1.5-5.3 3.6C9.9 7.5 7.8 6 5.4 6 2.4 6 0 8.4 0 11.4c0 6.6 9.4 12.3 15.2 16.2.5.3 1.1.3 1.6 0C22.6 23.7 32 18 32 11.4 32 8.4 29.6 6 26.6 6c-2.4 0-4.5 1.5-5.3 3.6C20.5 7.5 18.4 6 16 6z' fill='%235B1826'/><path d='M8 12h16M8 16h10' stroke='%23FAF4F2' stroke-width='2' stroke-linecap='round'/></svg>" />
@@ -48,10 +48,13 @@
   }
   </script>
 
-  <!-- Google Fonts: Lora (Serifada humanista das referências) + Plus Jakarta Sans (Texto limpo) -->
+  <!-- Preload da imagem LCP do Hero em WebP + Google Fonts sem bloqueio de renderização -->
+  <link rel="preload" as="image" href="./assets/foto-natalie-thedim.webp" type="image/webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 
   <style>
     /* ==========================================================================
@@ -1988,14 +1991,139 @@
     /* ==========================================================================
        EFEITOS AVANÇADOS DE MOTION & INTERATIVIDADE (60FPS GPU · PALETA OFICIAL)
        ========================================================================== */
-    .hero-ambient-canvas {
+    picture {
+      display: contents;
+    }
+
+    .hero-ambient-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-silk-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .hero-silk-orb-1 {
+      width: 560px;
+      height: 560px;
+      top: -8%;
+      right: 4%;
+      background: radial-gradient(circle, rgba(189, 105, 124, 0.16) 0%, rgba(189, 105, 124, 0.04) 45%, rgba(248, 242, 238, 0) 72%);
+      animation: silkDriftA 16s ease-in-out infinite alternate;
+    }
+
+    .hero-silk-orb-2 {
+      width: 620px;
+      height: 620px;
+      bottom: -18%;
+      left: -6%;
+      background: radial-gradient(circle, rgba(91, 24, 38, 0.09) 0%, rgba(91, 24, 38, 0.02) 48%, rgba(248, 242, 238, 0) 72%);
+      animation: silkDriftB 20s ease-in-out infinite alternate;
+    }
+
+    .hero-silk-orb-3 {
+      width: 460px;
+      height: 460px;
+      bottom: 6%;
+      left: 42%;
+      background: radial-gradient(circle, rgba(216, 154, 158, 0.15) 0%, rgba(216, 154, 158, 0.04) 45%, rgba(248, 242, 238, 0) 70%);
+      animation: silkDriftA 18s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes silkDriftA {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-24px, 18px, 0) scale(1.06); }
+    }
+
+    @keyframes silkDriftB {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(26px, -16px, 0) scale(1.05); }
+    }
+
+    .yt-facade-box {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #180A0D;
+      box-shadow: 0 18px 40px rgba(91, 24, 38, 0.16);
+    }
+
+    .yt-facade-btn {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      padding: 0;
+      border: 0;
+      background: #180A0D;
+      cursor: pointer;
+      display: block;
+    }
+
+    .yt-facade-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.86;
+      transition: transform 0.45s var(--ease-out-cubic), opacity 0.3s ease;
+    }
+
+    .yt-facade-btn:hover img,
+    .yt-facade-btn:focus-visible img {
+      transform: scale(1.03);
+      opacity: 0.96;
+    }
+
+    .yt-facade-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: linear-gradient(180deg, rgba(24, 10, 13, 0.18) 0%, rgba(24, 10, 13, 0.56) 100%);
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.85;
+    }
+
+    .yt-facade-play {
+      width: 72px;
+      height: 50px;
+      border-radius: 14px;
+      background: rgba(91, 24, 38, 0.94);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s var(--ease-out-cubic), background-color 0.25s ease;
+    }
+
+    .yt-facade-btn:hover .yt-facade-play,
+    .yt-facade-btn:focus-visible .yt-facade-play {
+      transform: scale(1.08);
+      background: #7A2334;
+    }
+
+    .yt-facade-label {
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-full);
+      background: rgba(24, 10, 13, 0.78);
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
     .hero-wrapper > .container {
@@ -2010,8 +2138,7 @@
       width: 440px;
       height: 500px;
       border-radius: 220px 220px 150px 150px;
-      background: radial-gradient(circle at 50% 40%, rgba(189, 105, 124, 0.28), rgba(91, 24, 38, 0.08) 65%, transparent 80%);
-      filter: blur(22px);
+      background: radial-gradient(circle at 50% 40%, rgba(189, 105, 124, 0.26) 0%, rgba(91, 24, 38, 0.08) 52%, transparent 76%);
       z-index: 0;
       animation: breatheHalo 6s ease-in-out infinite alternate;
       pointer-events: none;
@@ -2415,9 +2542,13 @@
        HERO SECTION — NARRATIVA DAS INSPIRAÇÕES & FOTO OFICIAL REAL
        ====================================================================== -->
     <section class="hero-wrapper">
-      <canvas class="hero-ambient-canvas" id="heroAmbientCanvas" aria-hidden="true"></canvas>
+      <div class="hero-ambient-orbs" aria-hidden="true">
+        <span class="hero-silk-orb hero-silk-orb-1"></span>
+        <span class="hero-silk-orb hero-silk-orb-2"></span>
+        <span class="hero-silk-orb hero-silk-orb-3"></span>
+      </div>
       <div class="container hero-columns">
-        <div class="hero-info reveal">
+        <div class="hero-info">
           <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
             <div class="badge-welcome">
               <span>Bem-vinda ao meu espaço</span>
@@ -2460,14 +2591,19 @@
           </div>
         </div>
 
-        <div class="hero-image-frame reveal-scale" style="position: relative;">
+        <div class="hero-image-frame" style="position: relative;">
           <div class="hero-organic-mask">
             <!-- FOTO REAL ENVIADA PELA CLIENTE -->
-            <img src="./assets/foto-natalie-thedim.png" 
-                 alt="Psicóloga Natalie Thedim em seu consultório no Rio de Janeiro" 
-                 class="hero-real-photo" 
-                 fetchpriority="high" 
-                 decoding="async" />
+            <picture>
+              <source srcset="./assets/foto-natalie-thedim.webp" type="image/webp" />
+              <img src="./assets/foto-natalie-thedim.png"
+                   width="640"
+                   height="640"
+                   alt="Psicóloga Natalie Thedim em seu consultório no Rio de Janeiro"
+                   class="hero-real-photo"
+                   fetchpriority="high"
+                   decoding="async" />
+            </picture>
             <div class="hero-photo-gradient-overlay"></div>
             <div class="hero-card-desc">
               <b>Natalie Thedim</b>
@@ -2604,11 +2740,16 @@
       <div class="container about-layout">
         <div class="about-card-left reveal">
           <div class="about-portrait-frame">
-            <img src="./assets/foto-natalie-thedim.png" 
-                 alt="Psicóloga Natalie Thedim em seu consultório acolhedor" 
-                 class="about-portrait-img" 
-                 loading="lazy" 
-                 decoding="async" />
+            <picture>
+              <source srcset="./assets/foto-natalie-thedim.webp" type="image/webp" />
+              <img src="./assets/foto-natalie-thedim.png"
+                   width="640"
+                   height="640"
+                   alt="Psicóloga Natalie Thedim em seu consultório acolhedor"
+                   class="about-portrait-img"
+                   loading="lazy"
+                   decoding="async" />
+            </picture>
           </div>
 
           <div class="about-quote-box" data-cms="hero_title">
@@ -2686,11 +2827,16 @@
       <div class="container">
         <div class="consultorio-showcase reveal">
           <div class="consultorio-photo-wrap">
-            <img id="jornadaImg" 
-                 src="./assets/consultorio-ambiente.jpg" 
-                 alt="Ambiente do consultório de psicoterapia no Jardim Botânico, Rio de Janeiro" 
-                 loading="lazy" 
-                 decoding="async" />
+            <picture>
+              <source id="jornadaWebpSource" srcset="./assets/consultorio-ambiente.webp" type="image/webp" />
+              <img id="jornadaImg"
+                   src="./assets/consultorio-ambiente.jpg"
+                   width="1080"
+                   height="603"
+                   alt="Ambiente do consultório de psicoterapia no Jardim Botânico, Rio de Janeiro"
+                   loading="lazy"
+                   decoding="async" />
+            </picture>
             <span class="consultorio-photo-badge" id="jornadaBadge">📍 Consultório Presencial · Jardim Botânico (RJ) &amp; Online</span>
           </div>
 
@@ -2817,7 +2963,7 @@
                 <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/perfil/natalie-rodrigues-thedim-silvado" target="_blank" rel="noopener noreferrer nofollow" data-zlw-doctor="natalie-rodrigues-thedim-silvado" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Abrir Agenda Doctoralia →</a>
                 <a href="https://wa.me/5521989020364?text=Ol%C3%A1%2C%20Natalie!%20Gostaria%20de%20verificar%20hor%C3%A1rios%20dispon%C3%ADveis%20para%20consulta." class="btn-outline-story" target="_blank" rel="noopener noreferrer">Agendar pelo WhatsApp</a>
               </div>
-              <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "https://platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
+              <div id="doctoraliaScriptAnchor" hidden></div>
             </div>
 
             <div class="doctoralia-card-footer">
@@ -2951,14 +3097,26 @@
 
         <div class="consultorio-showcase reveal" style="margin-top: 2rem;">
           <div style="display:flex; flex-direction:column; gap:1rem;">
-            <div style="position:relative; width:100%; padding-top:56.25%; border-radius:20px; overflow:hidden; background:#180A0D; box-shadow:0 18px 40px rgba(91, 24, 38, 0.16);">
-              <iframe id="homeYtIframe"
-                      src="https://www.youtube.com/embed/lK3v4QovVcc?rel=0"
-                      title="Canal Oficial da Psicóloga Natalie Thedim no YouTube"
-                      style="position:absolute; inset:0; width:100%; height:100%; border:0;"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      loading="lazy"
-                      allowfullscreen></iframe>
+            <div id="homeYtPlayerBox" class="yt-facade-box">
+              <button type="button"
+                      id="homeYtPlayBtn"
+                      class="yt-facade-btn"
+                      data-ytid="lK3v4QovVcc"
+                      aria-label="Reproduzir vídeo no YouTube: Transgeracionalidade: Como os Padrões Emocionais são Passados de Geração em Geração">
+                <img id="homeYtThumb"
+                     src="./assets/yt-lK3v4QovVcc.webp"
+                     width="480"
+                     height="270"
+                     alt="Capa do episódio no YouTube: Transgeracionalidade e Família"
+                     loading="lazy"
+                     decoding="async" />
+                <span class="yt-facade-overlay">
+                  <span class="yt-facade-play" aria-hidden="true">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                  <span class="yt-facade-label">Assistir episódio aqui</span>
+                </span>
+              </button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
               <span id="homeYtCaption" style="font-family:var(--font-serif); font-weight:600; color:var(--color-brand-wine); font-size:1.05rem;">
@@ -3219,8 +3377,9 @@
   </a>
 
   <!-- ========================================================================
-       SCRIPT DO MOTOR DE MOTION & SCROLL DAS GRANDES MARCAS (60FPS GPU)
+       CONEXÃO COM BANCO & MOTOR DE INTERATIVIDADE (DEFER NÃO BLOQUEANTE)
        ======================================================================== -->
+  <script src="assets/db.js" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // 1. Barra de Leitura Superior
@@ -3419,8 +3578,38 @@
         });
       }
 
+      // Carregamento sob demanda do widget Doctoralia (evita JS/CSS de terceiros no carregamento inicial)
+      let doctoraliaLoaded = false;
+      function loadDoctoraliaWidget() {
+        if (doctoraliaLoaded || document.getElementById('zl-widget-s')) {
+          doctoraliaLoaded = true;
+          return;
+        }
+        doctoraliaLoaded = true;
+        const js = document.createElement('script');
+        js.id = 'zl-widget-s';
+        js.src = 'https://platform.docplanner.com/js/widget.js';
+        js.async = true;
+        const anchor = document.getElementById('doctoraliaScriptAnchor') || document.body;
+        anchor.parentNode.insertBefore(js, anchor);
+      }
+
+      const agendamentosSec = document.getElementById('agendamentos');
+      if (agendamentosSec && 'IntersectionObserver' in window) {
+        const docObs = new IntersectionObserver((entries, obs) => {
+          if (entries.some(e => e.isIntersecting)) {
+            loadDoctoraliaWidget();
+            obs.disconnect();
+          }
+        }, { rootMargin: '150px 0px', threshold: 0.01 });
+        docObs.observe(agendamentosSec);
+      }
+
       if (tabBtnDoctoralia && tabBtnWhatsapp) {
-        tabBtnDoctoralia.addEventListener('click', () => switchAgendamentoTab(true));
+        tabBtnDoctoralia.addEventListener('click', () => {
+          loadDoctoraliaWidget();
+          switchAgendamentoTab(true);
+        });
         tabBtnWhatsapp.addEventListener('click', () => switchAgendamentoTab(false));
       }
 
@@ -3428,28 +3617,34 @@
         linkGoToWhatsapp.addEventListener('click', () => switchAgendamentoTab(false));
       }
       if (linkGoToDoctoralia) {
-        linkGoToDoctoralia.addEventListener('click', () => switchAgendamentoTab(true));
+        linkGoToDoctoralia.addEventListener('click', () => {
+          loadDoctoraliaWidget();
+          switchAgendamentoTab(true);
+        });
       }
 
       // Suporte a âncoras diretas na URL (#atendimentos abre a aba de WhatsApp, #agendamentos abre Doctoralia)
       if (window.location.hash === '#atendimentos') {
         switchAgendamentoTab(false);
       } else if (window.location.hash === '#agendamentos') {
+        loadDoctoraliaWidget();
         switchAgendamentoTab(true);
       }
       window.addEventListener('hashchange', () => {
         if (window.location.hash === '#atendimentos') {
           switchAgendamentoTab(false);
         } else if (window.location.hash === '#agendamentos') {
+          loadDoctoraliaWidget();
           switchAgendamentoTab(true);
         }
       });
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // 7. Vitrine Interativa da Jornada Clínica (Troca de Fotografia 8K com Crossfade)
+      // 7. Vitrine Interativa da Jornada Clínica (Troca de Fotografia WebP/JPG com Crossfade)
       const jornadaSteps = document.querySelectorAll('.jornada-step[data-img]');
       const jornadaImg = document.getElementById('jornadaImg');
+      const jornadaWebpSource = document.getElementById('jornadaWebpSource');
       const jornadaBadge = document.getElementById('jornadaBadge');
 
       if (jornadaSteps.length && jornadaImg) {
@@ -3462,6 +3657,9 @@
           if (nextSrc) {
             jornadaImg.style.opacity = '0.35';
             setTimeout(() => {
+              if (jornadaWebpSource) {
+                jornadaWebpSource.srcset = nextSrc.replace(/\.jpe?g$/i, '.webp');
+              }
               jornadaImg.src = nextSrc;
               if (jornadaBadge && nextBadge) jornadaBadge.textContent = nextBadge;
               jornadaImg.style.opacity = '1';
@@ -3483,19 +3681,46 @@
         });
       }
 
-      // 7b. Seletor de Vídeos Reais do Canal Oficial (@nataliethedimsilvadopsicologa) na Home
+      // 7b. Facade + Seletor de Vídeos do YouTube (Carrega iframe apenas no clique — 0ms de TBT inicial)
       const ytHomeSteps = document.querySelectorAll('.home-yt-step[data-ytid]');
-      const homeYtIframe = document.getElementById('homeYtIframe');
+      const homeYtPlayerBox = document.getElementById('homeYtPlayerBox');
+      const homeYtPlayBtn = document.getElementById('homeYtPlayBtn');
       const homeYtCaption = document.getElementById('homeYtCaption');
-      if (ytHomeSteps.length && homeYtIframe) {
+
+      const mountHomeYtIframe = (vid, title) => {
+        if (!homeYtPlayerBox || !vid) return;
+        let iframe = document.getElementById('homeYtIframe');
+        const embedUrl = `https://www.youtube.com/embed/${encodeURIComponent(vid)}?autoplay=1&rel=0`;
+        if (!iframe) {
+          iframe = document.createElement('iframe');
+          iframe.id = 'homeYtIframe';
+          iframe.title = title || 'Canal Oficial da Psicóloga Natalie Thedim no YouTube';
+          iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0;';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.allowFullscreen = true;
+          homeYtPlayerBox.innerHTML = '';
+          homeYtPlayerBox.appendChild(iframe);
+        }
+        iframe.src = embedUrl;
+      };
+
+      if (homeYtPlayBtn) {
+        homeYtPlayBtn.addEventListener('click', () => {
+          const vid = homeYtPlayBtn.getAttribute('data-ytid') || 'lK3v4QovVcc';
+          const title = homeYtCaption ? homeYtCaption.textContent.trim() : '';
+          mountHomeYtIframe(vid, title);
+        });
+      }
+
+      if (ytHomeSteps.length && homeYtPlayerBox) {
         const switchHomeYt = (el) => {
           ytHomeSteps.forEach(s => s.classList.remove('is-active'));
           el.classList.add('is-active');
           const vid = el.getAttribute('data-ytid');
           const title = el.getAttribute('data-yttitle');
           if (vid) {
-            homeYtIframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;
             if (homeYtCaption && title) homeYtCaption.textContent = title;
+            mountHomeYtIframe(vid, title);
           }
         };
         ytHomeSteps.forEach(step => {
@@ -3565,73 +3790,6 @@
         });
       }
 
-      // 10. Motor de Fundo Animado Fluido em Seda Marsala/Rosé (60fps GPU Canvas)
-      const heroCanvas = document.getElementById('heroAmbientCanvas');
-      if (heroCanvas && heroCanvas.getContext && !reduceMotion) {
-        const ctx = heroCanvas.getContext('2d');
-        let width = 0, height = 0, rafId = null, isHeroVisible = true;
-        let mouseX = 0.5, mouseY = 0.4;
-
-        const resizeCanvas = () => {
-          const parent = heroCanvas.parentElement;
-          if (!parent) return;
-          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-          width = parent.clientWidth;
-          height = parent.clientHeight;
-          heroCanvas.width = width * dpr;
-          heroCanvas.height = height * dpr;
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        };
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas, { passive: true });
-
-        heroCanvas.parentElement.addEventListener('mousemove', (e) => {
-          const rect = heroCanvas.getBoundingClientRect();
-          mouseX = (e.clientX - rect.left) / (rect.width || 1);
-          mouseY = (e.clientY - rect.top) / (rect.height || 1);
-        }, { passive: true });
-
-        const orbs = [
-          { x: 0.72, y: 0.35, r: 340, color: 'rgba(189, 105, 124, 0.14)', vx: 0.00028, vy: 0.00022, phase: 0 },
-          { x: 0.22, y: 0.65, r: 390, color: 'rgba(91, 24, 38, 0.08)', vx: -0.00022, vy: 0.00026, phase: 2.1 },
-          { x: 0.55, y: 0.78, r: 290, color: 'rgba(216, 154, 158, 0.15)', vx: 0.00019, vy: -0.00024, phase: 4.2 }
-        ];
-
-        let t = 0;
-        const renderHeroMesh = () => {
-          if (!isHeroVisible) {
-            rafId = null;
-            return;
-          }
-          t += 0.012;
-          ctx.clearRect(0, 0, width, height);
-
-          orbs.forEach((orb, idx) => {
-            const ox = (orb.x + Math.sin(t + orb.phase) * 0.08 + (mouseX - 0.5) * (0.04 * (idx + 1))) * width;
-            const oy = (orb.y + Math.cos(t * 0.85 + orb.phase) * 0.07 + (mouseY - 0.5) * (0.04 * (idx + 1))) * height;
-            const grad = ctx.createRadialGradient(ox, oy, 10, ox, oy, orb.r);
-            grad.addColorStop(0, orb.color);
-            grad.addColorStop(1, 'rgba(248, 242, 238, 0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(ox, oy, orb.r, 0, Math.PI * 2);
-            ctx.fill();
-          });
-
-          rafId = requestAnimationFrame(renderHeroMesh);
-        };
-
-        if ('IntersectionObserver' in window) {
-          const heroObs = new IntersectionObserver((entries) => {
-            isHeroVisible = entries[0]?.isIntersecting ?? true;
-            if (isHeroVisible && !rafId) {
-              rafId = requestAnimationFrame(renderHeroMesh);
-            }
-          }, { threshold: 0.05 });
-          heroObs.observe(heroCanvas);
-        }
-        rafId = requestAnimationFrame(renderHeroMesh);
-      }
     });
   </script>
 
