@@ -1,16 +1,64 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/raizes", "destination": "/raizes.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/login", "destination": "/admin.html" }
+    {
+      "source": "/raizes",
+      "destination": "/raizes.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/admin.html"
+    }
   ],
   "headers": [
-    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] },
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "X-Frame-Options", "value": "DENY" },
-      { "key": "Referrer-Policy", "value": "same-origin" }
-    ] }
-  ]
+    {
+      "source": "/admin(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(webp|jpg|jpeg|png|svg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ],
+  "trailingSlash": false
 }

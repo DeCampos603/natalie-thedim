@@ -307,7 +307,7 @@ var DB = (typeof window !== 'undefined' && window.DB) ? window.DB : (() => {
       const conteudo = (r.ok && r.json?.conteudo) ? { ...cacheLocal, ...conteudoApi } : { ...cacheLocal, ...conteudoApi };
 
       if (!conteudo.nome_profissional) {
-        conteudo.nome_profissional = { texto: 'Natalie Thedim Silvado', imagem: null };
+        conteudo.nome_profissional = { texto: 'Natalie Thedim', imagem: null };
       }
       if (!conteudo.whatsapp_numero || String(conteudo.whatsapp_numero.texto || '').replace(/\D/g, '').length < 10) {
         conteudo.whatsapp_numero = { texto: '+' + WHATSAPP_OFICIAL, imagem: null };

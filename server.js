@@ -30,7 +30,7 @@ const MIME_TYPES = {
 };
 
 const MAX_BODY_BYTES = 1024 * 1024; // 1 MB
-const BLOCKED_PREFIXES = ['/api/', '/turso/', '/hostinger/', '/node_modules/', '/.git', '/.env', '/.vercel', '/package'];
+const BLOCKED_PREFIXES = ['/api/', '/turso/', '/hostinger/', '/tools/', '/node_modules/', '/.git', '/.env', '/.vercel', '/package'];
 const BLOCKED_FILES = ['/server.js', '/.htaccess', '/.gitignore', '/vercel.json', '/package.json', '/package-lock.json', '/readme.md'];
 const BLOCKED_EXTENSIONS = ['.zip', '.tar', '.gz', '.sql', '.env', '.md', '.log', '.bak', '.sh', '.py', '.mjs'];
 
@@ -68,6 +68,15 @@ const server = http.createServer(async (req, res) => {
 
     const host = req.headers.host || 'localhost';
     const urlObj = new URL(req.url || '/', `http://${host}`);
+
+    // Endereço único: domínio sem "www" (o mesmo do canonical). Não força HTTPS aqui: o HTTPS é
+    // ativado no hPanel (SSL > "Forçar HTTPS"); redirecionar por cabeçalho do proxy pode gerar laço.
+    const hostSemPorta = host.split(':')[0].toLowerCase();
+    if (hostSemPorta.startsWith('www.') && (req.method === 'GET' || req.method === 'HEAD')) {
+      res.writeHead(301, { Location: `https://${hostSemPorta.slice(4)}${req.url || '/'}` });
+      return res.end();
+    }
+
     let pathname;
     try {
       pathname = decodeURIComponent(urlObj.pathname);
@@ -76,6 +85,11 @@ const server = http.createServer(async (req, res) => {
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');
       res.end('Bad Request');
       return;
+    }
+
+    // Painel administrativo fora do índice do Google (mesmo com a meta robots na página)
+    if (/^\/(admin|login)(\.html)?\/?$/i.test(urlObj.pathname)) {
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     }
 
     // 1. Rotas de API Serverless (/api/publico, /api/conteudo, /api/admin, /api/notificar)
@@ -141,9 +155,12 @@ const server = http.createServer(async (req, res) => {
 
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    const cacheHeader = ext === '.html'
-      ? 'no-cache'
-      : 'public, max-age=31536000, immutable';
+    // HTML sempre revalida. CSS/JS não têm hash no nome, então cache curto: uma edição (ex.: IDs do
+    // Google em analytics-config.js) precisa chegar a quem já visitou o site. Imagens/fontes: 30 dias.
+    let cacheHeader;
+    if (ext === '.html') cacheHeader = 'no-cache';
+    else if (ext === '.css' || ext === '.js' || ext === '.mjs' || ext === '.json' || ext === '.xml' || ext === '.txt') cacheHeader = 'public, max-age=3600, must-revalidate';
+    else cacheHeader = 'public, max-age=2592000';
 
     res.writeHead(200, {
       'Content-Type': contentType,

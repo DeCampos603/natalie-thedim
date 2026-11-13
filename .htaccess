@@ -13,6 +13,16 @@ DirectoryIndex index.html
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # www -> domínio sem www (mesmo host do canonical)
+  RewriteCond %{HTTP_HOST} ^www\.nataliethedim\.com\.br$ [NC]
+  RewriteRule ^(.*)$ https://nataliethedim.com.br/$1 [L,R=301]
+
+  # /pagina.html -> /pagina (um único endereço por página; evita conteúdo duplicado)
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?] [NC]
+  RewriteCond %{REQUEST_URI} !^/index\.html$ [NC]
+  RewriteRule ^ /%1 [R=301,L]
+  RewriteRule ^index\.html$ / [R=301,L]
+
   # Suporte a URLs limpas sem extensão .html (ex: /biblioteca -> /biblioteca.html)
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
@@ -36,4 +46,25 @@ DirectoryIndex index.html
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Compressão (Core Web Vitals)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml application/xml text/plain
+</IfModule>
+
+# Arquivos internos que nunca devem ser servidos
+<FilesMatch "\.(sql|md|mjs|zip|tar|gz|env|log|bak|sh|py)$|^(package(-lock)?\.json|server\.js|vercel\.json)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteRule ^(turso|hostinger|node_modules)/ - [F,L]
+</IfModule>
+
+# Admin e API fora do índice do Google
+<IfModule mod_headers.c>
+  <FilesMatch "^admin\.html$">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </FilesMatch>
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 </IfModule>

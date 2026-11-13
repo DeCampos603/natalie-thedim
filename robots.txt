@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# admin.html e as páginas de protótipo usam noindex (a leitura do robots não pode bloqueá-las,
+# senão o Google não enxerga o noindex).
+
+Sitemap: https://nataliethedim.com.br/sitemap.xml

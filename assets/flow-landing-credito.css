@@ -1,0 +1,74 @@
+/* ===========================================================================
+   Assinatura Flow Landing — card de rodapé padrão (copiar para todo site/sistema)
+   Fonte canônica: Agente-Landing-Pages/modelos/assinatura-flow-landing/
+   Autocontido: não depende do CSS do site. Cores = Manual de Identidade Visual
+   (Obsidian #070D0B / Cyan #00F0FF). Contraste do texto >= 7:1.
+   ========================================================================== */
+.fl-credito-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1rem 1.75rem;
+}
+.fl-credito {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 56px;
+  max-width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: #070D0B;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(2, 132, 199, 0.12) inset;
+  color: #94A3B8;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  text-decoration: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.fl-credito:hover,
+.fl-credito:focus-visible {
+  border-color: #00F0FF;
+  box-shadow: 0 8px 28px rgba(0, 240, 255, 0.22);
+  transform: translateY(-2px);
+}
+.fl-credito:focus-visible { outline: 2px solid #00F0FF; outline-offset: 3px; }
+.fl-credito img {
+  display: block;
+  width: 160px;
+  height: auto;
+  flex-shrink: 0;
+}
+.fl-credito-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.35;
+  text-align: left;
+  border-left: 1px solid rgba(148, 163, 184, 0.3);
+  padding-left: 1rem;
+}
+.fl-credito-txt small { font-size: 0.75rem; color: #94A3B8; }
+.fl-credito-txt strong { font-size: 0.9375rem; font-weight: 700; color: #FFFFFF; }
+.fl-credito-txt span { font-size: 0.75rem; color: #00F0FF; font-weight: 600; }
+@media (max-width: 560px) {
+  /* folga embaixo: o botão flutuante do WhatsApp não pode cobrir o card */
+  .fl-credito-wrap { padding-bottom: 5.5rem; }
+  .fl-credito { flex-direction: column; gap: 0.6rem; text-align: center; padding: 0.9rem 1.25rem; }
+  .fl-credito-txt { border-left: 0; padding-left: 0; text-align: center; align-items: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-credito { transition: none; }
+  .fl-credito:hover, .fl-credito:focus-visible { transform: none; }
+}
+/* Variante para sistemas, painéis e apps: uma linha discreta */
+.fl-credito-linha {
+  margin: 0;
+  padding: 0.75rem 1rem 1.25rem;
+  text-align: center;
+  font: 400 0.75rem/1.4 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  opacity: 0.85;
+}
+.fl-credito-linha a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.fl-credito-linha a:hover, .fl-credito-linha a:focus-visible { opacity: 1; text-decoration-thickness: 2px; }
+
+@media print { .fl-credito-wrap, .fl-credito-linha { display: none; } }

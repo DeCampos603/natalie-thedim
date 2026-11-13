@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS livros (
 
 -- Seed inicial de conteúdo
 INSERT INTO site_content (id, section_name, content_text, image_url, updated_at) VALUES
-  ('sec_nome', 'nome_profissional', 'Natalie Thedim Silvado', NULL, NOW()),
+  ('sec_nome', 'nome_profissional', 'Natalie Thedim', NULL, NOW()),
   ('sec_hero_title', 'hero_title', 'Não se trata de ter razão. Trata-se de compreender relações.', NULL, NOW()),
   ('sec_hero_sub', 'hero_subtitle', 'Psicoterapia de casal e individual com acolhimento, escuta qualificada e reconstrução do diálogo seguro.', NULL, NOW()),
   ('sec_sobre_mim', 'sobre_mim', 'Natalie Thedim Silvado Camardella · Psicóloga clínica formada e pós-graduada pela PUC-Rio, com mais de 20 anos de experiência clínica no Rio de Janeiro e atendimento online.', 'assets/foto-natalie-thedim.png', NOW()),
