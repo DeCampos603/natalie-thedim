@@ -34,6 +34,21 @@ const BLOCKED_PREFIXES = ['/api/', '/turso/', '/hostinger/', '/tools/', '/node_m
 const BLOCKED_FILES = ['/server.js', '/.htaccess', '/.gitignore', '/vercel.json', '/package.json', '/package-lock.json', '/readme.md'];
 const BLOCKED_EXTENSIONS = ['.zip', '.tar', '.gz', '.sql', '.env', '.md', '.log', '.bak', '.sh', '.py', '.mjs'];
 
+// Fonte única da lista de bloqueio. Vale para o caminho pedido E para o arquivo já resolvido em
+// disco, porque "/%2Fapi/x" decodifica para "//api/x": não casa com "/api/", mas path.resolve o
+// normaliza para <pasta>/api/x e serviria o código-fonte.
+function ehBloqueado(caminho) {
+  const lower = caminho.toLowerCase();
+  const extBaixa = path.extname(lower);
+  const hasDotSegment = lower.split('/').some((seg) => seg.startsWith('.') && seg !== '.well-known' && seg !== '');
+  return (
+    hasDotSegment ||
+    BLOCKED_PREFIXES.some((p) => lower.startsWith(p)) ||
+    BLOCKED_FILES.includes(lower) ||
+    BLOCKED_EXTENSIONS.includes(extBaixa)
+  );
+}
+
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -87,6 +102,12 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // Caminho ambíguo (barras duplicadas, contrabarra, byte nulo): nenhuma página legítima usa.
+    if (pathname.includes('\\') || pathname.includes('\0') || /\/{2,}/.test(pathname)) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('Não encontrado');
+    }
+
     // Painel administrativo fora do índice do Google (mesmo com a meta robots na página)
     if (/^\/(admin|login)(\.html)?\/?$/i.test(urlObj.pathname)) {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -120,14 +141,7 @@ const server = http.createServer(async (req, res) => {
 
     // 2. Bloqueio de segurança para arquivos internos, código-fonte e backups
     const extBaixa = path.extname(pathname).toLowerCase();
-    const lowerPath = pathname.toLowerCase();
-    const hasDotSegment = lowerPath.split('/').some((seg) => seg.startsWith('.') && seg !== '.well-known' && seg !== '');
-    if (
-      hasDotSegment ||
-      BLOCKED_PREFIXES.some((p) => lowerPath.startsWith(p)) ||
-      BLOCKED_FILES.includes(lowerPath) ||
-      BLOCKED_EXTENSIONS.includes(extBaixa)
-    ) {
+    if (ehBloqueado(pathname)) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end('Não encontrado');
     }
@@ -151,6 +165,13 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
         return res.end('Not Found');
       }
+    }
+
+    // Segunda barreira: confere o caminho REAL resolvido, não o texto da URL.
+    const relReal = '/' + path.relative(__dirname, filePath).split(path.sep).join('/');
+    if (ehBloqueado(relReal)) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('Não encontrado');
     }
 
     const ext = path.extname(filePath).toLowerCase();
