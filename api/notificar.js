@@ -76,7 +76,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helve
       <p style="font-size:13px; color:#555;">Você pode gerenciar os envios no Painel Administrativo em <a href="https://nataliethedim.com.br/admin.html" style="color:#5B1826; font-weight:600;">nataliethedim.com.br/admin.html</a>.</p>
     </div>
     <div class="footer">
-      Natalie Thedim Silvado Camardella · CRP 05/45482<br>
+      Natalie Thedim Silvado · CRP 05/45482<br>
       Material confidencial protegido pelo Código de Ética do Psicólogo e pela LGPD.
     </div>
   </div>

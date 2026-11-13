@@ -37,7 +37,7 @@ const MENSAGENS = {
 
 export function textoInformacoes() {
   return [
-    'Natalie Rodrigues Thedim Silvado Camardella (marca: Natalie Thedim), psicóloga clínica, CRP 05/45482 (Rio de Janeiro).',
+    'Natalie Rodrigues Thedim Silvado (marca: Natalie Thedim), psicóloga clínica, CRP 05/45482 (Rio de Janeiro).',
     'Especialidade: Terapia de Casal e Família. Abordagem sistêmica e psicanálise. Mais de 20 anos de experiência. Formação PUC-Rio (Psicologia e Pedagogia; pós-graduação em Casal e Família).',
     'Atendimentos: Terapia de Casal; Terapia Individual (adultos e adolescentes).',
     'Onde: consultório no Jardim Botânico, Zona Sul do Rio de Janeiro (RJ), e online para todo o Brasil e exterior.',
