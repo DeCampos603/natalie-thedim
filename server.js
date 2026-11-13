@@ -7,6 +7,8 @@ import publicoHandler from './api/publico.js';
 import conteudoHandler from './api/conteudo.js';
 import adminHandler from './api/admin.js';
 import notificarHandler from './api/notificar.js';
+import { tratarMcp } from './api/_agente.js';
+import { htmlParaMarkdown, prefereMarkdown } from './api/_markdown.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -113,6 +115,34 @@ const server = http.createServer(async (req, res) => {
       res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     }
 
+    // Servidor MCP somente leitura (informações públicas). Streamable HTTP, sem estado, com CORS aberto
+    // porque não há credencial nem dado pessoal.
+    if (pathname === '/mcp') {
+      const cors = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Accept, Mcp-Protocol-Version, Mcp-Session-Id',
+        'Cache-Control': 'no-store',
+      };
+      if (req.method === 'OPTIONS') { res.writeHead(204, cors); return res.end(); }
+      if (req.method !== 'POST') {
+        res.writeHead(405, { ...cors, Allow: 'POST, OPTIONS', 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('Use POST com JSON-RPC (MCP Streamable HTTP).');
+      }
+      let corpo;
+      try {
+        corpo = JSON.parse(await readRawBody(req));
+      } catch (e) {
+        const codigo = e && e.statusCode === 413 ? 413 : 400;
+        res.writeHead(codigo, { ...cors, 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'JSON inválido ou grande demais' } }));
+      }
+      const r = tratarMcp(corpo);
+      if (r.body === null) { res.writeHead(r.status, cors); return res.end(); }
+      res.writeHead(r.status, { ...cors, 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify(r.body));
+    }
+
     // 1. Rotas de API Serverless (/api/publico, /api/conteudo, /api/admin, /api/notificar)
     if (pathname === '/api/publico' || pathname === '/api/conteudo' || pathname === '/api/admin' || pathname === '/api/notificar') {
       res.setHeader('Cache-Control', 'no-store');
@@ -183,10 +213,35 @@ const server = http.createServer(async (req, res) => {
     else if (ext === '.css' || ext === '.js' || ext === '.mjs' || ext === '.json' || ext === '.xml' || ext === '.txt') cacheHeader = 'public, max-age=3600, must-revalidate';
     else cacheHeader = 'public, max-age=2592000';
 
-    res.writeHead(200, {
-      'Content-Type': contentType,
-      'Cache-Control': cacheHeader,
-    });
+    const cabecalhos = { 'Content-Type': contentType, 'Cache-Control': cacheHeader };
+
+    if (ext === '.html') {
+      // Descoberta para agentes (RFC 8288) e negociação de conteúdo (HTML x Markdown).
+      cabecalhos.Vary = 'Accept';
+      cabecalhos.Link = [
+        '</llms.txt>; rel="describedby"; type="text/plain"',
+        '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+        '</.well-known/mcp/server-card.json>; rel="describedby"; type="application/json"',
+        '<' + (pathname === '/' ? '/' : '/' + path.basename(filePath, '.html')) + '>; rel="alternate"; type="text/markdown"',
+      ].join(', ');
+
+      if ((req.method === 'GET' || req.method === 'HEAD') && prefereMarkdown(req.headers.accept)) {
+        const html = fs.readFileSync(filePath, 'utf8');
+        const slug = path.basename(filePath, '.html');
+        const md = htmlParaMarkdown(html, `https://nataliethedim.com.br${slug === 'index' ? '/' : '/' + slug}`);
+        res.writeHead(200, {
+          ...cabecalhos,
+          'Content-Type': 'text/markdown; charset=utf-8',
+          'x-markdown-tokens': String(Math.ceil(md.length / 4)),
+        });
+        return res.end(req.method === 'HEAD' ? undefined : md);
+      }
+    }
+
+    // O cartão do servidor MCP é público e pode ser lido por agentes em navegador.
+    if (pathname === '/.well-known/mcp/server-card.json') cabecalhos['Access-Control-Allow-Origin'] = '*';
+
+    res.writeHead(200, cabecalhos);
     fs.createReadStream(filePath).pipe(res);
   } catch (err) {
     console.error('[server]', err);

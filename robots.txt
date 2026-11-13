@@ -1,6 +1,9 @@
+# Natalie Thedim, psicóloga (CRP 05/45482). Política de uso do conteúdo por máquinas.
+# search: indexar em buscadores | ai-input: usar como contexto para responder (com citação) | ai-train: treinar modelos
 User-agent: *
 Allow: /
 Disallow: /api/
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # admin.html e as páginas de protótipo usam noindex (a leitura do robots não pode bloqueá-las,
 # senão o Google não enxerga o noindex).

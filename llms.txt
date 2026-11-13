@@ -1,0 +1,27 @@
+# Natalie Thedim, Psicóloga Clínica (CRP 05/45482)
+
+> Site da psicóloga clínica Natalie Thedim, especialista em Terapia de Casal e Família, com mais de 20 anos de experiência (PUC-Rio). Atendimento presencial no Jardim Botânico, Rio de Janeiro, e online para todo o Brasil e exterior. O agendamento é feito pelo WhatsApp +55 21 98902-0364. Valores não são divulgados no site; este canal não é para urgências (CVV 188, SAMU 192).
+
+O conteúdo é informativo e não substitui consulta psicológica. Pedir uma página com o cabeçalho "Accept: text/markdown" devolve a versão em Markdown. Há também um servidor MCP somente leitura em https://nataliethedim.com.br/mcp (cartão em https://nataliethedim.com.br/.well-known/mcp/server-card.json).
+
+## Atendimento
+- [Home](https://nataliethedim.com.br/): terapia de casal e individual, modalidades e agendamento
+- [Sobre Natalie Thedim](https://nataliethedim.com.br/sobre): formação, abordagem e modalidades de atendimento
+- [Contato e agendamento](https://nataliethedim.com.br/contato): WhatsApp, e-mail, agenda no Doctoralia, redes e local
+
+## Conteúdo sobre relacionamentos
+- [Histórias reais](https://nataliethedim.com.br/historias): relatos anônimos de leitores com reflexão da psicóloga
+- [Cartas que nunca enviei](https://nataliethedim.com.br/cartas): cartas anônimas lidas e analisadas
+- [Pergunte à psicóloga](https://nataliethedim.com.br/pergunte): envio anônimo de dúvidas sobre relacionamentos
+- [Diário anônimo](https://nataliethedim.com.br/diario): mural coletivo de relatos do dia a dia
+- [Biblioteca dos relacionamentos](https://nataliethedim.com.br/biblioteca): comunicação, família, filhos e autoconhecimento
+- [Exercícios e testes](https://nataliethedim.com.br/exercicios): testes rápidos de autoconhecimento sobre relacionamentos
+
+## Institucional e legal
+- [Política de privacidade (LGPD)](https://nataliethedim.com.br/privacidade): como os dados pessoais são tratados
+- [Termos de uso](https://nataliethedim.com.br/termos): regras do site e dos espaços de envio
+
+## Optional
+- [Sitemap](https://nataliethedim.com.br/sitemap.xml)
+- [Instagram](https://www.instagram.com/psicologa.nataliethedim/)
+- [YouTube](https://www.youtube.com/@nataliethedimsilvadopsicologa)

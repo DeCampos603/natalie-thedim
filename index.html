@@ -2444,6 +2444,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="assets/flow-landing-credito.css" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -2459,11 +2460,35 @@
       }
     },
     {
-      "@type": "ProfessionalService",
+      "@type": "WebPage",
+      "@id": "https://nataliethedim.com.br/#webpage",
+      "url": "https://nataliethedim.com.br/",
+      "name": "Terapia de Casal no Rio de Janeiro e Online | Natalie Thedim",
+      "description": "Psicóloga e terapeuta de casal no Rio de Janeiro e online. Natalie Thedim, CRP 05/45482, PUC-Rio, +20 anos de prática. Agende pelo WhatsApp.",
+      "inLanguage": "pt-BR",
+      "isPartOf": {
+        "@id": "https://nataliethedim.com.br/#website"
+      },
+      "about": {
+        "@id": "https://nataliethedim.com.br/#consultorio"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://nataliethedim.com.br/assets/og-natalie-thedim.jpg",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    {
+      "@type": [
+        "LocalBusiness",
+        "ProfessionalService"
+      ],
       "@id": "https://nataliethedim.com.br/#consultorio",
       "name": "Natalie Thedim — Psicóloga Clínica",
       "url": "https://nataliethedim.com.br/",
       "image": "https://nataliethedim.com.br/assets/og-natalie-thedim.jpg",
+      "logo": "https://nataliethedim.com.br/assets/logo-natalie-thedim.png",
       "description": "Psicoterapia individual, terapia de casal e de família com Natalie Thedim, psicóloga clínica formada pela PUC-Rio, com mais de 20 anos de experiência. Atendimento presencial no Rio de Janeiro (Jardim Botânico) e online para todo o Brasil e exterior.",
       "telephone": "+55-21-98902-0364",
       "email": "psicologa@nataliethedim.com.br",
@@ -2488,14 +2513,32 @@
         "Terapia de casal",
         "Psicoterapia individual",
         "Terapia de família",
-        "Terapia do esquema",
-        "Orientação parental"
+        "Terapia do esquema"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "agendamento",
         "telephone": "+55-21-98902-0364",
+        "email": "psicologa@nataliethedim.com.br",
         "availableLanguage": "pt-BR"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Atendimentos",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://nataliethedim.com.br/#servico-0"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://nataliethedim.com.br/#servico-1"
+            }
+          }
+        ]
       },
       "employee": {
         "@id": "https://nataliethedim.com.br/#natalie"
@@ -2503,6 +2546,46 @@
       "sameAs": [
         "https://www.instagram.com/psicologa.nataliethedim/",
         "https://www.youtube.com/@nataliethedimsilvadopsicologa"
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://nataliethedim.com.br/#servico-0",
+      "name": "Terapia de Casal",
+      "description": "Reconstrução do diálogo, da intimidade e da parceria; para casais que desejam superar conflitos e fortalecer a conexão.",
+      "serviceType": "Terapia de Casal",
+      "provider": {
+        "@id": "https://nataliethedim.com.br/#consultorio"
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Rio de Janeiro, RJ"
+        },
+        {
+          "@type": "Country",
+          "name": "Brasil"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://nataliethedim.com.br/#servico-1",
+      "name": "Terapia Individual",
+      "description": "Autoconhecimento e transformação de padrões de apego e sofrimento, para adultos e adolescentes: ansiedade, dependência afetiva e luto.",
+      "serviceType": "Terapia Individual",
+      "provider": {
+        "@id": "https://nataliethedim.com.br/#consultorio"
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Rio de Janeiro, RJ"
+        },
+        {
+          "@type": "Country",
+          "name": "Brasil"
+        }
       ]
     },
     {
@@ -2532,7 +2615,6 @@
   ]
 }
   </script>
-  <link rel="stylesheet" href="assets/flow-landing-credito.css" />
 </head>
 <body>
 
@@ -3434,6 +3516,9 @@
             <li><span>Código de Ética CFP</span></li>
             <li><span>Sigilo Profissional</span></li>
             <li><a href="privacidade.html">Política de Privacidade (LGPD)</a></li>
+            <li><a href="termos.html">Termos de uso</a></li>
+            <li><a href="sobre.html">Sobre Natalie (formação)</a></li>
+            <li><a href="contato.html">Contato e agendamento</a></li>
           </ul>
         </div>
       </div>
@@ -3849,5 +3934,6 @@
 
   <script src="assets/analytics-config.js"></script>
   <script src="assets/analytics.js"></script>
+  <script src="assets/webmcp.js" defer></script>
 </body>
 </html>

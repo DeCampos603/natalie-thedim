@@ -1,0 +1,39 @@
+{
+  "name": "natalie-thedim-site",
+  "version": "1.0.0",
+  "title": "Natalie Thedim, Psicóloga Clínica (informações públicas)",
+  "description": "Servidor MCP somente leitura com informações públicas do consultório da psicóloga Natalie Thedim (CRP 05/45482): atendimento, canais de contato e páginas do site. Não agenda nem recebe dados pessoais.",
+  "protocolVersion": "2025-06-18",
+  "serverInfo": {
+    "name": "natalie-thedim-site",
+    "title": "Natalie Thedim, Psicóloga Clínica (informações públicas)",
+    "version": "1.0.0"
+  },
+  "documentationUrl": "https://nataliethedim.com.br/llms.txt",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://nataliethedim.com.br/mcp"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "authentication": {
+    "required": false
+  },
+  "tools": [
+    {
+      "name": "informacoes_atendimento",
+      "description": "Resumo público: CRP, especialidade, modalidades, local, canais de contato e aviso de urgência."
+    },
+    {
+      "name": "como_agendar",
+      "description": "Link do WhatsApp com mensagem pré-pronta e demais canais para agendar. Não envia mensagem nem reserva horário."
+    },
+    {
+      "name": "listar_paginas",
+      "description": "Páginas públicas do site com título e descrição curta."
+    }
+  ]
+}
