@@ -13,7 +13,7 @@
    --------------------------------------------------------------------------- */
 window.SITE_ANALYTICS = {
   ga4Id: '',
-  adsId: '',
-  adsWhatsappLabel: '',
+  adsId: 'AW-11291871714',
+  adsWhatsappLabel: 'ALMrCMTTrLgdEOKTsYgq',
   gtmId: ''
 };

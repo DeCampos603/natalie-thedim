@@ -40,7 +40,7 @@ export function textoInformacoes() {
     'Natalie Rodrigues Thedim Silvado (marca: Natalie Thedim), psicóloga clínica, CRP 05/45482 (Rio de Janeiro).',
     'Especialidade: Terapia de Casal e Família. Abordagem sistêmica e psicanálise. Mais de 20 anos de experiência. Formação PUC-Rio (Psicologia e Pedagogia; pós-graduação em Casal e Família).',
     'Atendimentos: Terapia de Casal; Terapia Individual (adultos e adolescentes).',
-    'Onde: consultório em Botafogo (Rua Voluntários da Pátria), Zona Sul do Rio de Janeiro (RJ), e online para todo o Brasil e exterior.',
+    'Onde: consultório na Rua Voluntários da Pátria, 286, sala 203, Botafogo, Rio de Janeiro (RJ), e online para todo o Brasil e exterior.',
     'Valores: não são divulgados no site (Código de Ética do Psicólogo); são informados no primeiro contato.',
     `Agendamento: WhatsApp +55 21 98902-0364 (https://wa.me/${WHATSAPP}) ou e-mail ${EMAIL}.`,
     'Este canal não é para urgências: em risco de vida, ligue 188 (CVV) ou 192 (SAMU).',

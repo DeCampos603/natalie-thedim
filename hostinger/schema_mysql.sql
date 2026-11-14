@@ -140,5 +140,5 @@ INSERT INTO site_content (id, section_name, content_text, image_url, updated_at)
   ('sec_crp', 'crp_info', 'CRP 05/45482 (RJ)', NULL, NOW()),
   ('sec_whatsapp', 'whatsapp_numero', '+5521989020364', NULL, NOW()),
   ('sec_email', 'email_contato', 'psicologa@nataliethedim.com.br', NULL, NOW()),
-  ('sec_consultorio', 'endereco_consultorio', 'Consultório em Botafogo, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)', NULL, NOW())
+  ('sec_consultorio', 'endereco_consultorio', 'Consultório: Rua Voluntários da Pátria, 286, sala 203 - Botafogo, Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)', NULL, NOW())
 ON DUPLICATE KEY UPDATE content_text = VALUES(content_text), updated_at = VALUES(updated_at);
