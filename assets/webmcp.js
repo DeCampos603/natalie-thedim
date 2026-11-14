@@ -34,7 +34,7 @@
         return Promise.resolve(texto([
           'Natalie Thedim, psicóloga clínica, CRP 05/45482 (Rio de Janeiro). Especialista em Terapia de Casal e Família, mais de 20 anos de experiência, formação PUC-Rio.',
           'Atendimentos: Terapia de Casal; Terapia Individual (adultos e adolescentes).',
-          'Onde: Jardim Botânico, Zona Sul do Rio de Janeiro (RJ), e online para todo o Brasil e exterior.',
+          'Onde: Botafogo (Rua Voluntários da Pátria), Zona Sul do Rio de Janeiro (RJ), e online para todo o Brasil e exterior.',
           'Valores não são divulgados no site; são informados no primeiro contato.',
           'Agendamento: WhatsApp +55 21 98902-0364 ou psicologa@nataliethedim.com.br.',
           'Não é canal de urgência: em risco de vida, ligue 188 (CVV) ou 192 (SAMU).'

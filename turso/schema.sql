@@ -123,7 +123,7 @@ INSERT OR IGNORE INTO site_content (id, section_name, content_text, image_url) V
   ('sec_crp', 'crp_info', 'CRP 05/45482 (RJ)', NULL),
   ('sec_whatsapp', 'whatsapp_numero', '+5521989020364', NULL),
   ('sec_email', 'email_contato', 'psicologa@nataliethedim.com.br', NULL),
-  ('sec_consultorio', 'endereco_consultorio', 'Consultório no Jardim Botânico, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)', NULL);
+  ('sec_consultorio', 'endereco_consultorio', 'Consultório em Botafogo, Zona Sul - Rio de Janeiro / RJ (e Atendimento Online para todo o Brasil e exterior)', NULL);
 
 -- Atualização garantida do número oficial de atendimento WhatsApp
 UPDATE site_content

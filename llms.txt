@@ -1,6 +1,6 @@
 # Natalie Thedim, Psicóloga Clínica (CRP 05/45482)
 
-> Site da psicóloga clínica Natalie Thedim, especialista em Terapia de Casal e Família, com mais de 20 anos de experiência (PUC-Rio). Atendimento presencial no Jardim Botânico, Rio de Janeiro, e online para todo o Brasil e exterior. O agendamento é feito pelo WhatsApp +55 21 98902-0364. Valores não são divulgados no site; este canal não é para urgências (CVV 188, SAMU 192).
+> Site da psicóloga clínica Natalie Thedim, especialista em Terapia de Casal e Família, com mais de 20 anos de experiência (PUC-Rio). Atendimento presencial em Botafogo, Rio de Janeiro, e online para todo o Brasil e exterior. O agendamento é feito pelo WhatsApp +55 21 98902-0364. Valores não são divulgados no site; este canal não é para urgências (CVV 188, SAMU 192).
 
 O conteúdo é informativo e não substitui consulta psicológica. Pedir uma página com o cabeçalho "Accept: text/markdown" devolve a versão em Markdown. Há também um servidor MCP somente leitura em https://nataliethedim.com.br/mcp (cartão em https://nataliethedim.com.br/.well-known/mcp/server-card.json).
 
